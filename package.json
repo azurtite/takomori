@@ -1,0 +1,22 @@
+{
+  "name": "takomori",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://azuritev3coa3@azuritev3coa3.sakura.ne.jp/home/azuritev3coa3/www/git_repository/gitprep/data/rep/azuritev3coa3/takomori.git"
+  },
+  "keywords": [
+    "octopi",
+    "monitor"
+  ],
+  "author": "mozukuSu",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^20.1.1"
+  }
+}

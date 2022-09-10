@@ -7,7 +7,3 @@ window.electronAPI.handleCounter((event, value) => {
     counter.innerText = newValue
     event.sender.send('counter-value', newValue)
 })
-window.electronAPI.handleSIOMsg((event, value) => {
-	sioData.innerText = value	
-	event.sender.send('serial-data', value)
-})

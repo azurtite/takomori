@@ -4,6 +4,9 @@ const path = require('path')
 
 function createWindow () {
 	const mainWindow = new BrowserWindow({
+		titleBarStyle: 'hidden',
+		height:	198,
+		width:	352,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js')
 		}
@@ -33,7 +36,7 @@ function createWindow () {
 	mainWindow.loadFile('index.html')
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools()
+	mainWindow.webContents.openDevTools({mode: 'undocked'})
 	return mainWindow
 }
 

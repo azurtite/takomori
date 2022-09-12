@@ -1,5 +1,6 @@
 @sunshine:  	#FFDC00;
 @rescueorange:	#EA5405;
+@flameorange:	#EE7700;
 @ceruleanblue:	#008DB7;
 @forestleaf:	#008554;
 @lapislazuli:	#261F87;
@@ -317,5 +318,41 @@ body {
 			vertical-align:		top;
 			-webkit-app-region:	no-drag;
 		}
+	}
+}
+
+.alert-panel {
+	position:				absolute;
+	display:				table;
+	visibility:				hidden;
+	height:					168px;
+	width:					300px;
+	left:					26px;
+	top:					15px;
+	border:					1px solid @flameorange;
+	background-color:		@rescueorange;
+	z-index:				100;
+	.alert-text-area {
+		display:			table-cell;
+		height:				162px;
+		width:				284px;
+		left:				8px;
+		top:				8px;
+		text-align:			center;
+		vertical-align:		middle;
+	}
+	.alert-ok {
+		position:			absolute;
+		display:			table-cell;
+		width: 				64px;
+		height:				24px;
+		right:				8px;
+		bottom:				8px;
+		border-radius:		4px;
+		color:				@sunshine;
+		background-color:	@lapislazuli;
+		text-align:			center;
+		vertical-align:		middle;
+		-webkit-app-region:	no-drag;
 	}
 }

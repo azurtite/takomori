@@ -5,13 +5,36 @@ let forestleaf		= '#008554';
 
 let powerFlag		= false;
 let submenuToggle	= false;
-var windowSize		= 1;
+let windowSize		= 1;
 let maxWindowSize	= 3;
+let intervalID		= undefined;
 
-var client = new OctoPrintClient({
+let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
 	apikey:		'241B873D3FF8408FB95E1DB8510F81CC'
 });
+
+/**
+ * getPrinterFullSate()
+ */
+function getPrinterFullState() {
+	if(client == undefined) {
+		$('.alert-text').text('hoge');
+		return false;
+	}
+
+	client.printer.getFullState()
+		.done(function(response){
+			$('#tool-text').text(response.temperature.tool0.actual);	
+		}).fail(function(response){});
+}
+/**
+ * resetMonitorText()
+ */
+function resetMonitorText() {
+	$('#tool-text').text('N/A');
+}
+
 $(function(){
 	if(client == undefined) {
 		$('.alert-text').text('Failed to create OctoPrint object')
@@ -33,6 +56,8 @@ $(function(){
 							console.info('Logout success');
 							$('.nav-off').css({color: sunshine});
 							powerFlag = false;
+							clearInterval(intervalID);
+							resetMonitorText();
 						}).fail(function(response){
 							console.error('Logout failure');
 						});
@@ -56,6 +81,7 @@ $(function(){
 						console.info('Connection success');
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
+						intervalID = setInterval(getPrinterFullState, 1000);
 					}).fail(function(response){
 						console.error('Connection failure');
 						$('.alert-text').text('Error: Failed to connect to printer');

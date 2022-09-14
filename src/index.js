@@ -25,7 +25,8 @@ function getPrinterFullState() {
 
 	client.printer.getFullState()
 		.done(function(response){
-			$('#tool-text').text(response.temperature.tool0.actual);	
+			$('#tool-text').text(response.temperature.tool0.actual);
+			$('#bed-text').text(response.temperature.bed.actual);
 		}).fail(function(response){});
 }
 /**

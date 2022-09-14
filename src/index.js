@@ -34,6 +34,7 @@ function getPrinterFullState() {
  */
 function resetMonitorText() {
 	$('#tool-text').text('N/A');
+	$('#tool-bed').text('N/A');
 }
 
 $(function(){

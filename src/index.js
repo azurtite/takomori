@@ -4,6 +4,8 @@ let ceruleanblue	= '#008DB7';
 let forestleaf		= '#008554';
 
 let powerFlag		= false;
+let tool0Flag		= false;
+let bedFlag			= false;
 let submenuToggle	= false;
 let windowSize		= 1;
 let maxWindowSize	= 3;
@@ -27,17 +29,34 @@ function getPrinterFullState() {
 		.done(function(response){
 			console.info('Update tool0 temperature value');
 			if('tool0' in response.temperature)
-				$('#tool-text').text(response.temperature.tool0.actual);
+				$('#tool-text').text(response.temperature.tool0.actual+'C');
 			console.info('Update bed temperature value');
 			if('bed' in response.temperature)
 				$('#bed-text').text(response.temperature.bed.actual);
+
+			if('tool0' in response.temperature) {
+				console.info('Target temperatue check');
+				if(response.temperature.tool0.target > 0) {
+					console.info('Update tool0 target temperatue value and icon(on)');
+					$('#tool-target-text').text(response.temperature.tool0.target+'C');
+					$('#tool-icon').css({color: rescueorange});
+				} else {
+					console.info('Update tool0 target temperatue value and icon(off)');
+					$('#tool-target-text').text('N/A');
+					$('#tool-icon').css({color: sunshine});
+				}
+			}
 		}).fail(function(response){});
 }
 /**
  * resetMonitorText()
  */
 function resetMonitorText() {
+	console.info('resetMonitorText::Set tool text and icon to default')
 	$('#tool-text').text('N/A');
+	$('#tool-target-text').text('N/A');
+	$('#too-icon').css({color: sunshine});
+
 	$('#bed-text').text('N/A');
 }
 

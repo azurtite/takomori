@@ -25,8 +25,12 @@ function getPrinterFullState() {
 
 	client.printer.getFullState()
 		.done(function(response){
-			$('#tool-text').text(response.temperature.tool0.actual);
-			$('#bed-text').text(response.temperature.bed.actual);
+			console.info('Update tool0 temperature value');
+			if('tool0' in response.temperature)
+				$('#tool-text').text(response.temperature.tool0.actual);
+			console.info('Update bed temperature value');
+			if('bed' in response.temperature)
+				$('#bed-text').text(response.temperature.bed.actual);
 		}).fail(function(response){});
 }
 /**
@@ -34,7 +38,7 @@ function getPrinterFullState() {
  */
 function resetMonitorText() {
 	$('#tool-text').text('N/A');
-	$('#tool-bed').text('N/A');
+	$('#bed-text').text('N/A');
 }
 
 $(function(){

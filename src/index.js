@@ -32,7 +32,7 @@ function getPrinterFullState() {
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
 			console.info('Update bed temperature value');
 			if('bed' in response.temperature)
-				$('#bed-text').text(response.temperature.bed.actual);
+				$('#bed-text').text(response.temperature.bed.actual+'C');
 
 			if('tool0' in response.temperature) {
 				console.info('Target temperatue check');
@@ -46,6 +46,19 @@ function getPrinterFullState() {
 					$('#tool-icon').css({color: sunshine});
 				}
 			}
+
+			if('bed' in response.temperature) {
+				console.info('Target temperatue check');
+				if(response.temperature.bed.target > 0) {
+					console.info('Update tool0 target temperatue value and icon(on)');
+					$('#bed-target-text').text(response.temperature.bed.target+'C');
+					$('#bed-icon').css({color: rescueorange});
+				} else {
+					console.info('Update tool0 target temperatue value and icon(off)');
+					$('#bed-target-text').text('N/A');
+					$('#bed-icon').css({color: sunshine});
+				}
+			}
 		}).fail(function(response){});
 }
 /**
@@ -57,7 +70,10 @@ function resetMonitorText() {
 	$('#tool-target-text').text('N/A');
 	$('#too-icon').css({color: sunshine});
 
+	console.info('resetMonitorText::Set bed text and icon to default')
 	$('#bed-text').text('N/A');
+	$('#bed-target-text').text('N/A');
+	$('#bed-icon').css({color: sunshine});
 }
 
 $(function(){

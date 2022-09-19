@@ -6,6 +6,7 @@ let forestleaf		= '#008554';
 let powerFlag		= false;
 let tool0Flag		= false;
 let bedFlag			= false;
+let fanFlag			= false;
 let submenuToggle	= false;
 let windowSize		= 1;
 let maxWindowSize	= 3;
@@ -74,6 +75,27 @@ function resetMonitorText() {
 	$('#bed-text').text('N/A');
 	$('#bed-target-text').text('N/A');
 	$('#bed-icon').css({color: sunshine});
+
+	console.info('resetMonitorText::set fan text and icon to default');
+	$('#fan-text').text('0%');
+	$('#fan-icon').css({color: sunshine});
+}
+/**
+ * postProcess()
+ */
+function postProcess() {
+	console.info('postProcess::Start Function');
+	if(powerFlag) {
+		client.printerprofiles.get('_default')
+			.done(function(response){
+				switch(response.model.toUpperCase().match('MARLIN')[0]) {
+					case 'MARLIN':
+						client.control.sendGcode('M107');
+						console.info('postProcess::Stop fan(speed 0%)');
+						break;
+				}
+			}) 
+	}
 }
 
 $(function(){
@@ -89,6 +111,7 @@ $(function(){
 	$('#power-btn').click(function(){
 		if(powerFlag) {
 			console.info('Click powerbtn(on>off)');
+			postProcess();
 			client.connection.disconnect()
 				.done(function(response){
 					console.info('Disconnect success')
@@ -96,9 +119,9 @@ $(function(){
 						.done(function(response){
 							console.info('Logout success');
 							$('.nav-off').css({color: sunshine});
-							powerFlag = false;
 							clearInterval(intervalID);
 							resetMonitorText();
+							powerFlag = false;
 						}).fail(function(response){
 							console.error('Logout failure');
 						});
@@ -177,5 +200,55 @@ $(function(){
 	$("#suspend-btn").click(function(){
 		console.info('Click suspend btn');
 		window.close();
+	});
+	/**
+	 * fan icon click event
+	 */
+	$('#fan-icon').click(function(){
+		console.info('jQuery::Click fan icon');
+		console.info('jQuery::Detect firmware type');
+		let firmType;
+		if(powerFlag) {
+			client.printerprofiles.get('_default')
+				.done(function(response){
+					firmType = response.model;
+					firmType = firmType.toUpperCase();
+					console.info('jQuery::Firmware type is ' + firmType);
+		
+					var result = firmType.match('MARLIN');
+					if(fanFlag) {
+						switch(result[0]) {
+							case 'MARLIN':
+								client.control.sendGcode('M107 P1')
+									.done(function(){
+										console.info('jQuery::Stop fan(0%)');
+										$('#fan-icon').css({color: sunshine});
+										$('#fan-text').text('0%');
+										fanFlag = false;
+									}).fail(function(){
+										console.error('jQuery::Can not operate fan speed');
+									});
+								break;
+						}
+					} else {
+						switch(result[0]) {
+							case 'MARLIN':
+								client.control.sendGcode('M106 P1 S255')
+									.done(function(){
+										console.info('jQuery::Rotate fan(speed 100%)');
+										$('#fan-icon').css({color: rescueorange});
+										$('#fan-text').text('100%');
+										fanFlag = true;
+									}).fail(function(){
+										console.error('jQuery::Can not operate fan speed');
+									});
+								break;
+						}
+					}
+				});
+		} else {
+			console.error('jQuery::Printer is not connect');
+			return;
+		}
 	});
 });

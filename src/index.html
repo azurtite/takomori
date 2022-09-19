@@ -34,27 +34,36 @@
 		<!-- tool templature icon -->
 		<div class="nav-fire-space pos-fire-tool">
 			<div class="nav-fire-title">tool</div>
-			<div class="nav-fire-icon">
+			<div class="nav-fire-target">
+				<strong class="target" id="tool-target-text">N/A</strong>
+			</div>
+			<div class="nav-fire-icon" id="tool-icon">
 				<span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fire-value">
-				<strong class="tool">100.0C</strong>
+				<strong class="tool" id="tool-text">N/A</strong>
 			</div>
 		</div>
 		<!-- bed templature icon -->
 		<div class="nav-fire-space pos-fire-bed">
 			<div class="nav-fire-title">bed</div>
-			<div class="nav-fire-icon">
+			<div class="nav-fire-target">
+				<strong class="target" id="bed-target-text">N/A</strong>
+			</div>
+			<div class="nav-fire-icon" id="bed-icon">
 				<span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fire-value">
-				<strong class="bed">100.0C</strong>
+				<strong class="bed" id="bed-text">N/A</strong>
 			</div>
 		</div>
 		<!-- fan speed icon -->
 		<div class="nav-fire-space pos-fan-speed">
 			<div class="nav-fire-title">fan</div>
-			<div class="nav-fire-icon">
+			<div class="nav-fire-target">
+				&nbsp;
+			</div>
+			<div class="nav-fire-icon" id="fan-icon">
 				<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fire-value">
@@ -64,6 +73,9 @@
 		<!-- printer icon -->
 		<div class="nav-fire-space pos-printer">
 			<div class="nav-fire-title">print</div>
+			<div class="nav-fire-target">
+				&nbsp;
+			</div>
 			<div class="nav-fire-icon">
 				<span class="glyphicon glyphicon glyphicon-print" aria-hidden="true"></span>
 			</div>
@@ -80,8 +92,8 @@
 		</div>
 		<!-- progress bar -->
 		<div class="progress">
-			<div id="progressbar-one" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-				60% Complete (success)
+			<div id="progressbar-one" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+				0% Complete (success)
 			</div>
 		</div>
 	</div>

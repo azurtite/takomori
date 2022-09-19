@@ -4,14 +4,78 @@ let ceruleanblue	= '#008DB7';
 let forestleaf		= '#008554';
 
 let powerFlag		= false;
+let tool0Flag		= false;
+let bedFlag			= false;
 let submenuToggle	= false;
-var windowSize		= 1;
+let windowSize		= 1;
 let maxWindowSize	= 3;
+let intervalID		= undefined;
 
-var client = new OctoPrintClient({
+let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
 	apikey:		'241B873D3FF8408FB95E1DB8510F81CC'
 });
+
+/**
+ * getPrinterFullSate()
+ */
+function getPrinterFullState() {
+	if(client == undefined) {
+		$('.alert-text').text('hoge');
+		return false;
+	}
+
+	client.printer.getFullState()
+		.done(function(response){
+			console.info('Update tool0 temperature value');
+			if('tool0' in response.temperature)
+				$('#tool-text').text(response.temperature.tool0.actual+'C');
+			console.info('Update bed temperature value');
+			if('bed' in response.temperature)
+				$('#bed-text').text(response.temperature.bed.actual+'C');
+
+			if('tool0' in response.temperature) {
+				console.info('Target temperatue check');
+				if(response.temperature.tool0.target > 0) {
+					console.info('Update tool0 target temperatue value and icon(on)');
+					$('#tool-target-text').text(response.temperature.tool0.target+'C');
+					$('#tool-icon').css({color: rescueorange});
+				} else {
+					console.info('Update tool0 target temperatue value and icon(off)');
+					$('#tool-target-text').text('N/A');
+					$('#tool-icon').css({color: sunshine});
+				}
+			}
+
+			if('bed' in response.temperature) {
+				console.info('Target temperatue check');
+				if(response.temperature.bed.target > 0) {
+					console.info('Update tool0 target temperatue value and icon(on)');
+					$('#bed-target-text').text(response.temperature.bed.target+'C');
+					$('#bed-icon').css({color: rescueorange});
+				} else {
+					console.info('Update tool0 target temperatue value and icon(off)');
+					$('#bed-target-text').text('N/A');
+					$('#bed-icon').css({color: sunshine});
+				}
+			}
+		}).fail(function(response){});
+}
+/**
+ * resetMonitorText()
+ */
+function resetMonitorText() {
+	console.info('resetMonitorText::Set tool text and icon to default')
+	$('#tool-text').text('N/A');
+	$('#tool-target-text').text('N/A');
+	$('#too-icon').css({color: sunshine});
+
+	console.info('resetMonitorText::Set bed text and icon to default')
+	$('#bed-text').text('N/A');
+	$('#bed-target-text').text('N/A');
+	$('#bed-icon').css({color: sunshine});
+}
+
 $(function(){
 	if(client == undefined) {
 		$('.alert-text').text('Failed to create OctoPrint object')
@@ -33,6 +97,8 @@ $(function(){
 							console.info('Logout success');
 							$('.nav-off').css({color: sunshine});
 							powerFlag = false;
+							clearInterval(intervalID);
+							resetMonitorText();
 						}).fail(function(response){
 							console.error('Logout failure');
 						});
@@ -56,6 +122,7 @@ $(function(){
 						console.info('Connection success');
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
+						intervalID = setInterval(getPrinterFullState, 1000);
 					}).fail(function(response){
 						console.error('Connection failure');
 						$('.alert-text').text('Error: Failed to connect to printer');

@@ -41,9 +41,16 @@ logMan.fullDump			= function(options = undefined) {
 				if(options.types.indexOf(this.log[i].type) == -1) continue;
 			if('positions' in options)
 				if(options.positions.indexOf(this.log[i].position) == -1) continue;
+			if('showHide' in options)
+				if(typeof options.showHide == 'boolean')
+					if(options.showHide) {
+						console.info(out);
+						continue;
+					}
 		}
 		if(this.log[i].type < 3) console.error(out);
 		else if(this.log[i].type == 3) console.warn(out);
+		else if(this.log[i].type > 5 && !this.hideLowPriority) console.info(out);
 		else console.info(out);
 	}
 	return true;

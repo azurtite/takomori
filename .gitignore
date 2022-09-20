@@ -1,3 +1,7 @@
 node_modules/
 package-lock.json
 src/client.js
+.owncloudsync.log
+.sync_96dadc80b073.db
+.sync_96dadc80b073.db-wal
+Desktop.ini

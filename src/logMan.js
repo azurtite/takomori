@@ -36,13 +36,13 @@ logMan.fullDump			= function(options = undefined) {
 		if('position' in this.log[i]) out = out +'(' + this.log[i].position + ')';
 		out += this.log[i].msg;
 
-		if(typeof options == 'object')
-			if('types' in options && typeof options == 'object')
+		if(typeof options == 'object') {
+			if('types' in options)
 				if(options.types.indexOf(this.log[i].type) == -1) continue;
-		if(typeof options == 'object')
 			if('positions' in options)
 				if(options.positions.indexOf(this.log[i].position) == -1) continue;
-		if(this.log[i].type < 2) console.error(out);
+		}
+		if(this.log[i].type < 3) console.error(out);
 		else if(this.log[i].type == 3) console.warn(out);
 		else console.info(out);
 	}
@@ -53,7 +53,7 @@ logMan.message			= function(msg, ...args) {
 		let out = date[0] + ' [' + TYPE[type] + ']';
 		if('position' in data) out = out + '(' + data.position + ')';
 		out += msg;
-		if(type < 2) console.error(out);
+		if(type < 3) console.error(out);
 		else if(type == 3) console.warn(out);
 		else console.info(out);
 	}

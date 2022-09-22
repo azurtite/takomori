@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="../logMan.js"></script>
+	<script>
+		function sleep(waitMsec) {
+			var startMsec = new Date();
+			while (new Date() - startMsec < waitMsec);
+		}
+		
+		for(var i=0; i<100; i++) {
+			logMan.message('this is test code',  Math.floor(Math.random()*6)+1);
+			sleep(10);
+		}
+	</script>
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>

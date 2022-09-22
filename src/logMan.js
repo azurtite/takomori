@@ -29,6 +29,21 @@ logMan.fullDump			= function(options = undefined) {
 			return false;
 		}
 	}
+	/**
+	 * Scope processing
+	 */
+	let scopeStart, scopeEnd;
+	if(typeof options == 'object')
+		if('scope' in options) {
+			if('start' in options.scope) {
+				scopeStart = new Date(options.scope.start).getTime();
+				if(isNaN(scopeStart)) return false;
+			}
+			if('end' in options.scope) {
+				scopeEnd = new Date(options.scope.end).getTime();
+				if(isNaN(scopeEnd)) return false;
+			}
+		}
 
 	for(var i=0; i<this.log.length; i++) {
 		let date	= this.timeStamp(this.log[i].time);
@@ -39,7 +54,7 @@ logMan.fullDump			= function(options = undefined) {
 		if(typeof options == 'object') {
 			if('types' in options)
 				if(options.types.indexOf(this.log[i].type) == -1) continue;
-			if('positions' in options)
+			if('positions' in options) 
 				if(options.positions.indexOf(this.log[i].position) == -1) continue;
 			if('showHide' in options)
 				if(typeof options.showHide == 'boolean')
@@ -48,6 +63,10 @@ logMan.fullDump			= function(options = undefined) {
 						continue;
 					}
 		}
+		if(typeof scopeStart == 'number')
+			if(this.log[i].time < scopeStart) continue;
+		if(typeof scopeEnd == 'number')
+			if(this.log[i].time > scopeEnd) continue;
 		if(this.log[i].type < 3) console.error(out);
 		else if(this.log[i].type == 3) console.warn(out);
 		else if(this.log[i].type > 5 && !this.hideLowPriority) console.info(out);

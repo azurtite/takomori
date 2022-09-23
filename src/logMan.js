@@ -22,6 +22,27 @@ logMan.hideLowPriority	= true;
 logMan.log				= [];
 logMan.logLine			= 0;
 logMan.sendConsole		= true;
+/**
+ * fullDump ログを出力する
+ * 
+ * @param {JSON} options 
+ *		types 		{array} 指定した警報レベルのログのみ出力する
+ *			ex) logMan.fullDump({types:[ERROR, WARN]});
+ *				エラーと警告のみ
+ *		positions	{array} 指定したしおりのログのみ出力する
+ *			ex) logMan.fullDump({positions:['testpoint-1']});
+ *		scope		{json} 時間を指定してログを出力する
+ *			ex) logMan.fullDump({
+ *							scope:{
+ *								start:	'2022-09-21T19:21:30.939',
+ *								end:	'2022-09-21T19:35:30.425'
+ *							}
+ *						});
+ *		showHide	{boolean} INFO(low)とDEBUG(low)の出力を制御する
+ * 							　このパラメータ指定時はhideLowProprotuは無視される
+ * 			ex) logMan.fullDump({showHide: true});
+ * @returns 
+ */
 logMan.fullDump			= function(options = undefined) {
 	if(options != undefined) {
 		if(typeof options != 'object') {
@@ -76,6 +97,20 @@ logMan.fullDump			= function(options = undefined) {
 	}
 	return true;
 }
+/**
+ * 
+ * @param {*} msg			メッセージ文字列 
+ * @param  {...any} args
+ * 					(CONSTANT TYPE):メッセージの種類を指定['Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)', 'Debug(low)']
+ * 					SENDCONSOLE:	メッセージをコンソールに表する
+ * 					NOSENDCONSOLE:	メッセージをコンソールに表示しない
+ * 					(String):		メッセージにしおりを追加する
+ * 					※不要パラメータは省略可能
+ * 					
+ * 					ex) logMan.message('this is test Message', 'test-point1',ERROR, SENDCONSOLE);
+ * 					> 20220924T07:46:48.752 [Error](test-point1)this is test Message
+ * @returns 
+ */
 logMan.message			= function(msg, ...args) {
 	function consoleOut() {
 		let out = date[0] + ' [' + TYPE[type] + ']';

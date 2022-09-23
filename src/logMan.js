@@ -13,7 +13,7 @@ const LOWDEBUG			= 7;
 const SENDCONSOLE		= 101;
 const NOTSENDCONSOLE	= 102;
 const DISPOSE			= 203;
-const TYPE				= ['N/A', 'Deadly', 'Error', 'Warm', 'Info', 'Debug', 'Info(low)', 'Debug(low)'];
+const TYPE				= ['N/A', 'Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)', 'Debug(low)'];
 
 logMan.appendMills		= true;
 logMan.debugLevel		= 1
@@ -59,9 +59,11 @@ logMan.fullDump			= function(options = undefined) {
 			if('showHide' in options)
 				if(typeof options.showHide == 'boolean')
 					if(options.showHide) {
-						console.info(out);
+						if(this.log[i].type < 3) console.error(out);
+						else if(this.log[i].type == 3) console.warn(out);
+						else console.info(out);
 						continue;
-					}
+					} else if(this.log[i].type > 5) continue;
 		}
 		if(typeof scopeStart == 'number')
 			if(this.log[i].time < scopeStart) continue;

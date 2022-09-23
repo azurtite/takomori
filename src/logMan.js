@@ -128,7 +128,7 @@ logMan.message			= function(msg, ...args) {
 
 	for(var i=0; i<args.length; i++) {
 		if(args[i] < 100) type = args[i];
-		else if(args[i] == SENDCONSOLE) send = ture;
+		else if(args[i] == SENDCONSOLE) send = true;
 		else if(args[i] == NOTSENDCONSOLE) send = false;
 		else if(args[i] == DISPOSE) dispose = true;
 		else if(typeof args[i] == 'string') position = args[i];

@@ -23,6 +23,46 @@ let $$$ = new logMan(true, false);
  * getPrinterFullSate()
  */
 function getPrinterFullState() {
+	function bedTempertureCheck(response) {
+		$$$.message('Target temperature check(bed)', LOWDEBUG, 'bedTemperatureCheck');
+		if('bed' in response.temperature) {
+			if(response.temperature.bed.target <=0) {
+				if($('#bed-target-text').text() == 'N/A') return false;
+				else {
+					$$$.message('Update bed target temperature value and icon color(off)', DEBUG, 'bedTemperatureCheck');
+					$('#bed-target-text').text('N/A');
+					$('#bed-icon').css({color: sunshine});
+				}
+			} else {
+				var now = $('#bed-target-text').text();
+				if(now != (response.temperature.bed.target + 'C')) {
+					$$$.message('Update bed target temperature value and icon color(on)', DEBUG, 'bedTemperatureCheck');
+					$('#bed-target-text').text(response.temperature.bed.target + 'C');
+					$('#bed-icon').css({color: rescueorange});
+				}
+			}
+		}
+	}
+	function tool0TemperatureCheck(response) {
+		$$$.message('Target temperature check(tool0)', LOWDEBUG, 'tool0TemperatureCheck');
+		if('tool0' in response.temperature) {
+			if(response.temperature.tool0.target <=0) {
+				if($('#tool-target-text').text() == 'N/A') return false;
+				else {
+					$$$.message('Update tool0 temperature value and icon color(off)', DEBUG, 'tool0TemperatureCheck');
+					$('#tool-target-text').text('N/A');
+					$('#tool-icon').css({color: sunshine});
+				}
+			} else {
+				var now = $('#tool-target-text').text();
+				if(now != (response.temperature.tool0.target + 'C')) {
+					$$$.message('Update tool0 target temperature value and icon color(on)', DEBUG, 'bedTemperatureCheck');
+					$('#tool-target-text').text(response.temperature.tool0.target + 'C');
+					$('#tool-icon').css({color: rescueorange});
+				}
+			}
+		}
+	}
 	if(client == undefined) {
 		$('.alert-text').text('hoge');
 		return false;
@@ -37,31 +77,8 @@ function getPrinterFullState() {
 			if('bed' in response.temperature)
 				$('#bed-text').text(response.temperature.bed.actual+'C');
 
-			if('tool0' in response.temperature) {
-				$$$.message('Target temperatue check(tool0)', DEBUG, 'getFullState');
-				if(response.temperature.tool0.target > 0) {
-					console.info('Update tool0 target temperatue value and icon(on)');
-					$('#tool-target-text').text(response.temperature.tool0.target+'C');
-					$('#tool-icon').css({color: rescueorange});
-				} else {
-					console.info('Update tool0 target temperatue value and icon(off)');
-					$('#tool-target-text').text('N/A');
-					$('#tool-icon').css({color: sunshine});
-				}
-			}
-
-			if('bed' in response.temperature) {
-				$$$.message('Target temperatue check(bed)', DEBUG, 'getFullState');
-				if(response.temperature.bed.target > 0) {
-					console.info('Update tool0 target temperatue value and icon(on)');
-					$('#bed-target-text').text(response.temperature.bed.target+'C');
-					$('#bed-icon').css({color: rescueorange});
-				} else {
-					console.info('Update tool0 target temperatue value and icon(off)');
-					$('#bed-target-text').text('N/A');
-					$('#bed-icon').css({color: sunshine});
-				}
-			}
+			tool0TemperatureCheck(response);
+			bedTempertureCheck(response);
 		}).fail(function(response){});
 }
 /**

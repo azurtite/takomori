@@ -7,13 +7,14 @@
 	<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 	<script src="../logMan.js"></script>
 	<script>
+		let l = new logMan(false, true);
 		function sleep(waitMsec) {
 			var startMsec = new Date();
 			while (new Date() - startMsec < waitMsec);
 		}
 		var positions = ['logMan', 'logMan2', 'logMan3', 'test'];
 		for(var i=0; i<100; i++) {
-			logMan.message('this is test code',  Math.floor(Math.random()*6)+1, positions[Math.floor(Math.random()*4)]);
+			l.message('this is test code',  Math.floor(Math.random()*6)+1, positions[Math.floor(Math.random()*4)]);
 			sleep(10);
 		}
 	</script>

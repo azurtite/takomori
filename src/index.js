@@ -17,6 +17,8 @@ let client = new OctoPrintClient({
 	apikey:		'241B873D3FF8408FB95E1DB8510F81CC'
 });
 
+let $$$ = new logMan(true, false);
+
 /**
  * getPrinterFullSate()
  */
@@ -28,15 +30,15 @@ function getPrinterFullState() {
 
 	client.printer.getFullState()
 		.done(function(response){
-			console.info('Update tool0 temperature value');
+			$$$.message('Update tool0 temperature value', LOWDEBUG, 'getFullState');
 			if('tool0' in response.temperature)
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
-			console.info('Update bed temperature value');
+			$$$.message('Update bed temperature value', LOWDEBUG, 'getFullState');
 			if('bed' in response.temperature)
 				$('#bed-text').text(response.temperature.bed.actual+'C');
 
 			if('tool0' in response.temperature) {
-				console.info('Target temperatue check');
+				$$$.message('Target temperatue check(tool0)', DEBUG, 'getFullState');
 				if(response.temperature.tool0.target > 0) {
 					console.info('Update tool0 target temperatue value and icon(on)');
 					$('#tool-target-text').text(response.temperature.tool0.target+'C');
@@ -49,7 +51,7 @@ function getPrinterFullState() {
 			}
 
 			if('bed' in response.temperature) {
-				console.info('Target temperatue check');
+				$$$.message('Target temperatue check(bed)', DEBUG, 'getFullState');
 				if(response.temperature.bed.target > 0) {
 					console.info('Update tool0 target temperatue value and icon(on)');
 					$('#bed-target-text').text(response.temperature.bed.target+'C');
@@ -66,17 +68,17 @@ function getPrinterFullState() {
  * resetMonitorText()
  */
 function resetMonitorText() {
-	console.info('resetMonitorText::Set tool text and icon to default')
+	$$$.message('Set tool text and icon to default', DEBUG, 'resetMonitorText');
 	$('#tool-text').text('N/A');
 	$('#tool-target-text').text('N/A');
 	$('#too-icon').css({color: sunshine});
 
-	console.info('resetMonitorText::Set bed text and icon to default')
+	$$$.message('Set bed text and icon to default', DEBUG, 'resetMonitorText');
 	$('#bed-text').text('N/A');
 	$('#bed-target-text').text('N/A');
 	$('#bed-icon').css({color: sunshine});
 
-	console.info('resetMonitorText::set fan text and icon to default');
+	$$$.message('set fan text and icon to default', DEBUG, 'resetMonitorText');
 	$('#fan-text').text('0%');
 	$('#fan-icon').css({color: sunshine});
 }
@@ -84,14 +86,14 @@ function resetMonitorText() {
  * postProcess()
  */
 function postProcess() {
-	console.info('postProcess::Start Function');
+	$$$.message('Start Function', DEBUG, 'postProcess');
 	if(powerFlag) {
 		client.printerprofiles.get('_default')
 			.done(function(response){
 				switch(response.model.toUpperCase().match('MARLIN')[0]) {
 					case 'MARLIN':
 						client.control.sendGcode('M107');
-						console.info('postProcess::Stop fan(speed 0%)');
+						$$$.message('Stop fan(speed 0%)', DEBUG, 'postProcess');
 						break;
 				}
 			}) 
@@ -110,31 +112,31 @@ $(function(){
 	 */
 	$('#power-btn').click(function(){
 		if(powerFlag) {
-			console.info('Click powerbtn(on>off)');
+			$$$.message('Click powerbtn(on>off)', DEBUG, '$power-btn.click');
 			postProcess();
 			client.connection.disconnect()
 				.done(function(response){
-					console.info('Disconnect success')
+					$$$.message('Disconnect success', DEBUG, '$power-btn.click')
 					client.browser.logout()
 						.done(function(response){
-							console.info('Logout success');
+							$$$.message('Logout success', INFO, '$power-btn.click');
 							$('.nav-off').css({color: sunshine});
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
 						}).fail(function(response){
-							console.error('Logout failure');
+							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
 				}).fail(function(response){
-					console.error('Disconnect failure');
+					$$$.error('Disconnect failure', ERROR , '$power-btn.click');
 					$('.alert-text').text('Error: Failed to disconnect to printer');
 					$('#alert-pnl').css({visibility: 'visible'});
 				})
 		} else {
-			console.info('Click powerbtn(off>on)');
+			$$$.message('Click powerbtn(off>on)', DEBUG), '$power-btn.click';
 			client.browser.login('mozukuSu', 'ooxot8795SH', true)
 				.done(function(response){
-					console.info('Login success');
+					$$$.message('Login success', INFO, '$power-btn.click');
 					client.connection.connect({
 						port:			'/dev/ttyACM0',
 						baudrate:		115200,
@@ -142,17 +144,17 @@ $(function(){
 						save:			true,
 						autoconnect:	false
 					}).done(function(response){
-						console.info('Connection success');
+						$$$.message('Connection success', INFO, '$power-btn.click');
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
 						intervalID = setInterval(getPrinterFullState, 1000);
 					}).fail(function(response){
-						console.error('Connection failure');
+						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');
 						$('#alert-pnl').css({visibility: 'visible'});
 					});
 				}).fail(function(response){
-					console.error('Login failure');
+					$$$.message('Login failure', ERROR, '$power-btn.click');
 					$('.alert-text').text('Error: Failed to login to octoprint server');
 					$('#alert-pnl').css({visibility: 'visible'});
 				});
@@ -162,14 +164,14 @@ $(function(){
 	 * Sub menu button click event
 	 */
 	$('#submenu-btn').click(function(){
-		console.info('Click submen ctrl btn');
+		$$$.message('Click submen ctrl btn', DEBUG, '$submenu-btn');
 
 		if(submenuToggle) {
-			console.info('Hide submenu');
+			$$$.message('Hide submenu', INFO, '$submenu-btn');
 			$('.nav-submenu').css({right: '-285px'});
 			submenuToggle = false;
 		} else {
-			console.info('Show submenu');
+			$$$.message('Show submenu', INFO, '$submenu-btn');
 			$('.nav-submenu').css({right: '0px'});
 			submenuToggle = true;
 		}
@@ -178,42 +180,42 @@ $(function(){
 	 * Fullscreen button click event
 	 */
 	$('#fullscreen-btn').click(function(){
-		console.log('Click fullscreen btn');
+		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
 		if(windowSize > maxWindowSize) windowSize = 1;
-		console.log('Screen mode is ' + windowSize);
+		$$$.message('Screen mode is ' + windowSize, INFO, '$fullscreen-btn');
 	});
 	/**
 	 * alert ok button click event
 	 */
 	$('#alert-ok-btn').click(function(){
-		console.log('Click alert-ok btn');
+		$$$.message('Click alert-ok btn', DEBUG, '$alert-ok-btn');
 		$('.alert-panel').css({visibility: 'hidden'});
 	});
 	/**
 	 * Close button click event
 	 */
 	$('#remove-btn').click(function(){
-		console.info('Click close btn');
+		$$$.message('Click close btn', DEBUG, '$remove-btn');
 		window.close();
 	});
 	$("#suspend-btn").click(function(){
-		console.info('Click suspend btn');
+		$$$.message('Click suspend btn', DEBUG, '$suspend-btn');
 		window.close();
 	});
 	/**
 	 * fan icon click event
 	 */
 	$('#fan-icon').click(function(){
-		console.info('jQuery::Click fan icon');
-		console.info('jQuery::Detect firmware type');
+		$$$.message('Click fan icon', DEBUG, '$fan-icon');
+		$$$.message('Detect firmware type', INFO, $fan-icon);
 		let firmType;
 		if(powerFlag) {
 			client.printerprofiles.get('_default')
 				.done(function(response){
 					firmType = response.model;
 					firmType = firmType.toUpperCase();
-					console.info('jQuery::Firmware type is ' + firmType);
+					$$$.message('Firmware type is ' + firmType, INFO, '$fan-icon');
 		
 					var result = firmType.match('MARLIN');
 					if(fanFlag) {
@@ -221,12 +223,12 @@ $(function(){
 							case 'MARLIN':
 								client.control.sendGcode('M107 P1')
 									.done(function(){
-										console.info('jQuery::Stop fan(0%)');
+										$$$.message('Stop fan(0%)', INFO, '$fan-icon');
 										$('#fan-icon').css({color: sunshine});
 										$('#fan-text').text('0%');
 										fanFlag = false;
 									}).fail(function(){
-										console.error('jQuery::Can not operate fan speed');
+										$$$.message('Can not operate fan speed', ERROR, '$fan-icon');
 									});
 								break;
 						}
@@ -235,19 +237,19 @@ $(function(){
 							case 'MARLIN':
 								client.control.sendGcode('M106 P1 S255')
 									.done(function(){
-										console.info('jQuery::Rotate fan(speed 100%)');
+										$$$.message('Rotate fan(speed 100%)', INFO, '$fan-icon');
 										$('#fan-icon').css({color: rescueorange});
 										$('#fan-text').text('100%');
 										fanFlag = true;
 									}).fail(function(){
-										console.error('jQuery::Can not operate fan speed');
+										$$$.message('Can not operate fan speed', ERROR, '$fan-icon');
 									});
 								break;
 						}
 					}
 				});
 		} else {
-			console.error('jQuery::Printer is not connect');
+			$$$.message('Printer is not connect', ERROR, '$fan-icon');
 			return;
 		}
 	});

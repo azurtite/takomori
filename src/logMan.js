@@ -153,7 +153,13 @@ function logMan(hide, dispose) {
 			}
 		}
 
-		if(!dispose) {
+		if(dispose) {
+			if(type < 6) {
+				this.log[this.logLine] = data;
+				this.logLine++;
+				return true;
+			}
+		} else {
 			this.log[this.logLine] = data;
 			this.logLine++;
 			return true;

@@ -19,6 +19,8 @@ let client = new OctoPrintClient({
 
 let $$$ = new logMan(true, false);
 
+window.resizeTo(400, 240);
+
 /**
  * getPrinterFullSate()
  */
@@ -63,6 +65,52 @@ function getPrinterFullState() {
 			}
 		}
 	}
+	function jobNameCheck(response) {
+		function getTime(time) {
+			let result		= '';
+			let printTime	= time;
+			let hour		= Math.floor(printTime / 3600);
+			if(hour > 0) {
+				result = result + hour + 'h';
+				printTime = printTime - (hour * 3600);
+			}
+			let minute = Math.floor(printTime / 60);
+			if(minute > 0) {
+				result = result + minute + 'm';
+				printTime = printTime - (minute * 60);
+			}
+			return result + printTime + 's'
+		}
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.job.file.name != 'null')
+					if($('#jobname').text() != data.job.file.name) {
+						$$$.message('Update job name', INFO, 'jobNameCheck');
+						$('#jobname').text(data.job.file.name);
+					}
+				if(data.state.toLowerCase() == 'printing') {
+					if((Math.floor(data.progress.completion * 100) / 100) != $('#progressbar-one').text()) {
+						$$$.message('Update progress bar position', LOWINFO, 'jobNameCheck');
+						$('#complete-text').text(Math.floor(data.progress.completion * 100) / 100 + '%');
+						$('#progressbar-one').css({width: Math.floor(data.progress.completion) + '%'});
+					}
+					$$$.message('Update printer information', LOWINFO, 'jobNameCheck');
+					$('#print-title-text').text('printing');
+					$('#print-icon').css({color: rescueorange});
+					$$$.message('Update print time', LOWINFO, 'jobNameCheck');
+					$('#printtime-text').text(getTime(data.progress.printTime));
+					$$$.message('Update print time left', LOWINFO, 'jobNameCheck');
+					$('#printtimeleft-text').text(getTime(data.progress.printTimeLeft));
+				} else {
+					$$$.message('Reset job status', INFO, 'jobNameCheck');
+					$('#print-title-text').text('print');
+					$('#print-icon').css({color: sunshine});
+					$('#complete-text').text('0%');
+					$('#printtime-text').text('0s');
+					$('#printtimeleft-text').text('0s');
+				}
+			})
+	}
 	if(client == undefined) {
 		$('.alert-text').text('hoge');
 		return false;
@@ -79,6 +127,7 @@ function getPrinterFullState() {
 
 			tool0TemperatureCheck(response);
 			bedTempertureCheck(response);
+			jobNameCheck();
 		}).fail(function(response){});
 }
 /**
@@ -225,7 +274,7 @@ $(function(){
 	 */
 	$('#fan-icon').click(function(){
 		$$$.message('Click fan icon', DEBUG, '$fan-icon');
-		$$$.message('Detect firmware type', INFO, $fan-icon);
+		$$$.message('Detect firmware type', INFO, '$fan-icon');
 		let firmType;
 		if(powerFlag) {
 			client.printerprofiles.get('_default')

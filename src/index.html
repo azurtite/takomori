@@ -73,11 +73,11 @@
 		</div>
 		<!-- printer icon -->
 		<div class="nav-fire-space pos-printer">
-			<div class="nav-fire-title">print</div>
+			<div class="nav-fire-title" id='print-title-text'>print</div>
 			<div class="nav-fire-target">
 				&nbsp;
 			</div>
-			<div class="nav-fire-icon">
+			<div class="nav-fire-icon" id="print-icon">
 				<span class="glyphicon glyphicon glyphicon-print" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fire-value">
@@ -94,9 +94,24 @@
 		<!-- progress bar -->
 		<div class="progress">
 			<div id="progressbar-one" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-				0% Complete (success)
+				&nbsp;
 			</div>
 		</div>
+		<!-- completion area -->
+		<div class="completearea">
+			<strong class="complete" id="complete-text">68.00%</strong>
+		</div>
+		<!-- print time -->
+		<table class="printtime">
+			<tr>
+				<td class="printtime-title">Print time :</td>
+				<td class="printtime-value" id="printtime-text">0s</td>
+			</tr>
+			<tr>
+				<td class="printtime-title">Print time left :</td>
+				<td class="printtime-value" id="printtimeleft-text">0s</td>
+			</tr>
+		</table>
 	</div>
 	<!-- winctrl -->
 		<div class="nav-winctrl">

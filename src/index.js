@@ -100,12 +100,14 @@ function getPrinterFullState() {
 					$$$.message('Update print time', LOWINFO, 'jobNameCheck');
 					$('#printtime-text').text(getTime(data.progress.printTime));
 					$$$.message('Update print time left', LOWINFO, 'jobNameCheck');
-					$('#printtimeleft-text').text(getTime(data.progress.printTimeLeft));
-				} else {
+					if(getTime(data.progress.printTimeLeft) != 'nulls')
+						$('#printtimeleft-text').text(getTime(data.progress.printTimeLeft));
+				} else if($('#print-title-text').text() != 'print') {
 					$$$.message('Reset job status', INFO, 'jobNameCheck');
 					$('#print-title-text').text('print');
 					$('#print-icon').css({color: sunshine});
 					$('#complete-text').text('0%');
+					$('#progressbar-one').css({width: '0%'});
 					$('#printtime-text').text('0s');
 					$('#printtimeleft-text').text('0s');
 				}
@@ -250,6 +252,16 @@ $(function(){
 		windowSize++;
 		if(windowSize > maxWindowSize) windowSize = 1;
 		$$$.message('Screen mode is ' + windowSize, INFO, '$fullscreen-btn');
+		if(windowSize == 1) {
+			$$$.message('Window size is 400 x 240', LOWDEBUG, '$fullscreen-btn');
+			window.resizeTo(400,240);
+		} else if(windowSize == 2) {
+			$$$.message('Window size is 800 x 240', LOWDEBUG, '$fullscreen-btn');
+			window.resizeTo(800,240);
+		} else if(windowSize == 3) {
+			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
+			window.resizeTo(800,480);
+		}
 	});
 	/**
 	 * alert ok button click event

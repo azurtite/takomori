@@ -20,26 +20,6 @@ let client = new OctoPrintClient({
 let $$$ = new logMan(true, false);
 
 window.resizeTo(400, 240);
-$('#handle').roundSlider({
-	sliderType:			'min-range',
-	editableTooltip:	false,
-	radius:				65,
-	width:				16,
-	min:				0,
-	max:				240,
-	handleSize:			0,
-	handleShape:		'square',
-	circleShape:		'pie',
-	startAngle:			315,
-	tooltipFormat:		'changeTooltip'
-});
-function changeTooltip(event) {
-	var val = event.value, temperature;
-	if(val < 180) temperature = 'Low';
-	else if(val < 210) temperature = 'PLA';
-	else if(val < 230) temperature = 'ABS';
-	else temperature = 'Very high';
-}
 
 /**
  * getPrinterFullSate()
@@ -350,5 +330,9 @@ $(function(){
 			$$$.message('Printer is not connect', ERROR, '$fan-icon');
 			return;
 		}
+	});
+	$('#tool-on-remove-btn').click(function(){
+		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn');
+		$('#slider-panel-ctrl').css({visibility: 'hidden'});
 	});
 });

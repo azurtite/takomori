@@ -83,7 +83,7 @@ function getPrinterFullState() {
 		}
 		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 			.done(function(data){
-				if(data.job.file.name != 'null')
+				if(data.job.file.name != null)
 					if($('#jobname').text() != data.job.file.name) {
 						$$$.message('Update job name', INFO, 'jobNameCheck');
 						$('#jobname').text(data.job.file.name);

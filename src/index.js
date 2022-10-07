@@ -335,4 +335,20 @@ $(function(){
 		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn');
 		$('#slider-panel-ctrl').css({visibility: 'hidden'});
 	});
+	$('#tool-icon').click(function(){
+		$$$.message('Click tool-icon', DEBUG, '$tool-icon');
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon');
+					$('#slider-panel-ctrl').css({visibility: 'visible'});
+				} else {
+					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel', WARN, 'tool-icon');
+					else if(!powerFlag) $$$.message('Printer is not connected', WARN, 'tool-icon');
+				}
+			})
+			.fail(function(){
+				$$$.message('Printer is not operated', ERROR, 'tool-icon');
+			})
+	});
 });

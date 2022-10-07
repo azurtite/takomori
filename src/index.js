@@ -333,7 +333,7 @@ $(function(){
 	});
 	$('#tool-on-remove-btn').click(function(){
 		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn');
-		$('#slider-panel-ctrl').css({visibility: 'hidden'});
+		$('#slider-panel-ctrl').css({'z-index': -1});
 	});
 	$('#tool-icon').click(function(){
 		$$$.message('Click tool-icon', DEBUG, '$tool-icon');
@@ -341,7 +341,7 @@ $(function(){
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon');
-					$('#slider-panel-ctrl').css({visibility: 'visible'});
+					$('#slider-panel-ctrl').css({'z-index': 80});
 				} else {
 					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel', WARN, 'tool-icon');
 					else if(!powerFlag) $$$.message('Printer is not connected', WARN, 'tool-icon');

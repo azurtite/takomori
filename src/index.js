@@ -7,6 +7,7 @@ let powerFlag		= false;
 let tool0Flag		= false;
 let bedFlag			= false;
 let fanFlag			= false;
+let toolTempFlag	= true;
 let submenuToggle	= false;
 let windowSize		= 1;
 let maxWindowSize	= 3;
@@ -334,6 +335,8 @@ $(function(){
 	$('#tool-on-remove-btn').click(function(){
 		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn');
 		$('#slider-panel-ctrl').css({'z-index': -1});
+		toolTempFlag = false;
+		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-icon');
 	});
 	$('#tool-icon').click(function(){
 		$$$.message('Click tool-icon', DEBUG, '$tool-icon');
@@ -342,6 +345,8 @@ $(function(){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon');
 					$('#slider-panel-ctrl').css({'z-index': 80});
+					toolTempFlag = true;
+					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-icon');
 				} else {
 					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel', WARN, 'tool-icon');
 					else if(!powerFlag) $$$.message('Printer is not connected', WARN, 'tool-icon');

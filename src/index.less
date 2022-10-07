@@ -142,7 +142,7 @@ body {
 		text-align:			center;
 		vertical-align:		middle;
 		-webkit-app-region:	no-drag;
-}
+	}
 }
 
 .nav-triangle-left {
@@ -377,5 +377,47 @@ body {
 		text-align:			center;
 		vertical-align:		middle;
 		-webkit-app-region:	no-drag;
+	}
+}
+
+.slider-panel {
+	position:			absolute;
+	height:				200px;
+	width:				200px;
+	left:				100px;
+	top:				20px;
+	border-radius:		10px;
+	background-color:	@lapislazuli;
+	z-index:			99;
+	-webkit-app-region:	no-drag;
+	.slider {
+		position: 		absolute;
+		left:			35px;
+		top:			35px;
+	}
+	.slider-text {
+		position:		absolute;
+		display:		table-cell;
+		width:			200px;
+		height:			20px;
+		padding-top:	10px;
+		text-align:		center;
+		color:			@sunshine;
+	}
+	.tool-on-sw {
+		position: 		absolute;
+		width:			200px;
+		bottom:			0px;
+		font-size:		35px;
+		text-align:		center;
+		color:			@sunshine;
+		z-index:		10;
+	}
+	.tool-on-remove {
+		position:		absolute;
+		top:			5px;
+		right:			10px;
+		text-align:		center;
+		color:			@sunshine;
 	}
 }

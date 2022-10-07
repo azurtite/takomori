@@ -180,6 +180,10 @@ $(function(){
 	 * Power button click event
 	 */
 	$('#power-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('power-btn operation prohibited (under toolTempFlag control)', DEBUG, 'power-btn.click');
+			return;
+		}
 		if(powerFlag) {
 			$$$.message('Click powerbtn(on>off)', DEBUG, '$power-btn.click');
 			postProcess();
@@ -233,8 +237,11 @@ $(function(){
 	 * Sub menu button click event
 	 */
 	$('#submenu-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('submenu-btn operation prohibited (under toolTempFlag control)', DEBUG, 'submenu-btn.click');
+			return;
+		}
 		$$$.message('Click submen ctrl btn', DEBUG, '$submenu-btn');
-
 		if(submenuToggle) {
 			$$$.message('Hide submenu', INFO, '$submenu-btn');
 			$('.nav-submenu').css({right: '-285px'});
@@ -249,6 +256,10 @@ $(function(){
 	 * Fullscreen button click event
 	 */
 	$('#fullscreen-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('fullscreen-btn operation prohibited (under toolTempFlag control)', DEBUG, 'fullscreen-btn.click');
+			return;
+		}
 		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
 		if(windowSize > maxWindowSize) windowSize = 1;
@@ -275,10 +286,18 @@ $(function(){
 	 * Close button click event
 	 */
 	$('#remove-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('remove-btn operation prohibited (under toolTempFlag control)', DEBUG, 'remove-btn.click');
+			return;
+		}
 		$$$.message('Click close btn', DEBUG, '$remove-btn');
 		window.close();
 	});
 	$("#suspend-btn").click(function(){
+		if(toolTempFlag) {
+			$$$.message('suspend-btn operation prohibited (under toolTempFlag control)', DEBUG, 'suspend-btn.click');
+			return;
+		}
 		$$$.message('Click suspend btn', DEBUG, '$suspend-btn');
 		window.close();
 	});
@@ -286,6 +305,10 @@ $(function(){
 	 * fan icon click event
 	 */
 	$('#fan-icon').click(function(){
+		if(toolTempFlag) {
+			$$$.message('fan-icon operation prohibited (under toolTempFlag control)', DEBUG, 'fan-icon.click');
+			return;
+		}
 		$$$.message('Click fan icon', DEBUG, '$fan-icon');
 		$$$.message('Detect firmware type', INFO, '$fan-icon');
 		let firmType;
@@ -333,27 +356,27 @@ $(function(){
 		}
 	});
 	$('#tool-on-remove-btn').click(function(){
-		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn');
+		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn.click');
 		$('#slider-panel-ctrl').css({'z-index': -1});
 		toolTempFlag = false;
-		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-icon');
+		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
 	$('#tool-icon').click(function(){
-		$$$.message('Click tool-icon', DEBUG, '$tool-icon');
+		$$$.message('Click tool-icon', DEBUG, '$tool-icon.click');
 		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
-					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon');
+					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
 					$('#slider-panel-ctrl').css({'z-index': 80});
 					toolTempFlag = true;
-					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-icon');
+					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-icon.click');
 				} else {
 					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel', WARN, 'tool-icon');
-					else if(!powerFlag) $$$.message('Printer is not connected', WARN, 'tool-icon');
+					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$tool-icon.click');
 				}
 			})
 			.fail(function(){
-				$$$.message('Printer is not operated', ERROR, 'tool-icon');
+				$$$.message('Printer is not operated', ERROR, '$tool-icon.click');
 			})
 	});
 });

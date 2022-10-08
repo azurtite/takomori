@@ -7,11 +7,12 @@ let powerFlag		= false;
 let tool0Flag		= false;
 let bedFlag			= false;
 let fanFlag			= false;
-let toolTempFlag	= true;
+let toolTempFlag	= false;
 let submenuToggle	= false;
 let windowSize		= 1;
 let maxWindowSize	= 3;
 let intervalID		= undefined;
+let toolTempValue	= 0;
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -355,12 +356,18 @@ $(function(){
 			return;
 		}
 	});
+	/**
+	 * tool on remove btn click event
+	 */
 	$('#tool-on-remove-btn').click(function(){
 		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn.click');
 		$('#slider-panel-ctrl').css({'z-index': -1});
 		toolTempFlag = false;
 		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
+	/**
+	 * tool icon click event
+	 */
 	$('#tool-icon').click(function(){
 		$$$.message('Click tool-icon', DEBUG, '$tool-icon.click');
 		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
@@ -378,5 +385,24 @@ $(function(){
 			.fail(function(){
 				$$$.message('Printer is not operated', ERROR, '$tool-icon.click');
 			})
+	});
+	/**
+	 * tool on sw btn
+	 */
+	$('#tool-on-sw-btn').click(function(){
+	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		.done(function(data){
+			if(data.state.toLowerCase() != 'printing' && powerFlag) {
+				$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
+				client.printer.setToolTargetTemperatures({'tool0': toolTempValue});
+				$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
+				if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
+				else $('#tool-on-sw-btn').css({color: sunshine});
+				$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
+				$('#slider-panel-ctrl').css({'z-index': -1});
+				toolTempFlag = false;
+				$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '#tool-on-sw-btn.click');
+			};
+		})
 	});
 });

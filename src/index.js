@@ -365,7 +365,7 @@ $(function(){
 	 */
 	$('#tool-on-remove-btn').click(function(){
 		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn.click');
-		$('#slider-panel-ctrl').css({'z-index': -1});
+		$('#slider-panel-tool-ctrl').css({'z-index': -1});
 		toolTempFlag = false;
 		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
@@ -378,7 +378,7 @@ $(function(){
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
-					$('#slider-panel-ctrl').css({'z-index': 80});
+					$('#slider-panel-tool-ctrl').css({'z-index': 80});
 					toolTempFlag = true;
 					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-icon.click');
 				} else {
@@ -403,7 +403,7 @@ $(function(){
 				if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
 				else $('#tool-on-sw-btn').css({color: sunshine});
 				$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
-				$('#slider-panel-ctrl').css({'z-index': -1});
+				$('#slider-panel-tool-ctrl').css({'z-index': -1});
 				toolTempFlag = false;
 				$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '#tool-on-sw-btn.click');
 			};

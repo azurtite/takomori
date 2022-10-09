@@ -7,10 +7,12 @@ let powerFlag		= false;
 let tool0Flag		= false;
 let bedFlag			= false;
 let fanFlag			= false;
+let toolTempFlag	= false;
 let submenuToggle	= false;
 let windowSize		= 1;
 let maxWindowSize	= 3;
 let intervalID		= undefined;
+let toolTempValue	= 0;
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -83,7 +85,7 @@ function getPrinterFullState() {
 		}
 		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 			.done(function(data){
-				if(data.job.file.name != 'null')
+				if(data.job.file.name != null)
 					if($('#jobname').text() != data.job.file.name) {
 						$$$.message('Update job name', INFO, 'jobNameCheck');
 						$('#jobname').text(data.job.file.name);
@@ -164,7 +166,11 @@ function postProcess() {
 						$$$.message('Stop fan(speed 0%)', DEBUG, 'postProcess');
 						break;
 				}
-			}) 
+			})
+		$$$.message('Execute heart down process', DEBUG, 'postProcess');
+		client.printer.setToolTargetTemperatures({'tool0': 0});
+		$('#tool-on-sw-btn').css({color: sunshine});
+		$('#tool-icon').css({color:sunshine});
 	}
 }
 
@@ -179,12 +185,16 @@ $(function(){
 	 * Power button click event
 	 */
 	$('#power-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('power-btn operation prohibited (under toolTempFlag control)', DEBUG, 'power-btn.click');
+			return;
+		}
 		if(powerFlag) {
 			$$$.message('Click powerbtn(on>off)', DEBUG, '$power-btn.click');
 			postProcess();
 			client.connection.disconnect()
 				.done(function(response){
-					$$$.message('Disconnect success', DEBUG, '$power-btn.click')
+					$$$.message('Disconnect success', INFO, '$power-btn.click')
 					client.browser.logout()
 						.done(function(response){
 							$$$.message('Logout success', INFO, '$power-btn.click');
@@ -232,8 +242,11 @@ $(function(){
 	 * Sub menu button click event
 	 */
 	$('#submenu-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('submenu-btn operation prohibited (under toolTempFlag control)', DEBUG, 'submenu-btn.click');
+			return;
+		}
 		$$$.message('Click submen ctrl btn', DEBUG, '$submenu-btn');
-
 		if(submenuToggle) {
 			$$$.message('Hide submenu', INFO, '$submenu-btn');
 			$('.nav-submenu').css({right: '-285px'});
@@ -248,6 +261,10 @@ $(function(){
 	 * Fullscreen button click event
 	 */
 	$('#fullscreen-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('fullscreen-btn operation prohibited (under toolTempFlag control)', DEBUG, 'fullscreen-btn.click');
+			return;
+		}
 		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
 		if(windowSize > maxWindowSize) windowSize = 1;
@@ -274,10 +291,18 @@ $(function(){
 	 * Close button click event
 	 */
 	$('#remove-btn').click(function(){
+		if(toolTempFlag) {
+			$$$.message('remove-btn operation prohibited (under toolTempFlag control)', DEBUG, 'remove-btn.click');
+			return;
+		}
 		$$$.message('Click close btn', DEBUG, '$remove-btn');
 		window.close();
 	});
 	$("#suspend-btn").click(function(){
+		if(toolTempFlag) {
+			$$$.message('suspend-btn operation prohibited (under toolTempFlag control)', DEBUG, 'suspend-btn.click');
+			return;
+		}
 		$$$.message('Click suspend btn', DEBUG, '$suspend-btn');
 		window.close();
 	});
@@ -285,6 +310,10 @@ $(function(){
 	 * fan icon click event
 	 */
 	$('#fan-icon').click(function(){
+		if(toolTempFlag) {
+			$$$.message('fan-icon operation prohibited (under toolTempFlag control)', DEBUG, 'fan-icon.click');
+			return;
+		}
 		$$$.message('Click fan icon', DEBUG, '$fan-icon');
 		$$$.message('Detect firmware type', INFO, '$fan-icon');
 		let firmType;
@@ -330,5 +359,54 @@ $(function(){
 			$$$.message('Printer is not connect', ERROR, '$fan-icon');
 			return;
 		}
+	});
+	/**
+	 * tool on remove btn click event
+	 */
+	$('#tool-on-remove-btn').click(function(){
+		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn.click');
+		$('#slider-panel-tool-ctrl').css({'z-index': -1});
+		toolTempFlag = false;
+		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
+	});
+	/**
+	 * tool icon click event
+	 */
+	$('#tool-icon').click(function(){
+		$$$.message('Click tool-icon', DEBUG, '$tool-icon.click');
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
+					$('#slider-panel-tool-ctrl').css({'z-index': 80});
+					toolTempFlag = true;
+					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-icon.click');
+				} else {
+					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel', WARN, 'tool-icon');
+					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$tool-icon.click');
+				}
+			})
+			.fail(function(){
+				$$$.message('Printer is not operated', ERROR, '$tool-icon.click');
+			})
+	});
+	/**
+	 * tool on sw btn
+	 */
+	$('#tool-on-sw-btn').click(function(){
+	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		.done(function(data){
+			if(data.state.toLowerCase() != 'printing' && powerFlag) {
+				$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
+				client.printer.setToolTargetTemperatures({'tool0': toolTempValue});
+				$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
+				if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
+				else $('#tool-on-sw-btn').css({color: sunshine});
+				$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
+				$('#slider-panel-tool-ctrl').css({'z-index': -1});
+				toolTempFlag = false;
+				$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '#tool-on-sw-btn.click');
+			};
+		})
 	});
 });

@@ -7,3 +7,5 @@ src/client.js
 Desktop.ini
 .sync_96dadc80b073.db-shm
 src/testUnit/
+src/roundslider.min.css
+src/roundslider.min.js

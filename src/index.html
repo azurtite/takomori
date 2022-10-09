@@ -18,12 +18,16 @@
 			<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 			<![endif]-->
-		<!-- install self javascript -->
+		<!-- install liblary -->
 			<script src="../node_modules/jquery/dist/jquery.min.js"></script>
 			<script src="../node_modules/lodash/lodash.min.js"></script>
 			<script src="./client.js"></script>
+			<script src="./roundslider.min.js"></script>
+		<!-- install self javascript -->
 			<script src="./logMan.js"></script>
 			<script src="./index.js"></script>
+		<!-- install liblary css -->
+			<link rel="stylesheet" href="./roundslider.min.css">
 		<title>tokomori</title>
 	</head>
 	<body>
@@ -198,6 +202,95 @@
 			</div>
 			<div class="alert-ok" id="alert-ok-btn">
 				<strong>OK</strong>
+			</div>
+		</div>
+	<!-- slider panel -->
+		<div class="slider-panel-tool" id="slider-panel-tool-ctrl">
+			<strong class="slider-text">Tool temperature</strong>
+			<div class="slider">
+				<div class="block">
+					<div class="cell">
+						<div id="handle1" class="slider_look"></div>
+						<style>
+							#handle1 .rs-handle  {
+								background-color:	transparent;
+								border:				8px solid transparent;
+								border-right-color: black;
+								margin:				-6px 0px 0px 14px !important;
+								border-width:		6px 64px 6px 4px;
+							}
+							#handle1 .rs-handle:before  {
+								display:			block;
+								content:			" ";
+								position:			absolute;
+								height:				22px;
+								width:				22px;
+								background:			black;
+								right:				-11px;
+								bottom:				-11px;
+								border-radius:		100px;
+							}
+							#handle1 .rs-tooltip  {
+								top:				75%;
+								font-size:			11px;
+								color:				#FFDC00
+							}
+							#handle1 .rs-tooltip div  {
+								text-align:			center;
+								color:				#FFDC00
+								border-radius: 4px;
+								padding: 1px 5px 2px;
+								margin-top: 4px;
+							}
+							#handle1 .rs-range-color  {
+								background-color:	#EA5405;
+							}
+							#handle1 .rs-path-color  {
+								background-color:	#FFDC00;
+							}
+							#handle1 .rs-bg-color {
+								background-color:	#261F87;
+							}
+						</style>
+						<script>
+							$("#handle1").roundSlider({
+								sliderType: 		"min-range",
+								editableTooltip:	false,
+								radius:				65,
+								width:				16,
+								value:				0,
+								min:				0,
+								max:				240,
+								handleSize: 		0,
+								handleShape:		"square",
+								circleShape:		"pie",
+								startAngle:			315,
+								tooltipFormat:		"changeTooltipTool",
+								valueChange:		"changeValueTool"
+							});
+							function changeTooltipTool(event) {
+								var val = event.value, temperature;
+								if(val < 180) temperature = 'Low';
+								else if(val < 210) temperature = 'PLA';
+								else if(val < 230) temperature = 'ABS';
+								else temperature = 'Very high';
+
+								if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
+								else return val + " C" + "<div>" + temperature + "<div>";
+							}
+							function changeValueTool(event) {
+								toolTempValue = event.value;
+								$$$.message('Tool value is ' + toolTempValue, LOWDEBUG, 'changeValueTool');
+							}
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="tool-on-sw" id="tool-on-sw-btn">
+				<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+			</div>
+			<div class="tool-on-remove" id="tool-on-remove-btn">
+				<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 			</div>
 		</div>
 	<!-- scripts -->

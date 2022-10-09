@@ -205,7 +205,7 @@
 			</div>
 		</div>
 	<!-- slider panel -->
-		<div class="slider-panel">
+		<div class="slider-panel-tool" id="slider-panel-tool-ctrl">
 			<strong class="slider-text">Tool temperature</strong>
 			<div class="slider">
 				<div class="block">
@@ -265,25 +265,31 @@
 								handleShape:		"square",
 								circleShape:		"pie",
 								startAngle:			315,
-								tooltipFormat:		"changeTooltip"
+								tooltipFormat:		"changeTooltipTool",
+								valueChange:		"changeValueTool"
 							});
-							function changeTooltip(event) {
+							function changeTooltipTool(event) {
 								var val = event.value, temperature;
 								if(val < 180) temperature = 'Low';
 								else if(val < 210) temperature = 'PLA';
 								else if(val < 230) temperature = 'ABS';
 								else temperature = 'Very high';
 
-								return val + " C" + "<div>" + temperature + "<div>";
+								if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
+								else return val + " C" + "<div>" + temperature + "<div>";
+							}
+							function changeValueTool(event) {
+								toolTempValue = event.value;
+								$$$.message('Tool value is ' + toolTempValue, LOWDEBUG, 'changeValueTool');
 							}
 						</script>
 					</div>
 				</div>
 			</div>
-			<div class="tool-on-sw">
+			<div class="tool-on-sw" id="tool-on-sw-btn">
 				<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
 			</div>
-			<div class="tool-on-remove">
+			<div class="tool-on-remove" id="tool-on-remove-btn">
 				<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 			</div>
 		</div>

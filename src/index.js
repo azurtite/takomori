@@ -166,7 +166,11 @@ function postProcess() {
 						$$$.message('Stop fan(speed 0%)', DEBUG, 'postProcess');
 						break;
 				}
-			}) 
+			})
+		$$$.message('Execute heart down process', DEBUG, 'postProcess');
+		client.printer.setToolTargetTemperatures({'tool0': 0});
+		$('#tool-on-sw-btn').css({color: sunshine});
+		$('#tool-icon').css({color:sunshine});
 	}
 }
 
@@ -190,7 +194,7 @@ $(function(){
 			postProcess();
 			client.connection.disconnect()
 				.done(function(response){
-					$$$.message('Disconnect success', DEBUG, '$power-btn.click')
+					$$$.message('Disconnect success', INFO, '$power-btn.click')
 					client.browser.logout()
 						.done(function(response){
 							$$$.message('Logout success', INFO, '$power-btn.click');

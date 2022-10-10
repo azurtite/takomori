@@ -376,6 +376,10 @@ $(function(){
 	 */
 	$('#tool-icon').click(function(){
 		$$$.message('Click tool-icon', DEBUG, '$tool-icon.click');
+		if(submenuToggle) {
+			$$$.message('Expanding subpanel. not show slider-panel-tool', WARN, '$bed-icon.click');
+			return;
+		}
 		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
@@ -419,6 +423,10 @@ $(function(){
 	 */
 	$('#bed-icon').click(function(){
 		$$$.message('Click bed-icon', DEBUG, '$bed-icon.click');
+		if(submenuToggle) {
+			$$$.message('Expanding subpanel. not show slider-panel-bed', WARN, '$bed-icon.click');
+			return;
+		}
 		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {

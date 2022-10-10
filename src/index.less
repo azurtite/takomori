@@ -38,6 +38,8 @@ body {
 			font-size:			24pt;
 			text-align:			center;
 			color:				@sunshine;
+			-webkit-app-region:	no-drag;
+			cursor:				default;
 		}
 		.nav-fire-value {
 			height:				16px;
@@ -65,8 +67,24 @@ body {
 		position:				fixed;
 		left:					32px;
 		top:					150px;
-		width:					280px;
-		z-index:				90;
+		width:					215px;
+		z-index:				70;
+	}
+	.complete {
+		position:				fixed;
+		top:					150px;
+		left:					260px;
+		z-index:				70;
+	}
+	.printtime {
+		position: 				fixed;
+		top:					180px;
+		left:					130px;
+		font-weight:			bold;
+		.printtime-value {
+			width:				80px;
+			text-align:			right;
+		}
 	}
 	.nav-file-name {
 		position:				fixed;
@@ -124,7 +142,7 @@ body {
 		text-align:			center;
 		vertical-align:		middle;
 		-webkit-app-region:	no-drag;
-}
+	}
 }
 
 .nav-triangle-left {
@@ -359,5 +377,88 @@ body {
 		text-align:			center;
 		vertical-align:		middle;
 		-webkit-app-region:	no-drag;
+	}
+}
+
+.slider-panel-tool {
+	position:			absolute;
+	height:				200px;
+	width:				200px;
+	left:				100px;
+	top:				20px;
+	border-radius:		10px;
+	background-color:	@lapislazuli;
+	z-index:			-1;
+	-webkit-app-region:	no-drag;
+	.slider {
+		position: 		absolute;
+		left:			35px;
+		top:			35px;
+	}
+	.slider-text {
+		position:		absolute;
+		display:		table-cell;
+		width:			200px;
+		height:			20px;
+		padding-top:	10px;
+		text-align:		center;
+		color:			@sunshine;
+	}
+	.tool-on-sw {
+		position: 		absolute;
+		width:			200px;
+		bottom:			0px;
+		font-size:		35px;
+		text-align:		center;
+		color:			@sunshine;
+		z-index:		10;
+	}
+	.tool-on-remove {
+		position:		absolute;
+		top:			5px;
+		right:			10px;
+		text-align:		center;
+		color:			@sunshine;
+	}
+}
+.slider-panel-bed {
+	position:			absolute;
+	height:				200px;
+	width:				200px;
+	left:				100px;
+	top:				20px;
+	border-radius:		10px;
+	background-color:	@lapislazuli;
+	z-index:			-1;
+	-webkit-app-region:	no-drag;
+	.slider {
+		position: 		absolute;
+		left:			35px;
+		top:			35px;
+	}
+	.slider-text {
+		position:		absolute;
+		display:		table-cell;
+		width:			200px;
+		height:			20px;
+		padding-top:	10px;
+		text-align:		center;
+		color:			@sunshine;
+	}
+	.bed-on-sw {
+		position: 		absolute;
+		width:			200px;
+		bottom:			0px;
+		font-size:		35px;
+		text-align:		center;
+		color:			@sunshine;
+		z-index:		10;
+	}
+	.bed-on-remove {
+		position:		absolute;
+		top:			5px;
+		right:			10px;
+		text-align:		center;
+		color:			@sunshine;
 	}
 }

@@ -360,7 +360,7 @@
 						function changeTooltipBed(event) {
 							var val = event.value, temperature;
 							if(val < 40) temperature = 'Low';
-							else if(val < 61) temperature = 'PLA';
+							else if(val < 66) temperature = 'PLA';
 							else if(val < 121) temperature = 'ABS';
 							else temperature = 'Very high';
 
@@ -375,10 +375,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="tool-on-sw" id="tool-on-sw-btn">
+		<div class="bed-on-sw" id="bed-on-sw-btn">
 			<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
 		</div>
-		<div class="tool-on-remove" id="tool-on-remove-btn">
+		<div class="bed-on-remove" id="bed-on-remove-btn">
 			<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 		</div>
 	</div>

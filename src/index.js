@@ -8,11 +8,13 @@ let tool0Flag		= false;
 let bedFlag			= false;
 let fanFlag			= false;
 let toolTempFlag	= false;
+let bedTempFlag		= false;
 let submenuToggle	= false;
 let windowSize		= 1;
 let maxWindowSize	= 3;
 let intervalID		= undefined;
 let toolTempValue	= 0;
+let bedTempValue	= 0;
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -185,7 +187,7 @@ $(function(){
 	 * Power button click event
 	 */
 	$('#power-btn').click(function(){
-		if(toolTempFlag) {
+		if(toolTempFlag || bedTempFlag) {
 			$$$.message('power-btn operation prohibited (under toolTempFlag control)', DEBUG, 'power-btn.click');
 			return;
 		}
@@ -242,7 +244,7 @@ $(function(){
 	 * Sub menu button click event
 	 */
 	$('#submenu-btn').click(function(){
-		if(toolTempFlag) {
+		if(toolTempFlag || bedTempFlag) {
 			$$$.message('submenu-btn operation prohibited (under toolTempFlag control)', DEBUG, 'submenu-btn.click');
 			return;
 		}
@@ -261,7 +263,7 @@ $(function(){
 	 * Fullscreen button click event
 	 */
 	$('#fullscreen-btn').click(function(){
-		if(toolTempFlag) {
+		if(toolTempFlag || bedTempFlag) {
 			$$$.message('fullscreen-btn operation prohibited (under toolTempFlag control)', DEBUG, 'fullscreen-btn.click');
 			return;
 		}
@@ -291,7 +293,7 @@ $(function(){
 	 * Close button click event
 	 */
 	$('#remove-btn').click(function(){
-		if(toolTempFlag) {
+		if(toolTempFlag || bedTempFlag) {
 			$$$.message('remove-btn operation prohibited (under toolTempFlag control)', DEBUG, 'remove-btn.click');
 			return;
 		}
@@ -299,7 +301,7 @@ $(function(){
 		window.close();
 	});
 	$("#suspend-btn").click(function(){
-		if(toolTempFlag) {
+		if(toolTempFlag || bedTempFlag) {
 			$$$.message('suspend-btn operation prohibited (under toolTempFlag control)', DEBUG, 'suspend-btn.click');
 			return;
 		}
@@ -310,7 +312,7 @@ $(function(){
 	 * fan icon click event
 	 */
 	$('#fan-icon').click(function(){
-		if(toolTempFlag) {
+		if(toolTempFlag || bedTempFlag) {
 			$$$.message('fan-icon operation prohibited (under toolTempFlag control)', DEBUG, 'fan-icon.click');
 			return;
 		}
@@ -382,7 +384,7 @@ $(function(){
 					toolTempFlag = true;
 					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-icon.click');
 				} else {
-					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel', WARN, 'tool-icon');
+					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel-tool', WARN, 'tool-icon');
 					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$tool-icon.click');
 				}
 			})
@@ -391,22 +393,66 @@ $(function(){
 			})
 	});
 	/**
-	 * tool on sw btn
+	 * tool on sw btn click event
 	 */
 	$('#tool-on-sw-btn').click(function(){
-	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
-		.done(function(data){
-			if(data.state.toLowerCase() != 'printing' && powerFlag) {
-				$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
-				client.printer.setToolTargetTemperatures({'tool0': toolTempValue});
-				$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
-				if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
-				else $('#tool-on-sw-btn').css({color: sunshine});
-				$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
-				$('#slider-panel-tool-ctrl').css({'z-index': -1});
-				toolTempFlag = false;
-				$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '#tool-on-sw-btn.click');
-			};
-		})
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
+					client.printer.setToolTargetTemperatures({'tool0': toolTempValue});
+					$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
+					if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
+					else $('#tool-on-sw-btn').css({color: sunshine});
+					$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
+					$('#slider-panel-tool-ctrl').css({'z-index': -1});
+					toolTempFlag = false;
+					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-on-sw-btn.click');
+				}
+			})
+	});
+	/**
+	 * bed icon click event
+	 */
+	$('#bed-icon').click(function(){
+		$$$.message('Click bed-icon', DEBUG, '$bed-icon.click');
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					$$$.message('Show bed temperature panel', INFO, '$bed-icon.click');
+					$('#slider-panel-bed-ctrl').css({'z-index': 80});
+					bedTempFlag = true;
+					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-icon.click');
+				} else {
+					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel-bed', WARN, '$bed-icon.click');
+					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$bed-icon.click');
+				}
+			}).fail(function(err){
+				$$$.message('Printer not found', ERROR, '$bed-icon.click');
+			})
+	});
+	/**
+	 * bed on sw btn click event
+	 */
+	$('#bed-on-sw-btn').click(function(){
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					$$$.message('Click bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
+					client.printer.setBedTargetTemperature(bedTempValue);
+					$$$.message('Detect bed temperature. value is ' + bedTempValue, INFO, '$bed-on-sw-btn.click');
+					if(bedTempValue > 0) $('#bed-on-sw-btn').css({color: rescueorange});
+					else $('#bed-on-sw-btn').css({color: sunshine});
+					$$$.message('Change css. bed-on-sw-btn:color', DEBUG, '$bed-on-sw-btn.click');
+					$('#slider-panel-bed-ctrl').css({'z-index': -1});
+					bedTempFlag = false;
+					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-on-sw-btn.click');
+				} else {
+					if(!powerFlag) $$$.message('Printer is not connected', WARN, '$bed-on-sw-btn.click');
+				}
+			})
+			.fail(function(err){
+				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
+			})
 	});
 });

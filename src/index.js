@@ -389,7 +389,7 @@ $(function(){
 				}
 			})
 			.fail(function(){
-				$$$.message('Printer is not operated', ERROR, '$tool-icon.click');
+				$$$.message('Printer not found', ERROR, '$tool-icon.click');
 			})
 	});
 	/**
@@ -409,6 +409,9 @@ $(function(){
 					toolTempFlag = false;
 					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-on-sw-btn.click');
 				}
+			})
+			.fail(function(){
+				$$$.message('Printer not found', ERROR, '$tool-on-sw-btn.click');
 			})
 	});
 	/**
@@ -447,8 +450,6 @@ $(function(){
 					$('#slider-panel-bed-ctrl').css({'z-index': -1});
 					bedTempFlag = false;
 					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-on-sw-btn.click');
-				} else {
-					if(!powerFlag) $$$.message('Printer is not connected', WARN, '$bed-on-sw-btn.click');
 				}
 			})
 			.fail(function(err){

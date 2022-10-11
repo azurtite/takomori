@@ -151,6 +151,7 @@ body {
 	height:				100%;
 	width:				16px;
 	left:				0px;
+	z-index:			90;
 	.nav-triangle-left-mark {
 		display:		table-cell;
 		vertical-align:	middle;
@@ -163,6 +164,7 @@ body {
 	height:				100%;
 	width:				16px;
 	right:				0px;
+	z-index:			90;
 	.nav-triangle-right-mark {
 		display:		table-cell;
 		vertical-align:	middle;
@@ -460,5 +462,21 @@ body {
 		right:			10px;
 		text-align:		center;
 		color:			@sunshine;
+	}
+}
+
+
+.file-window {
+	position:			absolute;
+	display:			table;
+	height:				240px;
+	width:				400px;
+	color:				@sunshine;
+	background-color:	@ceruleanblue;
+	z-index:			80;
+	.file-window-text {
+		display:		table-cell;
+		text-align:		center;
+		vertical-align:	middle;
 	}
 }

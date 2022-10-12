@@ -146,29 +146,40 @@ body {
 }
 
 .nav-triangle-left {
-	position:			fixed;
-	display:			table;
-	height:				100%;
-	width:				16px;
-	left:				0px;
-	z-index:			90;
+	position:					fixed;
+	display:					table;
+	height:						100%;
+	width:						24px;
+	left:						0px;
+	z-index:					90;
 	.nav-triangle-left-mark {
-		display:		table-cell;
-		vertical-align:	middle;
-		color:			@sunshine;
+		display:				table-cell;
+		height:					24px;
+		color:					@sunshine;
+		font-size:				16pt;
+		text-align:				center;
+		vertical-align:			middle;
+		.marks {
+			-webkit-app-region:	no-drag;
+		}
 	}
 }
 .nav-triangle-right {
-	position:			fixed;
-	display:			table;
-	height:				100%;
-	width:				16px;
-	right:				0px;
-	z-index:			90;
+	position:					fixed;
+	display:					table;
+	height:						100%;
+	width:						24px;
+	right:						0px;
+	z-index:					90;
 	.nav-triangle-right-mark {
-		display:		table-cell;
-		vertical-align:	middle;
-		color:			@sunshine;
+		display:				table-cell;
+		color:					@sunshine;
+		font-size:				16pt;
+		text-align:				center;
+		vertical-align:			middle;
+		.marks {
+			-webkit-app-region:	no-drag;
+		}
 	}
 }
 

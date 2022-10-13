@@ -15,6 +15,7 @@ let maxWindowSize		= 3;
 let panelPosition		= 2;
 let maxPanelPosition	= 2;
 let intervalID			= undefined;
+let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
 
@@ -29,6 +30,16 @@ let $$$ = new logMan(true, false);
 
 window.resizeTo(400, 240);
 
+$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+	.done(function(data){
+		console.info(data.files.length);
+		$('#file-list-ctrl').html('');
+		for(var i=0; i<data.files.length; i++) {
+			var element = document.createElement('div');
+				element.innerText = data.files[i].display;
+			$('#file-list-ctrl').append(element);
+		}
+	})
 /**
  * getPrinterFullSate()
  */

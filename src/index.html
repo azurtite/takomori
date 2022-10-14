@@ -35,7 +35,7 @@
 			Current value: <strong id="counter">0</strong>
 		</div>
 	<!-- main window -->
-	<div class="main-window">
+	<div class="main-window" id="main-window-ctrl">
 		<!-- tool templature icon -->
 		<div class="nav-fire-space pos-fire-tool">
 			<div class="nav-fire-title">tool</div>
@@ -117,6 +117,10 @@
 			</tr>
 		</table>
 	</div>
+	<div class="file-window" id="file-window-ctrl">
+		<div class="file-list" id="file-list-ctrl"></div>
+		<strong class="file-window-text">File Panel</strong>
+	</div>
 	<!-- winctrl -->
 		<div class="nav-winctrl">
 			<div class="nav-minimum">
@@ -132,13 +136,13 @@
 	<!-- left angle -->
 		<div class="nav-triangle-left">
 			<div class="nav-triangle-left-mark">
-				<span class="glyphicon glyphicon glyphicon-triangle-left"></span>
+				<span class="marks glyphicon glyphicon glyphicon-triangle-left" id="left-mark"></span>
 			</div>
 		</div>
 	<!-- right angle -->
 		<div class="nav-triangle-right">
 			<div class="nav-triangle-right-mark">
-				<span class="glyphicon glyphicon glyphicon-triangle-right"></span>
+				<span class="marks glyphicon glyphicon glyphicon-triangle-right" id="right-mark"></span>
 			</div>
 		</div>
 	<!-- sub menu -->

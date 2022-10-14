@@ -1,20 +1,25 @@
-let sunshine		= '#FFDC00';
-let rescueorange	= '#EA5405';
-let ceruleanblue	= '#008DB7';
-let forestleaf		= '#008554';
+let sunshine			= '#FFDC00';
+let rescueorange		= '#EA5405';
+let ceruleanblue		= '#008DB7';
+let forestleaf			= '#008554';
 
-let powerFlag		= false;
-let tool0Flag		= false;
-let bedFlag			= false;
-let fanFlag			= false;
-let toolTempFlag	= false;
-let bedTempFlag		= false;
-let submenuToggle	= false;
-let windowSize		= 1;
-let maxWindowSize	= 3;
-let intervalID		= undefined;
-let toolTempValue	= 0;
-let bedTempValue	= 0;
+let powerFlag			= false;
+let tool0Flag			= false;
+let bedFlag				= false;
+let fanFlag				= false;
+let toolTempFlag		= false;
+let bedTempFlag			= false;
+let submenuToggle		= false;
+let windowSize			= 1;
+let maxWindowSize		= 3;
+let panelPosition		= 2;
+let maxPanelPosition	= 2;
+let intervalID			= undefined;
+let fileIntervalID		= undefined;
+let toolTempValue		= 0;
+let bedTempValue		= 0;
+
+let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl'];
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -25,6 +30,16 @@ let $$$ = new logMan(true, false);
 
 window.resizeTo(400, 240);
 
+$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+	.done(function(data){
+		console.info(data.files.length);
+		$('#file-list-ctrl').html('');
+		for(var i=0; i<data.files.length; i++) {
+			var element = document.createElement('div');
+				element.innerText = data.files[i].display;
+			$('#file-list-ctrl').append(element);
+		}
+	})
 /**
  * getPrinterFullSate()
  */
@@ -463,5 +478,29 @@ $(function(){
 			.fail(function(err){
 				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
 			})
+	});
+	$('#left-mark').click(function(){
+		$$$.message('Click left-mark', DEBUG, '$left-mark.click');
+		panelPosition--;
+		if(panelPosition < 1) panelPosition = maxPanelPosition;
+		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
+		$('#' + windowList[panelPosition]).css({'z-index': 80});
+		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
+		if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
+		else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
+		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
+		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+	});
+	$('#right-mark').click(function(){
+		$$$.message('Click right-mark', DEBUG, '$right-mark.click');
+		panelPosition++;
+		if(panelPosition > maxPanelPosition) panelPosition = 1;
+		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
+		$('#' + windowList[panelPosition]).css({'z-index': 80});
+		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
+		if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
+		else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
+		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$left-mark.click');
+		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$left-mark.click');
 	});
 });

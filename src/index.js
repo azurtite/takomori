@@ -45,11 +45,11 @@ function getFilelist() {
 				var element = document.createElement('div');
 					element.innerHTML = 
 						'<div onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
-						'<div class="left-btn"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
-						'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
-						'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
-						'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
-						'<div class="right-btn"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
+						'<div class="left-btn file-list-icon-download"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
+						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
+						'<div class="middle-btn file-list-icon-trash"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
+						'<div class="middle-btn file-list-icon-open"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
+						'<div class="right-btn file-list-icon-print"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 						$('#file-list-ctrl').append(element);
 			}
 			displayClick(0);	// test code
@@ -265,7 +265,14 @@ $(function(){
 		$('.alert-text').text('Failed to create OctoPrint object')
 		$('.alert-panel').css({visibility: 'visible'});
 	}
-
+	
+	$('.file-list-icon-download').css({color: rescueorange});
+	$$$.message('Change css(rescueorange) file-list-icon-download', DEBUG, '$function');
+	$('.file-list-icon-scissors').css({color: rescueorange});
+	$$$.message('Change css(rescueorange) file-list-icon-scissors', DEBUG, '$function');
+	$('.file-list-icon-trash').css({color: rescueorange});
+	$$$.message('Change css(rescueorange) file-list-icon-trash', DEBUG, '$function');
+	
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	/**
 	 * Power button click event
@@ -288,6 +295,10 @@ $(function(){
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
+							$('.file-list-icon-open').css({color: sunshine});
+							$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+							$('.file-list-icon-print').css({color: sunshine});
+							$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -312,6 +323,10 @@ $(function(){
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
 						intervalID = setInterval(getPrinterFullState, 1000);
+						$('.file-list-icon-open').css({color: rescueorange});
+						$$$.message('Change css(rescueorange) file-list-icon-open', DEBUG, '$function');
+						$('.file-list-icon-print').css({color: rescueorange});
+						$$$.message('Change css(rescueorange) file-list-icon-print', DEBUG, '$function');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');

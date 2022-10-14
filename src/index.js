@@ -28,7 +28,9 @@ let client = new OctoPrintClient({
 
 let $$$ = new logMan(true, false);
 
-window.resizeTo(400, 240);
+if(windowSize == 1) window.resizeTo(400, 240);
+else if(windowSize == 2) window.resizeTo(800, 240);
+else if(windowSize == 3) window.resizeTo(800, 480);
 
 /**
  * file list process
@@ -543,6 +545,9 @@ $(function(){
 				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
 			})
 	});
+	/**
+	 * left mark click event
+	 */
 	$('#left-mark').click(function(){
 		$$$.message('Click left-mark', DEBUG, '$left-mark.click');
 		panelPosition--;
@@ -555,6 +560,9 @@ $(function(){
 		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
 		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
 	});
+	/**
+	 * right mark click event
+	 */
 	$('#right-mark').click(function(){
 		$$$.message('Click right-mark', DEBUG, '$right-mark.click');
 		panelPosition++;

@@ -36,23 +36,26 @@ else if(windowSize == 3) window.resizeTo(800, 480);
  * file list process
  */
 let fileInfoContainar;
-$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
-	.done(function(data){
-		fileInfoContainar = data;
-		$('#file-list-ctrl').html('');
-		for(var i=0; i<data.files.length; i++) {
-			var element = document.createElement('div');
-				element.innerHTML = 
-					'<div onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
-					'<div class="left-btn"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
-					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
-					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
-					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
-					'<div class="right-btn"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
-					$('#file-list-ctrl').append(element);
-		}
-		displayClick(0);	// test code
-	})
+function getFilelist() {
+	$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		.done(function(data){
+			fileInfoContainar = data;
+			$('#file-list-ctrl').html('');
+			for(var i=0; i<data.files.length; i++) {
+				var element = document.createElement('div');
+					element.innerHTML = 
+						'<div onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
+						'<div class="left-btn"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
+						'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
+						'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
+						'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
+						'<div class="right-btn"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
+						$('#file-list-ctrl').append(element);
+			}
+			displayClick(0);	// test code
+		})
+}
+getFilelist();
 function displayClick(e) {
 	function calculateTime(t) {
 		let time, temp;
@@ -574,5 +577,12 @@ $(function(){
 		else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
 		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$left-mark.click');
 		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$left-mark.click');
+	});
+	/**
+	 * reload btn click event
+	 */
+	$('#reload-btn').click(function(){
+		$$$.message('Click reload-btn', DEBUG, '$reload-btn.click');
+		getFilelist();
 	});
 });

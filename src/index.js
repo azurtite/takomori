@@ -36,8 +36,14 @@ $.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 		$('#file-list-ctrl').html('');
 		for(var i=0; i<data.files.length; i++) {
 			var element = document.createElement('div');
-				element.innerText = data.files[i].display;
-			$('#file-list-ctrl').append(element);
+				element.innerHTML = 
+					data.files[i].display + '<br>' +
+					'<div class="left-btn"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
+					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
+					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
+					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
+					'<div class="right-btn"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
+					$('#file-list-ctrl').append(element);
 		}
 	})
 /**

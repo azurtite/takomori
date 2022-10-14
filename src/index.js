@@ -30,14 +30,18 @@ let $$$ = new logMan(true, false);
 
 window.resizeTo(400, 240);
 
+/**
+ * file list process
+ */
+let fileInfoContainar;
 $.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 	.done(function(data){
-		console.info(data.files.length);
+		fileInfoContainar = data;
 		$('#file-list-ctrl').html('');
 		for(var i=0; i<data.files.length; i++) {
 			var element = document.createElement('div');
 				element.innerHTML = 
-					data.files[i].display + '<br>' +
+					'<div onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
 					'<div class="left-btn"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
 					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
 					'<div class="middle-btn"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
@@ -45,7 +49,61 @@ $.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 					'<div class="right-btn"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 					$('#file-list-ctrl').append(element);
 		}
+		displayClick(0);	// test code
 	})
+function displayClick(e) {
+	function calculateTime(t) {
+		let time, temp;
+		temp = Math.floor(t / 3600);
+		time = temp + 'h';
+		t = t - (temp * 3600);
+		$$$.message('Calculation hour. quotient is ' + temp + '. surplus is ' + t, DEBUG, 'calculateTime');
+		temp = Math.floor(t / 60);
+		$$$.message('Calculation minutes. quotient is ' + temp + '. surplus is ' + (t - (temp * 60)), DEBUG, 'calculateTime');
+		time = time + temp + 'm' + Math.floor((t - (temp * 60))*100)/100 + 's';
+		return time;
+	}
+	function detectName() {
+		var name = '';
+		for(var i=0;i<fileInfoContainar.files[e].display.split('.').length - 1;i++) {
+			if(i > 0) name += '.';
+			name += fileInfoContainar.files[e].display.split('.')[i];
+		}
+		$$$.message('Detect display name', DEBUG, 'displayClick');
+		return name;
+	}
+	function calculateFilament(f) {
+		var length,temp;
+		temp = Math.floor(f / 1000);
+		f = f - (temp * 1000);
+		length = temp + 'm';
+		$$$.message('Calculation meter. quotient is ' + temp + '. surplus is ' + f, DEBUG, 'calculateFilament');
+		temp = Math.floor(f / 10);
+		f = f - (temp * 10);
+		length = length + temp + 'cm';
+		$$$.message('Calculation centimeter. quotient is ' + temp + '. surplus is ' + f, DEBUG, 'calculateFilament');
+		length = length + Math.floor(f * 100) / 100 + 'mm';
+		return length;
+	}
+	$$$.message('Name tag click', DEBUG, 'displayClick');
+	$('#information-panel-ctrl').html(
+		'<div class="title">' + detectName() + '</h3>'+
+		'<hr>' +
+		'<table class="information-table">' +
+		'<tr><td>Type:</td><td>' + fileInfoContainar.files[e].display.split('.')[fileInfoContainar.files[e].display.split('.').length-1] + '</td></tr>' +
+		'<tr><td>Time:</td><td>' + calculateTime(fileInfoContainar.files[e].gcodeAnalysis.estimatedPrintTime) + '</td></tr>' +
+		'<tr><td colspan="2">Filament:</td></tr>' +
+		'<tr><td colspan="2" class="right">' + calculateFilament(fileInfoContainar.files[e].gcodeAnalysis.filament.tool0.length) + '</td></tr>' +
+		'<th>Size:</th>' +
+		'<tr><td colspan=2 class="right">' +
+		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.width*100)/100 + 'x' +
+		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.depth*100)/100 + 'x' +
+		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.height*100)/100 + ' mm' +
+		'</td></tr>' +
+		'</table>'
+	);
+	$$$.message('Generate innerHTML(information-panel)', DEBUG, 'displayClick');
+}
 /**
  * getPrinterFullSate()
  */

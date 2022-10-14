@@ -486,10 +486,50 @@ body {
 	background-color:	@ceruleanblue;
 	z-index:			80;
 	.file-list {
-		position:		absolute;
-		left:			32px;
-		top:			24px;
-		height:			192px;
-		width:			160px;
+		position:			absolute;
+		left:				32px;
+		top:				24px;
+		height:				192px;
+		width:				160px;
+		overflow-y:			scroll;
+		font-size:			12pt;
+		.left-btn {
+			display:		table-cell;
+			height:			24px;
+			width:			24px;
+			border:			1px solid;
+			border-radius:	5px 0px 0px 5px;
+			text-align:		center;
+			vertical-align:	middle;
+		}
+		.middle-btn {
+			display:		table-cell;
+			height:			24px;
+			width:			24px;
+			border-top:		1px solid;
+			border-bottom:	1px solid;
+			border-right:	1px solid;
+			text-align:		center;
+			vertical-align:	middle;
+		}
+		.right-btn {
+			display:		table-cell;
+			height:			24px;
+			width:			24px;
+			border-top:		1px solid;
+			border-bottom:	1px solid;
+			border-right:	1px solid;
+			border-radius:	0px 5px 5px 0px;
+			text-align:		center;
+			vertical-align:	middle;
+		}
 	}
+}
+div::-webkit-scrollbar {
+	background:			@ceruleanblue;
+	width:				8px;
+}
+div::-webkit-scrollbar-thumb {
+	background: 		@sunshine;
+	border-radius:		5px;
 }

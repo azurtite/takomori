@@ -47,7 +47,7 @@ function getFilelist() {
 				var element = document.createElement('div');
 					element.innerHTML = 
 						'<div class="display-name" onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
-						'<div class="left-btn file-list-icon-download"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
+						'<div class="left-btn file-list-icon-download" onclick="downloadClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
 						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
 						'<div class="middle-btn file-list-icon-trash"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
 						'<div class="middle-btn file-list-icon-open"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
@@ -114,6 +114,28 @@ function displayClick(e) {
 		'</table>'
 	);
 	$$$.message('Generate innerHTML(information-panel)', DEBUG, 'displayClick');
+}
+function downloadClick(e) {
+	function changeStream(data) {
+			$$$.message('Start encording ', DEBUG, 'downloadClick')
+			var length = data.length;
+		var result = new Uint8Array(length);
+		for(var i=0; i<length; i++)
+			result[i] = data[i].charCodeAt(0);
+		return result;
+	}
+	$$$.message('Click the download icon in Listing ' + e, DEBUG, 'downloadClick');
+	client.files.download('local', fileInfoContainar.files[e].path)
+		.done(function(data){
+			$$$.message('Download ' + fileInfoContainar.files[e].display, DEBUG, 'downloadClick')
+			var stream = new Uint8Array(changeStream(data));
+			var element = document.createElement('a');
+			element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'text/.gcode'}));
+			element.download = '';
+			element.click();
+			URL.revokeObjectURL(element.href);
+			$$$.message('Delete temporary files', DEBUG, 'downloadClick')
+		})
 }
 /**
  * getPrinterFullSate()

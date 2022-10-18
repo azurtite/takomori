@@ -2,6 +2,7 @@ let sunshine			= '#FFDC00';
 let rescueorange		= '#EA5405';
 let ceruleanblue		= '#008DB7';
 let forestleaf			= '#008554';
+let peleskyblue			= '#C2E5F9';
 
 let powerFlag			= false;
 let tool0Flag			= false;
@@ -37,6 +38,7 @@ else if(windowSize == 3) window.resizeTo(800, 480);
  */
 let fileInfoContainar;
 function getFilelist() {
+	$$$.message('Call REST api', DEBUG, 'getFilelist');
 	$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
 		.done(function(data){
 			fileInfoContainar = data;
@@ -44,8 +46,8 @@ function getFilelist() {
 			for(var i=0; i<data.files.length; i++) {
 				var element = document.createElement('div');
 					element.innerHTML = 
-						'<div onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
-						'<div class="left-btn file-list-icon-download"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
+						'<div class="display-name" onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
+						'<div class="left-btn file-list-icon-download" onclick="downloadClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
 						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
 						'<div class="middle-btn file-list-icon-trash"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
 						'<div class="middle-btn file-list-icon-open"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
@@ -53,6 +55,10 @@ function getFilelist() {
 						$('#file-list-ctrl').append(element);
 			}
 			displayClick(0);	// test code
+			$('.file-list-icon-open').css({color: peleskyblue});
+			$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+			$('.file-list-icon-print').css({color: peleskyblue});
+			$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
 		})
 }
 getFilelist();
@@ -108,6 +114,28 @@ function displayClick(e) {
 		'</table>'
 	);
 	$$$.message('Generate innerHTML(information-panel)', DEBUG, 'displayClick');
+}
+function downloadClick(e) {
+	function changeStream(data) {
+			$$$.message('Start encording ', DEBUG, 'downloadClick')
+			var length = data.length;
+		var result = new Uint8Array(length);
+		for(var i=0; i<length; i++)
+			result[i] = data[i].charCodeAt(0);
+		return result;
+	}
+	$$$.message('Click the download icon in Listing ' + e, DEBUG, 'downloadClick');
+	client.files.download('local', fileInfoContainar.files[e].path)
+		.done(function(data){
+			$$$.message('Download ' + fileInfoContainar.files[e].display, DEBUG, 'downloadClick')
+			var stream = new Uint8Array(changeStream(data));
+			var element = document.createElement('a');
+			element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'text/.gcode'}));
+			element.download = '';
+			element.click();
+			URL.revokeObjectURL(element.href);
+			$$$.message('Delete temporary files', DEBUG, 'downloadClick')
+		})
 }
 /**
  * getPrinterFullSate()
@@ -266,13 +294,6 @@ $(function(){
 		$('.alert-panel').css({visibility: 'visible'});
 	}
 	
-	$('.file-list-icon-download').css({color: rescueorange});
-	$$$.message('Change css(rescueorange) file-list-icon-download', DEBUG, '$function');
-	$('.file-list-icon-scissors').css({color: rescueorange});
-	$$$.message('Change css(rescueorange) file-list-icon-scissors', DEBUG, '$function');
-	$('.file-list-icon-trash').css({color: rescueorange});
-	$$$.message('Change css(rescueorange) file-list-icon-trash', DEBUG, '$function');
-	
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	/**
 	 * Power button click event
@@ -295,10 +316,10 @@ $(function(){
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
-							$('.file-list-icon-open').css({color: sunshine});
-							$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
-							$('.file-list-icon-print').css({color: sunshine});
-							$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
+							$('.file-list-icon-open').css({color: peleskyblue});
+							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+							$('.file-list-icon-print').css({color: peleskyblue});
+							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -323,10 +344,10 @@ $(function(){
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
 						intervalID = setInterval(getPrinterFullState, 1000);
-						$('.file-list-icon-open').css({color: rescueorange});
-						$$$.message('Change css(rescueorange) file-list-icon-open', DEBUG, '$function');
-						$('.file-list-icon-print').css({color: rescueorange});
-						$$$.message('Change css(rescueorange) file-list-icon-print', DEBUG, '$function');
+						$('.file-list-icon-open').css({color: sunshine});
+						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+						$('.file-list-icon-print').css({color: sunshine});
+						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');

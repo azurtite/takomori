@@ -589,61 +589,51 @@ $(function(){
 	 */
 	$('#left-mark-main').click(function(){
 		$$$.message('Click left-mark-main', DEBUG, '$left-mark-main.click');
-		panelPosition--;
-		if(panelPosition < 1) panelPosition = maxPanelPosition;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark-main.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark-main.click');
-		if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
-		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark-main.click');
-		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark-main.click');
+		leftmarkClick();
 	});
 	/**
 	 * right mark main click event
 	 */
 	$('#right-mark-main').click(function(){
 		$$$.message('Click right-mark-main', DEBUG, '$right-mark-main.click');
-		panelPosition++;
-		if(panelPosition > maxPanelPosition) panelPosition = 1;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark-main.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark-main.click');
-		if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
-		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark-main.click');
-		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark-main.click');
+		rightmarkClick();
 	});
 	/**
 	 * left mark file click event
 	 */
-	 $('#left-mark-file').click(function(){
+	$('#left-mark-file').click(function(){
 		$$$.message('Click left-mark-file', DEBUG, '$left-mark-file.click');
-		panelPosition--;
-		if(panelPosition < 1) panelPosition = maxPanelPosition;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark-file.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark-file.click');
-		if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
-		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark-file.click');
-		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark-file.click');
+		leftmarkClick();
 	});
 	/**
 	 * right mark file click event
 	 */
 	$('#right-mark-file').click(function(){
 		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
+		rightmarkClick();
+	});
+	function leftmarkClick() {
+		panelPosition--;
+		if(panelPosition < 1) panelPosition = maxPanelPosition;
+		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
+		$('#' + windowList[panelPosition]).css({'z-index': 80});
+		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
+		if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
+		else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
+		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
+		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+	}
+	function rightmarkClick() {
 		panelPosition++;
 		if(panelPosition > maxPanelPosition) panelPosition = 1;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark-file.click');
+		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
 		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark-file.click');
+		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark.click');
 		if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
 		else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
-		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark-file.click');
-		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark-file.click');
-	});
+		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark.click');
+		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark.click');
+	}
 	/**
 	 * reload btn click event
 	 */

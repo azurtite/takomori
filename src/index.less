@@ -14,11 +14,14 @@ body {
 
 .main-window {
 	position:					absolute;
-	height:						100%;
-	width:						100%;
+	top:						0px;
+	left:						0px;
+	height:						240px;
+	width:						400px;
 	color:						@sunshine;
 	background-color:			@ceruleanblue;
 	-webkit-app-region:			drag;
+	z-index:					-1;
 	cursor:						move;
 	.nav-fire-space {
 		position:				fixed;
@@ -142,44 +145,6 @@ body {
 		text-align:			center;
 		vertical-align:		middle;
 		-webkit-app-region:	no-drag;
-	}
-}
-
-.nav-triangle-left {
-	position:					fixed;
-	display:					table;
-	height:						100%;
-	width:						24px;
-	left:						0px;
-	z-index:					90;
-	.nav-triangle-left-mark {
-		display:				table-cell;
-		height:					24px;
-		color:					@sunshine;
-		font-size:				16pt;
-		text-align:				center;
-		vertical-align:			middle;
-		.marks {
-			-webkit-app-region:	no-drag;
-		}
-	}
-}
-.nav-triangle-right {
-	position:					fixed;
-	display:					table;
-	height:						100%;
-	width:						24px;
-	right:						0px;
-	z-index:					90;
-	.nav-triangle-right-mark {
-		display:				table-cell;
-		color:					@sunshine;
-		font-size:				16pt;
-		text-align:				center;
-		vertical-align:			middle;
-		.marks {
-			-webkit-app-region:	no-drag;
-		}
 	}
 }
 
@@ -568,4 +533,42 @@ div::-webkit-scrollbar {
 div::-webkit-scrollbar-thumb {
 	background: 		@sunshine;
 	border-radius:		5px;
+}
+
+.nav-triangle-left {
+	position:					fixed;
+	display:					table;
+	height:						100%;
+	width:						24px;
+	left:						0px;
+	z-index:					90;
+	.nav-triangle-left-mark {
+		display:				table-cell;
+		height:					24px;
+		color:					@sunshine;
+		font-size:				16pt;
+		text-align:				center;
+		vertical-align:			middle;
+		.marks {
+			-webkit-app-region:	no-drag;
+		}
+	}
+}
+.nav-triangle-right {
+	position:					fixed;
+	display:					table;
+	height:						100%;
+	width:						24px;
+	right:						0px;
+	z-index:					90;
+	.nav-triangle-right-mark {
+		display:				table-cell;
+		color:					@sunshine;
+		font-size:				16pt;
+		text-align:				center;
+		vertical-align:			middle;
+		.marks {
+			-webkit-app-region:	no-drag;
+		}
+	}
 }

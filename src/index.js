@@ -394,9 +394,15 @@ $(function(){
 		if(windowSize == 1) {
 			$$$.message('Window size is 400 x 240', LOWDEBUG, '$fullscreen-btn');
 			window.resizeTo(400,240);
+			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			if(panelPosition == 1) $('#main-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 2) $('#file-window-ctrl').css({'z-index': 80});
 		} else if(windowSize == 2) {
 			$$$.message('Window size is 800 x 240', LOWDEBUG, '$fullscreen-btn');
 			window.resizeTo(800,240);
+			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
 		} else if(windowSize == 3) {
 			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
 			window.resizeTo(800,480);

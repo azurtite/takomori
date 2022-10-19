@@ -11,7 +11,7 @@ let fanFlag				= false;
 let toolTempFlag		= false;
 let bedTempFlag			= false;
 let submenuToggle		= false;
-let windowSize			= 1;
+let windowSize			= 3;
 let maxWindowSize		= 3;
 let panelPosition		= 2;
 let maxPanelPosition	= 4;
@@ -295,6 +295,7 @@ $(function(){
 	}
 	
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
+	triggerWindowSizeChange();
 	/**
 	 * Power button click event
 	 */
@@ -389,6 +390,9 @@ $(function(){
 		}
 		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
+		triggerWindowSizeChange();
+	});
+	function triggerWindowSizeChange() {
 		if(windowSize > maxWindowSize) windowSize = 1;
 		$$$.message('Screen mode is ' + windowSize, INFO, '$fullscreen-btn');
 		if(windowSize == 1) {
@@ -411,7 +415,7 @@ $(function(){
 			$('#manu-window-ctrl').css({'z-index': 80, top: '240px', left: '0px'});
 			$('#temp-window-ctrl').css({'z-index': 80, top: '240px', left: '400px'});
 		}
-	});
+	}
 	/**
 	 * alert ok button click event
 	 */

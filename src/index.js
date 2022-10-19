@@ -14,13 +14,13 @@ let submenuToggle		= false;
 let windowSize			= 1;
 let maxWindowSize		= 3;
 let panelPosition		= 2;
-let maxPanelPosition	= 2;
+let maxPanelPosition	= 4;
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
 
-let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl'];
+let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -406,6 +406,10 @@ $(function(){
 		} else if(windowSize == 3) {
 			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
 			window.resizeTo(800,480);
+			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
+			$('#manu-window-ctrl').css({'z-index': 80, top: '240px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': 80, top: '240px', left: '400px'});
 		}
 	});
 	/**
@@ -618,6 +622,34 @@ $(function(){
 		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
 		rightmarkClick();
 	});
+	/**
+	 * left mark file click event
+	 */
+	 $('#left-mark-manu').click(function(){
+		$$$.message('Click left-mark-manu', DEBUG, '$left-mark-manu.click');
+		leftmarkClick();
+	});
+	/**
+	 * right mark manu click event
+	 */
+	$('#right-mark-manu').click(function(){
+		$$$.message('Click right-mark-manu', DEBUG, '$right-mark-manu.click');
+		rightmarkClick();
+	});
+	/**
+	 * left mark file click event
+	 */
+	 $('#left-mark-temp').click(function(){
+		$$$.message('Click left-mark-temp', DEBUG, '$left-mark-temp.click');
+		leftmarkClick();
+	});
+	/**
+	 * right mark temp click event
+	 */
+	$('#right-mark-temp').click(function(){
+		$$$.message('Click right-mark-temp', DEBUG, '$right-mark-temp.click');
+		rightmarkClick();
+	});
 	function leftmarkClick() {
 		if(windowSize == 1) {
 			panelPosition--;
@@ -625,10 +657,10 @@ $(function(){
 			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
 			$('#' + windowList[panelPosition]).css({'z-index': 80});
 			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
-			if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
-			else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
-			if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
-			else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+			if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
+			else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
+			if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark.click');
+			else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark.click');
 		}
 	}
 	function rightmarkClick() {
@@ -638,10 +670,10 @@ $(function(){
 			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
 			$('#' + windowList[panelPosition]).css({'z-index': 80});
 			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark.click');
-			if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
-			else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
-			if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark.click');
-			else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark.click');
+			if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
+			else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
+			if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
+			else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
 		}
 	}
 	/**

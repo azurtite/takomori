@@ -395,9 +395,9 @@ $(function(){
 	});
 	function triggerWindowSizeChange() {
 		if(windowSize > maxWindowSize) windowSize = 1;
-		$$$.message('Screen mode is ' + windowSize, INFO, '$fullscreen-btn');
+		$$$.message('Screen mode is ' + windowSize, INFO, 'triggerWindowSizeChange');
 		if(windowSize == 1) {
-			$$$.message('Window size is 400 x 240', LOWDEBUG, '$fullscreen-btn');
+			$$$.message('Window size is 400 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(400,240);
 			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
@@ -408,17 +408,19 @@ $(function(){
 			else if(panelPosition == 3) $('#manu-window-ctrl').css({'z-index': 80});
 			else if(panelPosition == 4) $('#temp-window-ctrl').css({'z-index': 80});
 		} else if(windowSize == 2) {
-			$$$.message('Window size is 800 x 240', LOWDEBUG, '$fullscreen-btn');
+			$$$.message('Window size is 800 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,240);
 			// Main panel position set
 			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$$$.message('Reset panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
 			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
 			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
+			$$$.message('Set panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
 		} else if(windowSize == 3) {
-			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
+			$$$.message('Window size is 800 x 480', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,480);
 			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
 			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});

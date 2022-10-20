@@ -21,7 +21,7 @@ body {
 	color:						@sunshine;
 	background-color:			@ceruleanblue;
 	-webkit-app-region:			drag;
-	z-index:					-1;
+	z-index:					80;
 	cursor:						move;
 	.nav-fire-space {
 		position:				fixed;
@@ -105,6 +105,42 @@ body {
 			vertical-align:		bottom;
 			-webkit-app-region:	no-drag;
 			cursor:				auto;
+		}
+	}
+	.main-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		-webkit-app-region:	no-drag;
+		cursor:				default;
+		.main-triangle-left-mark {
+			display:		table-cell;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.main-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		-webkit-app-region:	no-drag;
+		cursor:				default;
+		.main-triangle-right-mark {
+			display:		table-cell;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
 		}
 	}
 }
@@ -449,7 +485,7 @@ body {
 	width:					400px;
 	color:					@sunshine;
 	background-color:		@ceruleanblue;
-	z-index:				80;
+	z-index:				-1;
 	.file-list-title {
 		position:			absolute;
 		left:				32px;
@@ -525,6 +561,40 @@ body {
 			}
 		}
 	}
+	.file-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		.file-triangle-left-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.file-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		.file-triangle-right-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
 }
 div::-webkit-scrollbar {
 	background:			@ceruleanblue;
@@ -547,6 +617,40 @@ div::-webkit-scrollbar-thumb {
 		text-align:			center;
 		vertical-align:		middle;
 	}
+	.manu-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		.manu-triangle-left-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.manu-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		.manu-triangle-right-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
 }
 .temp-window{
 	position:				absolute;
@@ -561,42 +665,38 @@ div::-webkit-scrollbar-thumb {
 		text-align:			center;
 		vertical-align:		middle;
 	}
-}
-
-.nav-triangle-left {
-	position:					fixed;
-	display:					table;
-	height:						240px;
-	width:						24px;
-	left:						0px;
-	z-index:					90;
-	.nav-triangle-left-mark {
-		display:				table-cell;
-		height:					24px;
-		color:					@sunshine;
-		font-size:				16pt;
-		text-align:				center;
-		vertical-align:			middle;
-		.marks {
-			-webkit-app-region:	no-drag;
+	.temp-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		.temp-triangle-left-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
 		}
 	}
-}
-.nav-triangle-right {
-	position:					fixed;
-	display:					table;
-	height:						240px;
-	width:						24px;
-	right:						0px;
-	z-index:					90;
-	.nav-triangle-right-mark {
-		display:				table-cell;
-		color:					@sunshine;
-		font-size:				16pt;
-		text-align:				center;
-		vertical-align:			middle;
-		.marks {
-			-webkit-app-region:	no-drag;
+	.temp-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		.temp-triangle-right-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
 		}
 	}
 }

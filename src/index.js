@@ -11,10 +11,11 @@ let fanFlag				= false;
 let toolTempFlag		= false;
 let bedTempFlag			= false;
 let submenuToggle		= false;
-let windowSize			= 1;
+let windowSize			= 2;
 let maxWindowSize		= 3;
 let panelPosition		= 1;
 let maxPanelPosition	= 4;
+let panel2Array			= [1,2];
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
@@ -409,10 +410,13 @@ $(function(){
 		} else if(windowSize == 2) {
 			$$$.message('Window size is 800 x 240', LOWDEBUG, '$fullscreen-btn');
 			window.resizeTo(800,240);
-			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
-			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
+			// Main panel position set
+			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
+			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
 		} else if(windowSize == 3) {
 			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
 			window.resizeTo(800,480);

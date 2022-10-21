@@ -696,6 +696,7 @@ $(function(){
 		downmarkClick(4);
 	});
 	function leftmarkClick(p) {
+		$$$.message('Call leftmarkClick(' + p + ')', DEBUG, 'downmarkClick');
 		if(windowSize == 1) {
 			panelPosition--;
 			if(panelPosition < 1) panelPosition = maxPanelPosition;
@@ -727,6 +728,7 @@ $(function(){
 		}
 	}
 	function rightmarkClick(p) {
+		$$$.message('Call rightmarkClick(' + p + ')', DEBUG, 'downmarkClick');
 		if(windowSize == 1) {
 			panelPosition++;
 			if(panelPosition > maxPanelPosition) panelPosition = 1;

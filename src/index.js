@@ -626,6 +626,13 @@ $(function(){
 		rightmarkClick(1);
 	});
 	/**
+	 * down mark main click event
+	 */
+	$('#down-mark-main').click(function(){
+		$$$.message('Click down-mark-main', DEBUG, '$down-mark-main');
+		downmarkClick(1);
+	});
+	/**
 	 * left mark file click event
 	 */
 	$('#left-mark-file').click(function(){
@@ -638,6 +645,13 @@ $(function(){
 	$('#right-mark-file').click(function(){
 		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
 		rightmarkClick(2);
+	});
+	/**
+	 * down mark main click event
+	 */
+	 $('#down-mark-file').click(function(){
+		$$$.message('Click down-mark-file', DEBUG, '$down-mark-file');
+		downmarkClick(2);
 	});
 	/**
 	 * left mark file click event
@@ -654,6 +668,13 @@ $(function(){
 		rightmarkClick(3);
 	});
 	/**
+	 * down mark main click event
+	 */
+	 $('#down-mark-manu').click(function(){
+		$$$.message('Click down-mark-manu', DEBUG, '$down-mark-manu');
+		downmarkClick(3);
+	});
+	/**
 	 * left mark file click event
 	 */
 	 $('#left-mark-temp').click(function(){
@@ -666,6 +687,13 @@ $(function(){
 	$('#right-mark-temp').click(function(){
 		$$$.message('Click right-mark-temp', DEBUG, '$right-mark-temp.click');
 		rightmarkClick(4);
+	});
+	/**
+	 * down mark main click event
+	 */
+	 $('#down-mark-temp').click(function(){
+		$$$.message('Click down-mark-temp', DEBUG, '$down-mark-temp');
+		downmarkClick(4);
 	});
 	function leftmarkClick(p) {
 		if(windowSize == 1) {
@@ -728,6 +756,9 @@ $(function(){
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
 		}
+	}
+	function downmarkClick(p) {
+		$$$.message('Call downmarkClick(' + p + ')', DEBUG, 'downmarkClick');
 	}
 	/**
 	 * reload btn click event

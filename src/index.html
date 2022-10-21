@@ -36,6 +36,8 @@
 		</div>
 	<!-- main window -->
 	<div class="main-window" id="main-window-ctrl">
+		<!-- base body -->
+		<div class="basebody"></div>
 		<!-- tool templature icon -->
 		<div class="nav-fire-space pos-fire-tool">
 			<div class="nav-fire-title">tool</div>
@@ -116,103 +118,7 @@
 				<td class="printtime-value" id="printtimeleft-text">0s</td>
 			</tr>
 		</table>
-	</div>
-	<div class="file-window" id="file-window-ctrl">
-		<div class="file-list-title">
-			<span class="glyphicon glyphicon glyphicon glyphicon-floppy-open"></span>
-			<span class="glyphicon glyphicon glyphicon-refresh" id="reload-btn"></span>
-		</div>
-		<div class="file-list" id="file-list-ctrl"></div>
-		<div class="information-panel" id="information-panel-ctrl"></div>
-	</div>
-	<!-- winctrl -->
-		<div class="nav-winctrl">
-			<div class="nav-minimum">
-				<span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
-			</div>
-			<div class="nav-fullscreen" id="fullscreen-btn">
-				<span class="glyphicon glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-			</div>
-			<div class="nav-remove" id="remove-btn">
-				<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-			</div>
-		</div>
-	<!-- left angle -->
-		<div class="nav-triangle-left">
-			<div class="nav-triangle-left-mark">
-				<span class="marks glyphicon glyphicon glyphicon-triangle-left" id="left-mark"></span>
-			</div>
-		</div>
-	<!-- right angle -->
-		<div class="nav-triangle-right">
-			<div class="nav-triangle-right-mark">
-				<span class="marks glyphicon glyphicon glyphicon-triangle-right" id="right-mark"></span>
-			</div>
-		</div>
-	<!-- sub menu -->
-		<div class="nav-submenu">
-			<div class="nav-triangle-sub" id="submenu-btn">
-				&nbsp;
-			</div>
-			<div class="nav-move">
-				<div class="nav-move-icon">
-					<span class="glyphicon glyphicon glyphicon-move"></span><br />
-				</div>
-				<div class="nav-move-title">
-					move
-				</div>
-			</div>
-			<div class="nav-stats">
-				<div class="nav-stats-icon">
-					<span class="glyphicon glyphicon glyphicon-stats"></span><br />
-				</div>
-				<div class="nav-stats-title">
-					glaph
-				</div>
-			</div>
-			<div class="nav-console">
-				<div class="nav-console-icon">
-					<span class="glyphicon glyphicon glyphicon-console"></span><br />
-				</div>
-				<div class="nav-console-title">
-					gCode
-				</div>
-			</div>
-			<div class="nav-cog">
-				<div class="nav-cog-icon">
-					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
-				</div>
-				<div class="nav-cog-title">
-					config
-				</div>
-			</div>
-			<div class="nav-log">
-				<div class="nav-log-icon">
-					<span class="glyphicon glyphicon glyphicon-file"></span><br />
-				</div>
-				<div class="nav-log-title">
-					log
-				</div>
-			</div>
-			<div class="nav-suspend" id="suspend-btn">
-				<div class="nav-suspend-icon">
-					<span class="glyphicon glyphicon glyphicon-remove"></span><br />
-				</div>
-				<div class="nav-suspend-title">
-					close
-				</div>
-			</div>
-		</div>
-	<!-- alert panel -->
-		<div class="alert-panel" id="alert-pnl">
-			<div class="alert-text-area">
-				<strong class="alert-text">This is alert message view area.</strong>
-			</div>
-			<div class="alert-ok" id="alert-ok-btn">
-				<strong>OK</strong>
-			</div>
-		</div>
-	<!-- slider panel tool -->
+		<!-- slider panel tool -->
 		<div class="slider-panel-tool" id="slider-panel-tool-ctrl">
 			<strong class="slider-text">Tool temperature</strong>
 			<div class="slider">
@@ -301,95 +207,233 @@
 				<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 			</div>
 		</div>
-	<!-- slider panel bed -->
-	<div class="slider-panel-bed" id="slider-panel-bed-ctrl">
-		<strong class="slider-text">Bed temperature</strong>
-		<div class="slider">
-			<div class="block">
-				<div class="cell">
-					<div id="handle2" class="slider_look"></div>
-					<style>
-						#handle2 .rs-handle  {
-							background-color:	transparent;
-							border:				8px solid transparent;
-							border-right-color: black;
-							margin:				-6px 0px 0px 14px !important;
-							border-width:		6px 64px 6px 4px;
-						}
-						#handle2 .rs-handle:before  {
-							display:			block;
-							content:			" ";
-							position:			absolute;
-							height:				22px;
-							width:				22px;
-							background:			black;
-							right:				-11px;
-							bottom:				-11px;
-							border-radius:		100px;
-						}
-						#handle2 .rs-tooltip  {
-							top:				75%;
-							font-size:			11px;
-							color:				#FFDC00
-						}
-						#handle2 .rs-tooltip div  {
-							text-align:			center;
-							color:				#FFDC00
-							border-radius: 4px;
-							padding: 1px 5px 2px;
-							margin-top: 4px;
-						}
-						#handle2 .rs-range-color  {
-							background-color:	#EA5405;
-						}
-						#handle2 .rs-path-color  {
-							background-color:	#FFDC00;
-						}
-						#handle2 .rs-bg-color {
-							background-color:	#261F87;
-						}
-					</style>
-					<script>
-						$("#handle2").roundSlider({
-							sliderType: 		"min-range",
-							editableTooltip:	false,
-							radius:				65,
-							width:				16,
-							value:				0,
-							min:				0,
-							max:				140,
-							handleSize: 		0,
-							handleShape:		"square",
-							circleShape:		"pie",
-							startAngle:			315,
-							tooltipFormat:		"changeTooltipBed",
-							valueChange:		"changeValueBed"
-						});
-						function changeTooltipBed(event) {
-							var val = event.value, temperature;
-							if(val < 40) temperature = 'Low';
-							else if(val < 66) temperature = 'PLA';
-							else if(val < 121) temperature = 'ABS';
-							else temperature = 'Very high';
+		<!-- slider panel bed -->
+		<div class="slider-panel-bed" id="slider-panel-bed-ctrl">
+			<strong class="slider-text">Bed temperature</strong>
+			<div class="slider">
+				<div class="block">
+					<div class="cell">
+						<div id="handle2" class="slider_look"></div>
+						<style>
+							#handle2 .rs-handle  {
+								background-color:	transparent;
+								border:				8px solid transparent;
+								border-right-color: black;
+								margin:				-6px 0px 0px 14px !important;
+								border-width:		6px 64px 6px 4px;
+							}
+							#handle2 .rs-handle:before  {
+								display:			block;
+								content:			" ";
+								position:			absolute;
+								height:				22px;
+								width:				22px;
+								background:			black;
+								right:				-11px;
+								bottom:				-11px;
+								border-radius:		100px;
+							}
+							#handle2 .rs-tooltip  {
+								top:				75%;
+								font-size:			11px;
+								color:				#FFDC00
+							}
+							#handle2 .rs-tooltip div  {
+								text-align:			center;
+								color:				#FFDC00
+								border-radius: 4px;
+								padding: 1px 5px 2px;
+								margin-top: 4px;
+							}
+							#handle2 .rs-range-color  {
+								background-color:	#EA5405;
+							}
+							#handle2 .rs-path-color  {
+								background-color:	#FFDC00;
+							}
+							#handle2 .rs-bg-color {
+								background-color:	#261F87;
+							}
+						</style>
+						<script>
+							$("#handle2").roundSlider({
+								sliderType: 		"min-range",
+								editableTooltip:	false,
+								radius:				65,
+								width:				16,
+								value:				0,
+								min:				0,
+								max:				140,
+								handleSize: 		0,
+								handleShape:		"square",
+								circleShape:		"pie",
+								startAngle:			315,
+								tooltipFormat:		"changeTooltipBed",
+								valueChange:		"changeValueBed"
+							});
+							function changeTooltipBed(event) {
+								var val = event.value, temperature;
+								if(val < 40) temperature = 'Low';
+								else if(val < 66) temperature = 'PLA';
+								else if(val < 121) temperature = 'ABS';
+								else temperature = 'Very high';
 
-							if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
-							else return val + " C" + "<div>" + temperature + "<div>";
-						}
-						function changeValueBed(event) {
-							bedTempValue = event.value;
-							$$$.message('Bed value is ' + bedTempValue, DEBUG, 'changeValueTool');
-						}
-					</script>
+								if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
+								else return val + " C" + "<div>" + temperature + "<div>";
+							}
+							function changeValueBed(event) {
+								bedTempValue = event.value;
+								$$$.message('Bed value is ' + bedTempValue, DEBUG, 'changeValueTool');
+							}
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="bed-on-sw" id="bed-on-sw-btn">
+				<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+			</div>
+			<div class="bed-on-remove" id="bed-on-remove-btn">
+				<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
+			</div>
+		</div>
+		<!-- left angle -->
+		<div class="main-triangle-left">
+			<div class="main-triangle-left-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-left" id="left-mark-main"></span>
+			</div>
+		</div>
+		<!-- right angle -->
+		<div class="main-triangle-right">
+			<div class="main-triangle-right-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-right" id="right-mark-main"></span>
+			</div>
+		</div>
+	</div>
+	<div class="file-window" id="file-window-ctrl">
+		<div class="file-list-title">
+			<span class="glyphicon glyphicon glyphicon glyphicon-floppy-open"></span>
+			<span class="glyphicon glyphicon glyphicon-refresh" id="reload-btn"></span>
+		</div>
+		<div class="file-list" id="file-list-ctrl"></div>
+		<div class="information-panel" id="information-panel-ctrl"></div>
+		<!-- left angle -->
+		<div class="file-triangle-left">
+			<div class="file-triangle-left-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-left" id="left-mark-file"></span>
+			</div>
+		</div>
+		<!-- right angle -->
+		<div class="file-triangle-right">
+			<div class="file-triangle-right-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-right" id="right-mark-file"></span>
+			</div>
+		</div>
+	</div>
+	<div class="manu-window" id="manu-window-ctrl">
+		<strong class="dummy-text">Manual control Panel</strong>
+		<!-- left angle -->
+		<div class="manu-triangle-left">
+			<div class="manu-triangle-left-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-left" id="left-mark-manu"></span>
+			</div>
+		</div>
+		<!-- right angle -->
+		<div class="manu-triangle-right">
+			<div class="manu-triangle-right-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-right" id="right-mark-manu"></span>
+			</div>
+		</div>
+	</div>
+	<div class="temp-window" id="temp-window-ctrl">
+		<strong class="dummy-text">Temperature view Panel</strong>
+		<!-- left angle -->
+		<div class="temp-triangle-left">
+			<div class="temp-triangle-left-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>
+			</div>
+		</div>
+		<!-- right angle -->
+		<div class="temp-triangle-right">
+			<div class="temp-triangle-right-mark">
+				<span class="marks glyphicon glyphicon glyphicon-triangle-right" id="right-mark-temp"></span>
+			</div>
+		</div>
+	</div>
+	<!-- winctrl -->
+		<div class="nav-winctrl">
+			<div class="nav-minimum">
+				<span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
+			</div>
+			<div class="nav-fullscreen" id="fullscreen-btn">
+				<span class="glyphicon glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+			</div>
+			<div class="nav-remove" id="remove-btn">
+				<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+			</div>
+		</div>
+	<!-- sub menu -->
+		<div class="nav-submenu">
+			<div class="nav-triangle-sub" id="submenu-btn">
+				&nbsp;
+			</div>
+			<div class="nav-move">
+				<div class="nav-move-icon">
+					<span class="glyphicon glyphicon glyphicon-move"></span><br />
+				</div>
+				<div class="nav-move-title">
+					move
+				</div>
+			</div>
+			<div class="nav-stats">
+				<div class="nav-stats-icon">
+					<span class="glyphicon glyphicon glyphicon-stats"></span><br />
+				</div>
+				<div class="nav-stats-title">
+					glaph
+				</div>
+			</div>
+			<div class="nav-console">
+				<div class="nav-console-icon">
+					<span class="glyphicon glyphicon glyphicon-console"></span><br />
+				</div>
+				<div class="nav-console-title">
+					gCode
+				</div>
+			</div>
+			<div class="nav-cog">
+				<div class="nav-cog-icon">
+					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
+				</div>
+				<div class="nav-cog-title">
+					config
+				</div>
+			</div>
+			<div class="nav-log">
+				<div class="nav-log-icon">
+					<span class="glyphicon glyphicon glyphicon-file"></span><br />
+				</div>
+				<div class="nav-log-title">
+					log
+				</div>
+			</div>
+			<div class="nav-suspend" id="suspend-btn">
+				<div class="nav-suspend-icon">
+					<span class="glyphicon glyphicon glyphicon-remove"></span><br />
+				</div>
+				<div class="nav-suspend-title">
+					close
 				</div>
 			</div>
 		</div>
-		<div class="bed-on-sw" id="bed-on-sw-btn">
-			<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+	<!-- alert panel -->
+		<div class="alert-panel" id="alert-pnl">
+			<div class="alert-text-area">
+				<strong class="alert-text">This is alert message view area.</strong>
+			</div>
+			<div class="alert-ok" id="alert-ok-btn">
+				<strong>OK</strong>
+			</div>
 		</div>
-		<div class="bed-on-remove" id="bed-on-remove-btn">
-			<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
-		</div>
-	</div>
 
 	<!-- scripts -->
 		<script src="./renderer.js"></script>

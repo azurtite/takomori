@@ -11,16 +11,17 @@ let fanFlag				= false;
 let toolTempFlag		= false;
 let bedTempFlag			= false;
 let submenuToggle		= false;
-let windowSize			= 1;
+let windowSize			= 2;
 let maxWindowSize		= 3;
-let panelPosition		= 2;
-let maxPanelPosition	= 2;
+let panelPosition		= 1;
+let maxPanelPosition	= 4;
+let panel2Array			= [1,2];
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
 
-let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl'];
+let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -295,6 +296,7 @@ $(function(){
 	}
 	
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
+	triggerWindowSizeChange();
 	/**
 	 * Power button click event
 	 */
@@ -389,19 +391,43 @@ $(function(){
 		}
 		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
-		if(windowSize > maxWindowSize) windowSize = 1;
-		$$$.message('Screen mode is ' + windowSize, INFO, '$fullscreen-btn');
-		if(windowSize == 1) {
-			$$$.message('Window size is 400 x 240', LOWDEBUG, '$fullscreen-btn');
-			window.resizeTo(400,240);
-		} else if(windowSize == 2) {
-			$$$.message('Window size is 800 x 240', LOWDEBUG, '$fullscreen-btn');
-			window.resizeTo(800,240);
-		} else if(windowSize == 3) {
-			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
-			window.resizeTo(800,480);
-		}
+		triggerWindowSizeChange();
 	});
+	function triggerWindowSizeChange() {
+		if(windowSize > maxWindowSize) windowSize = 1;
+		$$$.message('Screen mode is ' + windowSize, INFO, 'triggerWindowSizeChange');
+		if(windowSize == 1) {
+			$$$.message('Window size is 400 x 240', LOWDEBUG, 'triggerWindowSizeChange');
+			window.resizeTo(400,240);
+			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			if(panelPosition == 1) $('#main-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 2) $('#file-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 3) $('#manu-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 4) $('#temp-window-ctrl').css({'z-index': 80});
+		} else if(windowSize == 2) {
+			$$$.message('Window size is 800 x 240', LOWDEBUG, 'triggerWindowSizeChange');
+			window.resizeTo(800,240);
+			// Main panel position set
+			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$$$.message('Reset panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
+			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
+			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
+			$$$.message('Set panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
+		} else if(windowSize == 3) {
+			$$$.message('Window size is 800 x 480', LOWDEBUG, 'triggerWindowSizeChange');
+			window.resizeTo(800,480);
+			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
+			$('#manu-window-ctrl').css({'z-index': 80, top: '240px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': 80, top: '240px', left: '400px'});
+		}
+	}
 	/**
 	 * alert ok button click event
 	 */
@@ -585,35 +611,123 @@ $(function(){
 			})
 	});
 	/**
-	 * left mark click event
+	 * left mark main click event
 	 */
-	$('#left-mark').click(function(){
-		$$$.message('Click left-mark', DEBUG, '$left-mark.click');
-		panelPosition--;
-		if(panelPosition < 1) panelPosition = maxPanelPosition;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
-		if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
-		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
-		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+	$('#left-mark-main').click(function(){
+		$$$.message('Click left-mark-main', DEBUG, '$left-mark-main.click');
+		leftmarkClick(1);
 	});
 	/**
-	 * right mark click event
+	 * right mark main click event
 	 */
-	$('#right-mark').click(function(){
-		$$$.message('Click right-mark', DEBUG, '$right-mark.click');
-		panelPosition++;
-		if(panelPosition > maxPanelPosition) panelPosition = 1;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
-		if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
-		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$left-mark.click');
-		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$left-mark.click');
+	$('#right-mark-main').click(function(){
+		$$$.message('Click right-mark-main', DEBUG, '$right-mark-main.click');
+		rightmarkClick(1);
 	});
+	/**
+	 * left mark file click event
+	 */
+	$('#left-mark-file').click(function(){
+		$$$.message('Click left-mark-file', DEBUG, '$left-mark-file.click');
+		leftmarkClick(2);
+	});
+	/**
+	 * right mark file click event
+	 */
+	$('#right-mark-file').click(function(){
+		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
+		rightmarkClick(2);
+	});
+	/**
+	 * left mark file click event
+	 */
+	 $('#left-mark-manu').click(function(){
+		$$$.message('Click left-mark-manu', DEBUG, '$left-mark-manu.click');
+		leftmarkClick(3);
+	});
+	/**
+	 * right mark manu click event
+	 */
+	$('#right-mark-manu').click(function(){
+		$$$.message('Click right-mark-manu', DEBUG, '$right-mark-manu.click');
+		rightmarkClick(3);
+	});
+	/**
+	 * left mark file click event
+	 */
+	 $('#left-mark-temp').click(function(){
+		$$$.message('Click left-mark-temp', DEBUG, '$left-mark-temp.click');
+		leftmarkClick(4);
+	});
+	/**
+	 * right mark temp click event
+	 */
+	$('#right-mark-temp').click(function(){
+		$$$.message('Click right-mark-temp', DEBUG, '$right-mark-temp.click');
+		rightmarkClick(4);
+	});
+	function leftmarkClick(p) {
+		if(windowSize == 1) {
+			panelPosition--;
+			if(panelPosition < 1) panelPosition = maxPanelPosition;
+			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
+			$('#' + windowList[panelPosition]).css({'z-index': 80});
+			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
+			if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
+			else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
+			if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark.click');
+			else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark.click');
+		} else if(windowSize == 2) {
+			var panelNo = p;
+			panelNo--;
+			if(panelNo < 1) panelNo = maxPanelPosition;
+			if(panelNo == panel2Array[0] || panelNo == panel2Array[1]) panelNo--;
+			if(panelNo < 1) panelNo = maxPanelPosition;
+			$$$.message('panelNo is ' + panelNo, DEBUG, 'leftmarkClick');
+			$$$.message('Identify panel to display', DEBUG, 'leftmarkClick');
+			$('#' + windowList[panelNo]).css({
+				'z-index':	$('#' + windowList[p]).css('z-index'),
+				left:		$('#' + windowList[p]).css('left'),
+				top:		$('#' + windowList[p]).css('top')
+			});
+			$('#' + windowList[p]).css({'z-index': -1});
+			$$$.message('Set css property', DEBUG, 'leftmarkClick');
+			if(panel2Array[0] == p) panel2Array[0] = panelNo;
+			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
+			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'leftmarkClick');
+		}
+	}
+	function rightmarkClick(p) {
+		if(windowSize == 1) {
+			panelPosition++;
+			if(panelPosition > maxPanelPosition) panelPosition = 1;
+			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
+			$('#' + windowList[panelPosition]).css({'z-index': 80});
+			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark.click');
+			if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
+			else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
+			if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
+			else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+		} else if(windowSize == 2) {
+			var panelNo = p;
+			panelNo++;
+			if(panelNo > maxPanelPosition) panelNo = 1;
+			if(panelNo == panel2Array[0] || panelNo == panel2Array[1]) panelNo++;
+			if(panelNo > maxPanelPosition) PanelNo = 1;
+			$$$.message('panelNo is ' + panelNo, DEBUG, 'rightmarkClick');
+			$$$.message('Identify panel to display', DEBUG, 'rightmarkClick');
+			$('#' + windowList[panelNo]).css({
+				'z-index':	$('#' + windowList[p]).css('z-index'),
+				left:		$('#' + windowList[p]).css('left'),
+				top:		$('#' + windowList[p]).css('top')
+			});
+			$('#' + windowList[p]).css({'z-index': -1});
+			$$$.message('Set css property', DEBUG, 'rightmarkClick');
+			if(panel2Array[0] == p) panel2Array[0] = panelNo;
+			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
+			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
+		}
+	}
 	/**
 	 * reload btn click event
 	 */

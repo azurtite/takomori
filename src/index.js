@@ -16,6 +16,7 @@ let maxWindowSize		= 3;
 let panelPosition		= 1;
 let maxPanelPosition	= 4;
 let panel2Array			= [1,2];
+let panel4Array			= [1, 2, 3, 4];
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;

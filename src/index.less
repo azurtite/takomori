@@ -23,8 +23,17 @@ body {
 	-webkit-app-region:			drag;
 	z-index:					80;
 	cursor:						move;
+	.basebody {
+		position:				absolute;
+		top:					0px;
+		left:					0px;
+		height:					240px;
+		width:					400px;
+		z-index:				0;
+		background-color:			@ceruleanblue;
+	}
 	.nav-fire-space {
-		position:				fixed;
+		position:				absolute;
 		width:					40px;
 		.nav-fire-title {
 			height:				24px;
@@ -67,20 +76,20 @@ body {
 		top:					40px;
 	}
 	.progress {
-		position:				fixed;
+		position:				absolute;
 		left:					32px;
 		top:					150px;
 		width:					250px;
 		z-index:				70;
 	}
 	.complete {
-		position:				fixed;
+		position:				absolute;
 		top:					150px;
 		left:					292px;
 		z-index:				70;
 	}
 	.printtime {
-		position: 				fixed;
+		position: 				absolute;
 		top:					180px;
 		left:					130px;
 		font-weight:			bold;
@@ -90,7 +99,7 @@ body {
 		}
 	}
 	.nav-file-name {
-		position:				fixed;
+		position:				absolute;
 		left:					32px;
 		top:					8px;
 		display:				table;
@@ -141,6 +150,88 @@ body {
 			font-size:		16pt;
 			color:			@sunshine;
 			z-index:		90;
+		}
+	}
+	.slider-panel-tool {
+		position:			absolute;
+		height:				200px;
+		width:				200px;
+		left:				100px;
+		top:				20px;
+		border-radius:		10px;
+		background-color:	@lapislazuli;
+		z-index:			-1;
+		-webkit-app-region:	no-drag;
+		.slider {
+			position: 		absolute;
+			left:			35px;
+			top:			35px;
+		}
+		.slider-text {
+			position:		absolute;
+			display:		table-cell;
+			width:			200px;
+			height:			20px;
+			padding-top:	10px;
+			text-align:		center;
+			color:			@sunshine;
+		}
+		.tool-on-sw {
+			position: 		absolute;
+			width:			200px;
+			bottom:			0px;
+			font-size:		35px;
+			text-align:		center;
+			color:			@sunshine;
+			z-index:		10;
+		}
+		.tool-on-remove {
+			position:		absolute;
+			top:			5px;
+			right:			10px;
+			text-align:		center;
+			color:			@sunshine;
+		}
+	}
+	.slider-panel-bed {
+		position:			absolute;
+		height:				200px;
+		width:				200px;
+		left:				100px;
+		top:				20px;
+		border-radius:		10px;
+		background-color:	@lapislazuli;
+		z-index:			-1;
+		-webkit-app-region:	no-drag;
+		.slider {
+			position: 		absolute;
+			left:			35px;
+			top:			35px;
+		}
+		.slider-text {
+			position:		absolute;
+			display:		table-cell;
+			width:			200px;
+			height:			20px;
+			padding-top:	10px;
+			text-align:		center;
+			color:			@sunshine;
+		}
+		.bed-on-sw {
+			position: 		absolute;
+			width:			200px;
+			bottom:			0px;
+			font-size:		35px;
+			text-align:		center;
+			color:			@sunshine;
+			z-index:		10;
+		}
+		.bed-on-remove {
+			position:		absolute;
+			top:			5px;
+			right:			10px;
+			text-align:		center;
+			color:			@sunshine;
 		}
 	}
 }
@@ -393,90 +484,6 @@ body {
 		-webkit-app-region:	no-drag;
 	}
 }
-
-.slider-panel-tool {
-	position:			absolute;
-	height:				200px;
-	width:				200px;
-	left:				100px;
-	top:				20px;
-	border-radius:		10px;
-	background-color:	@lapislazuli;
-	z-index:			-1;
-	-webkit-app-region:	no-drag;
-	.slider {
-		position: 		absolute;
-		left:			35px;
-		top:			35px;
-	}
-	.slider-text {
-		position:		absolute;
-		display:		table-cell;
-		width:			200px;
-		height:			20px;
-		padding-top:	10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-	.tool-on-sw {
-		position: 		absolute;
-		width:			200px;
-		bottom:			0px;
-		font-size:		35px;
-		text-align:		center;
-		color:			@sunshine;
-		z-index:		10;
-	}
-	.tool-on-remove {
-		position:		absolute;
-		top:			5px;
-		right:			10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-}
-.slider-panel-bed {
-	position:			absolute;
-	height:				200px;
-	width:				200px;
-	left:				100px;
-	top:				20px;
-	border-radius:		10px;
-	background-color:	@lapislazuli;
-	z-index:			-1;
-	-webkit-app-region:	no-drag;
-	.slider {
-		position: 		absolute;
-		left:			35px;
-		top:			35px;
-	}
-	.slider-text {
-		position:		absolute;
-		display:		table-cell;
-		width:			200px;
-		height:			20px;
-		padding-top:	10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-	.bed-on-sw {
-		position: 		absolute;
-		width:			200px;
-		bottom:			0px;
-		font-size:		35px;
-		text-align:		center;
-		color:			@sunshine;
-		z-index:		10;
-	}
-	.bed-on-remove {
-		position:		absolute;
-		top:			5px;
-		right:			10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-}
-
 
 .file-window {
 	position:				absolute;

@@ -14,14 +14,26 @@ body {
 
 .main-window {
 	position:					absolute;
-	height:						100%;
-	width:						100%;
+	top:						0px;
+	left:						0px;
+	height:						240px;
+	width:						400px;
 	color:						@sunshine;
 	background-color:			@ceruleanblue;
 	-webkit-app-region:			drag;
+	z-index:					80;
 	cursor:						move;
+	.basebody {
+		position:				absolute;
+		top:					0px;
+		left:					0px;
+		height:					240px;
+		width:					400px;
+		z-index:				0;
+		background-color:			@ceruleanblue;
+	}
 	.nav-fire-space {
-		position:				fixed;
+		position:				absolute;
 		width:					40px;
 		.nav-fire-title {
 			height:				24px;
@@ -64,20 +76,20 @@ body {
 		top:					40px;
 	}
 	.progress {
-		position:				fixed;
+		position:				absolute;
 		left:					32px;
 		top:					150px;
 		width:					250px;
 		z-index:				70;
 	}
 	.complete {
-		position:				fixed;
+		position:				absolute;
 		top:					150px;
 		left:					292px;
 		z-index:				70;
 	}
 	.printtime {
-		position: 				fixed;
+		position: 				absolute;
 		top:					180px;
 		left:					130px;
 		font-weight:			bold;
@@ -87,7 +99,7 @@ body {
 		}
 	}
 	.nav-file-name {
-		position:				fixed;
+		position:				absolute;
 		left:					32px;
 		top:					8px;
 		display:				table;
@@ -102,6 +114,124 @@ body {
 			vertical-align:		bottom;
 			-webkit-app-region:	no-drag;
 			cursor:				auto;
+		}
+	}
+	.main-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		-webkit-app-region:	no-drag;
+		cursor:				default;
+		.main-triangle-left-mark {
+			display:		table-cell;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.main-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		-webkit-app-region:	no-drag;
+		cursor:				default;
+		.main-triangle-right-mark {
+			display:		table-cell;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.slider-panel-tool {
+		position:			absolute;
+		height:				200px;
+		width:				200px;
+		left:				100px;
+		top:				20px;
+		border-radius:		10px;
+		background-color:	@lapislazuli;
+		z-index:			-1;
+		-webkit-app-region:	no-drag;
+		.slider {
+			position: 		absolute;
+			left:			35px;
+			top:			35px;
+		}
+		.slider-text {
+			position:		absolute;
+			display:		table-cell;
+			width:			200px;
+			height:			20px;
+			padding-top:	10px;
+			text-align:		center;
+			color:			@sunshine;
+		}
+		.tool-on-sw {
+			position: 		absolute;
+			width:			200px;
+			bottom:			0px;
+			font-size:		35px;
+			text-align:		center;
+			color:			@sunshine;
+			z-index:		10;
+		}
+		.tool-on-remove {
+			position:		absolute;
+			top:			5px;
+			right:			10px;
+			text-align:		center;
+			color:			@sunshine;
+		}
+	}
+	.slider-panel-bed {
+		position:			absolute;
+		height:				200px;
+		width:				200px;
+		left:				100px;
+		top:				20px;
+		border-radius:		10px;
+		background-color:	@lapislazuli;
+		z-index:			-1;
+		-webkit-app-region:	no-drag;
+		.slider {
+			position: 		absolute;
+			left:			35px;
+			top:			35px;
+		}
+		.slider-text {
+			position:		absolute;
+			display:		table-cell;
+			width:			200px;
+			height:			20px;
+			padding-top:	10px;
+			text-align:		center;
+			color:			@sunshine;
+		}
+		.bed-on-sw {
+			position: 		absolute;
+			width:			200px;
+			bottom:			0px;
+			font-size:		35px;
+			text-align:		center;
+			color:			@sunshine;
+			z-index:		10;
+		}
+		.bed-on-remove {
+			position:		absolute;
+			top:			5px;
+			right:			10px;
+			text-align:		center;
+			color:			@sunshine;
 		}
 	}
 }
@@ -142,44 +272,6 @@ body {
 		text-align:			center;
 		vertical-align:		middle;
 		-webkit-app-region:	no-drag;
-	}
-}
-
-.nav-triangle-left {
-	position:					fixed;
-	display:					table;
-	height:						100%;
-	width:						24px;
-	left:						0px;
-	z-index:					90;
-	.nav-triangle-left-mark {
-		display:				table-cell;
-		height:					24px;
-		color:					@sunshine;
-		font-size:				16pt;
-		text-align:				center;
-		vertical-align:			middle;
-		.marks {
-			-webkit-app-region:	no-drag;
-		}
-	}
-}
-.nav-triangle-right {
-	position:					fixed;
-	display:					table;
-	height:						100%;
-	width:						24px;
-	right:						0px;
-	z-index:					90;
-	.nav-triangle-right-mark {
-		display:				table-cell;
-		color:					@sunshine;
-		font-size:				16pt;
-		text-align:				center;
-		vertical-align:			middle;
-		.marks {
-			-webkit-app-region:	no-drag;
-		}
 	}
 }
 
@@ -393,101 +485,225 @@ body {
 	}
 }
 
-.slider-panel-tool {
-	position:			absolute;
-	height:				200px;
-	width:				200px;
-	left:				100px;
-	top:				20px;
-	border-radius:		10px;
-	background-color:	@lapislazuli;
-	z-index:			-1;
-	-webkit-app-region:	no-drag;
-	.slider {
-		position: 		absolute;
-		left:			35px;
-		top:			35px;
-	}
-	.slider-text {
-		position:		absolute;
-		display:		table-cell;
-		width:			200px;
-		height:			20px;
-		padding-top:	10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-	.tool-on-sw {
-		position: 		absolute;
-		width:			200px;
-		bottom:			0px;
-		font-size:		35px;
-		text-align:		center;
-		color:			@sunshine;
-		z-index:		10;
-	}
-	.tool-on-remove {
-		position:		absolute;
-		top:			5px;
-		right:			10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-}
-.slider-panel-bed {
-	position:			absolute;
-	height:				200px;
-	width:				200px;
-	left:				100px;
-	top:				20px;
-	border-radius:		10px;
-	background-color:	@lapislazuli;
-	z-index:			-1;
-	-webkit-app-region:	no-drag;
-	.slider {
-		position: 		absolute;
-		left:			35px;
-		top:			35px;
-	}
-	.slider-text {
-		position:		absolute;
-		display:		table-cell;
-		width:			200px;
-		height:			20px;
-		padding-top:	10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-	.bed-on-sw {
-		position: 		absolute;
-		width:			200px;
-		bottom:			0px;
-		font-size:		35px;
-		text-align:		center;
-		color:			@sunshine;
-		z-index:		10;
-	}
-	.bed-on-remove {
-		position:		absolute;
-		top:			5px;
-		right:			10px;
-		text-align:		center;
-		color:			@sunshine;
-	}
-}
-
-
 .file-window {
-	position:			absolute;
-	display:			table;
-	height:				240px;
-	width:				400px;
-	color:				@sunshine;
-	background-color:	@ceruleanblue;
-	z-index:			80;
-	.file-window-text {
-		display:		table-cell;
-		text-align:		center;
-		vertical-align:	middle;
+	position:				absolute;
+	display:				table;
+	height:					240px;
+	width:					400px;
+	color:					@sunshine;
+	background-color:		@ceruleanblue;
+	z-index:				-1;
+	.file-list-title {
+		position:			absolute;
+		left:				32px;
+		top:				24px;
+		height:				32px;
+		width:				160px;
+		font-size:			16pt;
+		text-align:			right;
+	}
+	.file-list {
+		position:			absolute;
+		left:				32px;
+		top:				56px;
+		height:				160px;
+		width:				160px;
+		overflow-y:			scroll;
+		font-size:			13pt;
+		-webkit-app-region:	no-drag;
+		.display-name {
+			cursor:			pointer;
+		}
+		.left-btn {
+			display:		table-cell;
+			height:			24px;
+			width:			24px;
+			border:			1px solid @sunshine;
+			border-radius:	5px 0px 0px 5px;
+			text-align:		center;
+			vertical-align:	middle;
+		}
+		.middle-btn {
+			display:		table-cell;
+			height:			24px;
+			width:			24px;
+			border-top:		1px solid @sunshine;
+			border-bottom:	1px solid @sunshine;
+			border-right:	1px solid @sunshine;
+			text-align:		center;
+			vertical-align:	middle;
+		}
+		.right-btn {
+			display:		table-cell;
+			height:			24px;
+			width:			24px;
+			border-top:		1px solid @sunshine;
+			border-bottom:	1px solid @sunshine;
+			border-right:	1px solid @sunshine;
+			border-radius:	0px 5px 5px 0px;
+			text-align:		center;
+			vertical-align:	middle;
+		}
+	}
+	.information-panel {
+		position:			absolute;
+		left:				210px;
+		top:				56px;
+		Height:				156px;
+		width:				160px;
+		hr {
+			margin:			0px;
+			color:			@sunshine;
+		}
+		.title {
+			height:			24px;
+			font-size:		12pt;
+		}
+		.information-table {
+			margin:			10px;
+			width:			150px;
+			font-size:		9pt;
+			.right {
+				text-align:	right;
+			}
+		}
+	}
+	.file-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		.file-triangle-left-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.file-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		.file-triangle-right-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+}
+div::-webkit-scrollbar {
+	background:			@ceruleanblue;
+	width:				8px;
+}
+div::-webkit-scrollbar-thumb {
+	background: 		@sunshine;
+	border-radius:		5px;
+}
+.manu-window{
+	position:				absolute;
+	display:				table;
+	height:					240px;
+	width:					400px;
+	color:					@sunshine;
+	background-color:		@ceruleanblue;
+	z-index:				-1;
+	.dummy-text {
+		display:			table-cell;
+		text-align:			center;
+		vertical-align:		middle;
+	}
+	.manu-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		.manu-triangle-left-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.manu-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		.manu-triangle-right-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+}
+.temp-window{
+	position:				absolute;
+	display:				table;
+	height:					240px;
+	width:					400px;
+	color:					@sunshine;
+	background-color:		@ceruleanblue;
+	z-index:				-1;
+	.dummy-text {
+		display:			table-cell;
+		text-align:			center;
+		vertical-align:		middle;
+	}
+	.temp-triangle-left {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				0px;
+		.temp-triangle-left-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.temp-triangle-right {
+		position:			absolute;
+		display:			table;
+		height:				240px;
+		width:				24px;
+		top:				0px;
+		left:				376px;
+		.temp-triangle-right-mark {
+			display:		table-cell;
+			height:			100%;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
 	}
 }

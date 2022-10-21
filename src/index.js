@@ -2,6 +2,7 @@ let sunshine			= '#FFDC00';
 let rescueorange		= '#EA5405';
 let ceruleanblue		= '#008DB7';
 let forestleaf			= '#008554';
+let peleskyblue			= '#C2E5F9';
 
 let powerFlag			= false;
 let tool0Flag			= false;
@@ -10,16 +11,17 @@ let fanFlag				= false;
 let toolTempFlag		= false;
 let bedTempFlag			= false;
 let submenuToggle		= false;
-let windowSize			= 1;
+let windowSize			= 2;
 let maxWindowSize		= 3;
-let panelPosition		= 2;
-let maxPanelPosition	= 2;
+let panelPosition		= 1;
+let maxPanelPosition	= 4;
+let panel2Array			= [1,2];
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
 
-let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl'];
+let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
@@ -28,18 +30,114 @@ let client = new OctoPrintClient({
 
 let $$$ = new logMan(true, false);
 
-window.resizeTo(400, 240);
+if(windowSize == 1) window.resizeTo(400, 240);
+else if(windowSize == 2) window.resizeTo(800, 240);
+else if(windowSize == 3) window.resizeTo(800, 480);
 
-$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
-	.done(function(data){
-		console.info(data.files.length);
-		$('#file-list-ctrl').html('');
-		for(var i=0; i<data.files.length; i++) {
-			var element = document.createElement('div');
-				element.innerText = data.files[i].display;
-			$('#file-list-ctrl').append(element);
+/**
+ * file list process
+ */
+let fileInfoContainar;
+function getFilelist() {
+	$$$.message('Call REST api', DEBUG, 'getFilelist');
+	$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		.done(function(data){
+			fileInfoContainar = data;
+			$('#file-list-ctrl').html('');
+			for(var i=0; i<data.files.length; i++) {
+				var element = document.createElement('div');
+					element.innerHTML = 
+						'<div class="display-name" onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
+						'<div class="left-btn file-list-icon-download" onclick="downloadClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
+						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
+						'<div class="middle-btn file-list-icon-trash"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
+						'<div class="middle-btn file-list-icon-open"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
+						'<div class="right-btn file-list-icon-print"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
+						$('#file-list-ctrl').append(element);
+			}
+			displayClick(0);	// test code
+			$('.file-list-icon-open').css({color: peleskyblue});
+			$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+			$('.file-list-icon-print').css({color: peleskyblue});
+			$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+		})
+}
+getFilelist();
+function displayClick(e) {
+	function calculateTime(t) {
+		let time, temp;
+		temp = Math.floor(t / 3600);
+		time = temp + 'h';
+		t = t - (temp * 3600);
+		$$$.message('Calculation hour. quotient is ' + temp + '. surplus is ' + t, DEBUG, 'calculateTime');
+		temp = Math.floor(t / 60);
+		$$$.message('Calculation minutes. quotient is ' + temp + '. surplus is ' + (t - (temp * 60)), DEBUG, 'calculateTime');
+		time = time + temp + 'm' + Math.floor((t - (temp * 60))*100)/100 + 's';
+		return time;
+	}
+	function detectName() {
+		var name = '';
+		for(var i=0;i<fileInfoContainar.files[e].display.split('.').length - 1;i++) {
+			if(i > 0) name += '.';
+			name += fileInfoContainar.files[e].display.split('.')[i];
 		}
-	})
+		$$$.message('Detect display name', DEBUG, 'displayClick');
+		return name;
+	}
+	function calculateFilament(f) {
+		var length,temp;
+		temp = Math.floor(f / 1000);
+		f = f - (temp * 1000);
+		length = temp + 'm';
+		$$$.message('Calculation meter. quotient is ' + temp + '. surplus is ' + f, DEBUG, 'calculateFilament');
+		temp = Math.floor(f / 10);
+		f = f - (temp * 10);
+		length = length + temp + 'cm';
+		$$$.message('Calculation centimeter. quotient is ' + temp + '. surplus is ' + f, DEBUG, 'calculateFilament');
+		length = length + Math.floor(f * 100) / 100 + 'mm';
+		return length;
+	}
+	$$$.message('Name tag click', DEBUG, 'displayClick');
+	$('#information-panel-ctrl').html(
+		'<div class="title">' + detectName() + '</h3>'+
+		'<hr>' +
+		'<table class="information-table">' +
+		'<tr><td>Type:</td><td>' + fileInfoContainar.files[e].display.split('.')[fileInfoContainar.files[e].display.split('.').length-1] + '</td></tr>' +
+		'<tr><td>Time:</td><td>' + calculateTime(fileInfoContainar.files[e].gcodeAnalysis.estimatedPrintTime) + '</td></tr>' +
+		'<tr><td colspan="2">Filament:</td></tr>' +
+		'<tr><td colspan="2" class="right">' + calculateFilament(fileInfoContainar.files[e].gcodeAnalysis.filament.tool0.length) + '</td></tr>' +
+		'<th>Size:</th>' +
+		'<tr><td colspan=2 class="right">' +
+		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.width*100)/100 + 'x' +
+		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.depth*100)/100 + 'x' +
+		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.height*100)/100 + ' mm' +
+		'</td></tr>' +
+		'</table>'
+	);
+	$$$.message('Generate innerHTML(information-panel)', DEBUG, 'displayClick');
+}
+function downloadClick(e) {
+	function changeStream(data) {
+			$$$.message('Start encording ', DEBUG, 'downloadClick')
+			var length = data.length;
+		var result = new Uint8Array(length);
+		for(var i=0; i<length; i++)
+			result[i] = data[i].charCodeAt(0);
+		return result;
+	}
+	$$$.message('Click the download icon in Listing ' + e, DEBUG, 'downloadClick');
+	client.files.download('local', fileInfoContainar.files[e].path)
+		.done(function(data){
+			$$$.message('Download ' + fileInfoContainar.files[e].display, DEBUG, 'downloadClick')
+			var stream = new Uint8Array(changeStream(data));
+			var element = document.createElement('a');
+			element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'text/.gcode'}));
+			element.download = '';
+			element.click();
+			URL.revokeObjectURL(element.href);
+			$$$.message('Delete temporary files', DEBUG, 'downloadClick')
+		})
+}
 /**
  * getPrinterFullSate()
  */
@@ -196,8 +294,9 @@ $(function(){
 		$('.alert-text').text('Failed to create OctoPrint object')
 		$('.alert-panel').css({visibility: 'visible'});
 	}
-
+	
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
+	triggerWindowSizeChange();
 	/**
 	 * Power button click event
 	 */
@@ -219,6 +318,10 @@ $(function(){
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
+							$('.file-list-icon-open').css({color: peleskyblue});
+							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+							$('.file-list-icon-print').css({color: peleskyblue});
+							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -243,6 +346,10 @@ $(function(){
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
 						intervalID = setInterval(getPrinterFullState, 1000);
+						$('.file-list-icon-open').css({color: sunshine});
+						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+						$('.file-list-icon-print').css({color: sunshine});
+						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');
@@ -284,19 +391,43 @@ $(function(){
 		}
 		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
-		if(windowSize > maxWindowSize) windowSize = 1;
-		$$$.message('Screen mode is ' + windowSize, INFO, '$fullscreen-btn');
-		if(windowSize == 1) {
-			$$$.message('Window size is 400 x 240', LOWDEBUG, '$fullscreen-btn');
-			window.resizeTo(400,240);
-		} else if(windowSize == 2) {
-			$$$.message('Window size is 800 x 240', LOWDEBUG, '$fullscreen-btn');
-			window.resizeTo(800,240);
-		} else if(windowSize == 3) {
-			$$$.message('Window size is 800 x 480', LOWDEBUG, '$fullscreen-btn');
-			window.resizeTo(800,480);
-		}
+		triggerWindowSizeChange();
 	});
+	function triggerWindowSizeChange() {
+		if(windowSize > maxWindowSize) windowSize = 1;
+		$$$.message('Screen mode is ' + windowSize, INFO, 'triggerWindowSizeChange');
+		if(windowSize == 1) {
+			$$$.message('Window size is 400 x 240', LOWDEBUG, 'triggerWindowSizeChange');
+			window.resizeTo(400,240);
+			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			if(panelPosition == 1) $('#main-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 2) $('#file-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 3) $('#manu-window-ctrl').css({'z-index': 80});
+			else if(panelPosition == 4) $('#temp-window-ctrl').css({'z-index': 80});
+		} else if(windowSize == 2) {
+			$$$.message('Window size is 800 x 240', LOWDEBUG, 'triggerWindowSizeChange');
+			window.resizeTo(800,240);
+			// Main panel position set
+			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$$$.message('Reset panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
+			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
+			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
+			$$$.message('Set panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
+		} else if(windowSize == 3) {
+			$$$.message('Window size is 800 x 480', LOWDEBUG, 'triggerWindowSizeChange');
+			window.resizeTo(800,480);
+			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
+			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
+			$('#manu-window-ctrl').css({'z-index': 80, top: '240px', left: '0px'});
+			$('#temp-window-ctrl').css({'z-index': 80, top: '240px', left: '400px'});
+		}
+	}
 	/**
 	 * alert ok button click event
 	 */
@@ -479,28 +610,129 @@ $(function(){
 				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
 			})
 	});
-	$('#left-mark').click(function(){
-		$$$.message('Click left-mark', DEBUG, '$left-mark.click');
-		panelPosition--;
-		if(panelPosition < 1) panelPosition = maxPanelPosition;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
-		if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
-		if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
-		else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+	/**
+	 * left mark main click event
+	 */
+	$('#left-mark-main').click(function(){
+		$$$.message('Click left-mark-main', DEBUG, '$left-mark-main.click');
+		leftmarkClick(1);
 	});
-	$('#right-mark').click(function(){
-		$$$.message('Click right-mark', DEBUG, '$right-mark.click');
-		panelPosition++;
-		if(panelPosition > maxPanelPosition) panelPosition = 1;
-		$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
-		$('#' + windowList[panelPosition]).css({'z-index': 80});
-		$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
-		if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
-		else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
-		if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$left-mark.click');
-		else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$left-mark.click');
+	/**
+	 * right mark main click event
+	 */
+	$('#right-mark-main').click(function(){
+		$$$.message('Click right-mark-main', DEBUG, '$right-mark-main.click');
+		rightmarkClick(1);
+	});
+	/**
+	 * left mark file click event
+	 */
+	$('#left-mark-file').click(function(){
+		$$$.message('Click left-mark-file', DEBUG, '$left-mark-file.click');
+		leftmarkClick(2);
+	});
+	/**
+	 * right mark file click event
+	 */
+	$('#right-mark-file').click(function(){
+		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
+		rightmarkClick(2);
+	});
+	/**
+	 * left mark file click event
+	 */
+	 $('#left-mark-manu').click(function(){
+		$$$.message('Click left-mark-manu', DEBUG, '$left-mark-manu.click');
+		leftmarkClick(3);
+	});
+	/**
+	 * right mark manu click event
+	 */
+	$('#right-mark-manu').click(function(){
+		$$$.message('Click right-mark-manu', DEBUG, '$right-mark-manu.click');
+		rightmarkClick(3);
+	});
+	/**
+	 * left mark file click event
+	 */
+	 $('#left-mark-temp').click(function(){
+		$$$.message('Click left-mark-temp', DEBUG, '$left-mark-temp.click');
+		leftmarkClick(4);
+	});
+	/**
+	 * right mark temp click event
+	 */
+	$('#right-mark-temp').click(function(){
+		$$$.message('Click right-mark-temp', DEBUG, '$right-mark-temp.click');
+		rightmarkClick(4);
+	});
+	function leftmarkClick(p) {
+		if(windowSize == 1) {
+			panelPosition--;
+			if(panelPosition < 1) panelPosition = maxPanelPosition;
+			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
+			$('#' + windowList[panelPosition]).css({'z-index': 80});
+			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
+			if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
+			else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
+			if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark.click');
+			else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark.click');
+		} else if(windowSize == 2) {
+			var panelNo = p;
+			panelNo--;
+			if(panelNo < 1) panelNo = maxPanelPosition;
+			if(panelNo == panel2Array[0] || panelNo == panel2Array[1]) panelNo--;
+			if(panelNo < 1) panelNo = maxPanelPosition;
+			$$$.message('panelNo is ' + panelNo, DEBUG, 'leftmarkClick');
+			$$$.message('Identify panel to display', DEBUG, 'leftmarkClick');
+			$('#' + windowList[panelNo]).css({
+				'z-index':	$('#' + windowList[p]).css('z-index'),
+				left:		$('#' + windowList[p]).css('left'),
+				top:		$('#' + windowList[p]).css('top')
+			});
+			$('#' + windowList[p]).css({'z-index': -1});
+			$$$.message('Set css property', DEBUG, 'leftmarkClick');
+			if(panel2Array[0] == p) panel2Array[0] = panelNo;
+			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
+			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'leftmarkClick');
+		}
+	}
+	function rightmarkClick(p) {
+		if(windowSize == 1) {
+			panelPosition++;
+			if(panelPosition > maxPanelPosition) panelPosition = 1;
+			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
+			$('#' + windowList[panelPosition]).css({'z-index': 80});
+			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark.click');
+			if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
+			else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
+			if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
+			else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+		} else if(windowSize == 2) {
+			var panelNo = p;
+			panelNo++;
+			if(panelNo > maxPanelPosition) panelNo = 1;
+			if(panelNo == panel2Array[0] || panelNo == panel2Array[1]) panelNo++;
+			if(panelNo > maxPanelPosition) PanelNo = 1;
+			$$$.message('panelNo is ' + panelNo, DEBUG, 'rightmarkClick');
+			$$$.message('Identify panel to display', DEBUG, 'rightmarkClick');
+			$('#' + windowList[panelNo]).css({
+				'z-index':	$('#' + windowList[p]).css('z-index'),
+				left:		$('#' + windowList[p]).css('left'),
+				top:		$('#' + windowList[p]).css('top')
+			});
+			$('#' + windowList[p]).css({'z-index': -1});
+			$$$.message('Set css property', DEBUG, 'rightmarkClick');
+			if(panel2Array[0] == p) panel2Array[0] = panelNo;
+			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
+			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
+		}
+	}
+	/**
+	 * reload btn click event
+	 */
+	$('#reload-btn').click(function(){
+		$$$.message('Click reload-btn', DEBUG, '$reload-btn.click');
+		getFilelist();
 	});
 });

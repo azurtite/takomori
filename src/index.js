@@ -395,6 +395,28 @@ $(function(){
 		triggerWindowSizeChange();
 	});
 	function triggerWindowSizeChange() {
+		function modeTreeTriangleSet(){
+			$$$.message('Call modeTreeTriangleSet', DEBUG, 'modeTreeTriangleSet');
+			$('.' + windowList[1].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+			$('.' + windowList[1].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[2].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+			$('.' + windowList[2].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[3].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+			$('.' + windowList[3].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$('.' + windowList[4].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+			$('.' + windowList[4].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+		}
+		function modeTreeTriangleReset() {
+			$$$.message('Call modeTreeTriangleReset', DEBUG, 'modeTreeTriangleReset');
+			$('.' + windowList[1].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+			$('.' + windowList[1].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[2].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+			$('.' + windowList[2].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[3].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+			$('.' + windowList[3].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[4].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+			$('.' + windowList[4].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+		}
 		if(windowSize > maxWindowSize) windowSize = 1;
 		$$$.message('Screen mode is ' + windowSize, INFO, 'triggerWindowSizeChange');
 		if(windowSize == 1) {
@@ -408,6 +430,7 @@ $(function(){
 			else if(panelPosition == 2) $('#file-window-ctrl').css({'z-index': 80});
 			else if(panelPosition == 3) $('#manu-window-ctrl').css({'z-index': 80});
 			else if(panelPosition == 4) $('#temp-window-ctrl').css({'z-index': 80});
+			modeTreeTriangleReset();
 		} else if(windowSize == 2) {
 			$$$.message('Window size is 800 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,240);
@@ -420,13 +443,15 @@ $(function(){
 			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
 			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
 			$$$.message('Set panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
+			modeTreeTriangleReset();
 		} else if(windowSize == 3) {
 			$$$.message('Window size is 800 x 480', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,480);
-			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
-			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
-			$('#manu-window-ctrl').css({'z-index': 80, top: '240px', left: '0px'});
-			$('#temp-window-ctrl').css({'z-index': 80, top: '240px', left: '400px'});
+			$('#' + windowList[1]).css({'z-index': 80, top: '0px', left: '0px'});
+			$('#' + windowList[2]).css({'z-index': 80, top: '0px', left: '400px'});
+			$('#' + windowList[3]).css({'z-index': 80, top: '240px', left: '0px'});
+			$('#' + windowList[4]).css({'z-index': 80, top: '240px', left: '400px'});
+			modeTreeTriangleSet();
 		}
 	}
 	/**

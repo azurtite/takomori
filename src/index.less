@@ -90,7 +90,7 @@ body {
 	}
 	.printtime {
 		position: 				absolute;
-		top:					180px;
+		top:					175px;
 		left:					130px;
 		font-weight:			bold;
 		.printtime-value {
@@ -144,6 +144,24 @@ body {
 		-webkit-app-region:	no-drag;
 		cursor:				default;
 		.main-triangle-right-mark {
+			display:		table-cell;
+			text-align:		center;
+			vertical-align:	middle;
+			font-size:		16pt;
+			color:			@sunshine;
+			z-index:		90;
+		}
+	}
+	.main-triangle-down {
+		position:			absolute;
+		display:			table;
+		height:				24px;
+		width:				400px;
+		bottom:				0px;
+		left:				0px;
+		-webkit-app-region:	no-drag;
+		cursor:				default;
+		.main-triangle-down-mark {
 			display:		table-cell;
 			text-align:		center;
 			vertical-align:	middle;

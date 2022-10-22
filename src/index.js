@@ -753,32 +753,10 @@ $(function(){
 		} else if(windowSize == 3) {
 			if(panel4Array[0] == p) {
 				$$$.message('Click upper left panel', DEBUG, 'leftmarkClick');
-				$('#' + windowList[panel4Array[0]]).css({left: '400px'});
-				$('#' + windowList[panel4Array[1]]).css({left: '0px'});
-				$$$.message('Switch upper panel', DEBUG, 'leftmarkClick');
-				$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
-				$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
-				$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
-				$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
-				$$$.message('Change upper panel triangle css', DEBUG, 'leftmarkClick');
-				var t = panel4Array[0];
-				panel4Array[0] = panel4Array[1];
-				panel4Array[1] = t;
-				$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'leftmarkClick');
+				switchUpperPanel();
 			} else if(panel4Array[2] == p) {
 				$$$.message('Click upper left panel', DEBUG, 'leftmarkClick');
-				$('#' + windowList[panel4Array[2]]).css({left: '400px'});
-				$('#' + windowList[panel4Array[3]]).css({left: '0px'});
-				$$$.message('Switch lower panel', DEBUG, 'leftmarkClick');
-				$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
-				$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
-				$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
-				$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
-				$$$.message('Change lower panel triangle css', DEBUG, 'leftmarkClick');
-				var t = panel4Array[2];
-				panel4Array[2] = panel4Array[3];
-				panel4Array[3] = t;
-				$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'leftmarkClick');
+				switchLowerPanel();
 			}
 		}
 	}
@@ -812,7 +790,45 @@ $(function(){
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
+		} else if(windowSize == 3) {
+			if(panel4Array[1] == p) {
+				$$$.message('Click upper right panel', DEBUG, 'rightmarkClick');
+				switchUpperPanel();
+			} else if(panel4Array[3] == p) {
+				$$$.message('Click lower right panel', DEBUG, 'rightmarkClick');
+				switchLowerPanel();
+			}
 		}
+	}
+	function switchUpperPanel() {
+		$$$.message('Call switchUpperPanel', DEBUG, 'switchUpperPanel');
+		$('#' + windowList[panel4Array[0]]).css({left: '400px'});
+		$('#' + windowList[panel4Array[1]]).css({left: '0px'});
+		$$$.message('Switch upper panel', DEBUG, 'switchUpperPanel');
+		$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+		$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+		$$$.message('Change upper panel triangle css', DEBUG, 'switchUpperPanel');
+		var t = panel4Array[0];
+		 panel4Array[0] = panel4Array[1];
+		panel4Array[1] = t;
+		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'leftmarkClick');
+	}
+	function switchLowerPanel() {
+		$$$.message('Call switchLowerPanel', DEBUG, 'switchLowerPanel');
+		$('#' + windowList[panel4Array[2]]).css({left: '400px'});
+		$('#' + windowList[panel4Array[3]]).css({left: '0px'});
+		$$$.message('Switch lower panel', DEBUG, 'switchLowerPanel');
+		$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+		$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+		$$$.message('Change lower panel triangle css', DEBUG, 'switchLowerPanel');
+		var t = panel4Array[2];
+		panel4Array[2] = panel4Array[3];
+		panel4Array[3] = t;
+		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'leftmarkClick');
 	}
 	function downmarkClick(p) {
 		$$$.message('Call downmarkClick(' + p + ')', DEBUG, 'downmarkClick');

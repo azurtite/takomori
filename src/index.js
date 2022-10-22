@@ -813,7 +813,7 @@ $(function(){
 		var t = panel4Array[0];
 		 panel4Array[0] = panel4Array[1];
 		panel4Array[1] = t;
-		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'leftmarkClick');
+		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'switchUpperPanel');
 	}
 	function switchLowerPanel() {
 		$$$.message('Call switchLowerPanel', DEBUG, 'switchLowerPanel');
@@ -828,7 +828,7 @@ $(function(){
 		var t = panel4Array[2];
 		panel4Array[2] = panel4Array[3];
 		panel4Array[3] = t;
-		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'leftmarkClick');
+		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'switchLowerPanel');
 	}
 	function downmarkClick(p) {
 		$$$.message('Call downmarkClick(' + p + ')', DEBUG, 'downmarkClick');

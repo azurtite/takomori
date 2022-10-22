@@ -832,6 +832,29 @@ $(function(){
 	}
 	function downmarkClick(p) {
 		$$$.message('Call downmarkClick(' + p + ')', DEBUG, 'downmarkClick');
+		if(panel4Array[2] == p) {
+			$('#' + windowList[panel4Array[0]]).css({top: '240px'});
+			$('#' + windowList[panel4Array[2]]).css({top: '0px'});
+			$$$.message('Switch left panel', DEBUG, 'downmarkClick');
+			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$$$.message('Change left panel triangle css', DEBUG, 'downmarkClick');
+			var t = panel4Array[0];
+			panel4Array[0] = panel4Array[2];
+			panel4Array[2] = t;
+			$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'downmarkClick');
+		} else if(panel4Array[3] == p) {
+			$('#' + windowList[panel4Array[1]]).css({top: '240px'});
+			$('#' + windowList[panel4Array[3]]).css({top: '0px'});
+			$$$.message('Switch right panel', DEBUG, 'downmarkClick');
+			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$$$.message('Change right panel triangle css', DEBUG, 'downmarkClick');
+			var t = panel4Array[1];
+			panel4Array[1] = panel4Array[3];
+			panel4Array[3] = t;
+			$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'downmarkClick');
+		}
 	}
 	/**
 	 * reload btn click event

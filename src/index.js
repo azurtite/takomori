@@ -31,9 +31,16 @@ let client = new OctoPrintClient({
 
 let $$$ = new logMan(true, false);
 
-if(windowSize == 1) window.resizeTo(400, 240);
-else if(windowSize == 2) window.resizeTo(800, 240);
-else if(windowSize == 3) window.resizeTo(800, 480);
+if(windowSize == 1) {
+	window.resizeTo(400, 240);
+	$$$.message('Window size is 400 x 240', LOWDEBUG, 'null');
+} else if(windowSize == 2) {
+	window.resizeTo(800, 240);
+	$$$.message('Window size is 800 x 240', LOWDEBUG, 'null');
+} else if(windowSize == 3) {
+	window.resizeTo(800, 480);
+	$$$.message('Window size is 800 x 480', LOWDEBUG, 'null');
+}
 
 /**
  * file list process

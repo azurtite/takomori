@@ -319,10 +319,11 @@ $(function(){
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
+							$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 							$('.file-list-icon-open').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -346,11 +347,12 @@ $(function(){
 						$$$.message('Connection success', INFO, '$power-btn.click');
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
+						$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 						intervalID = setInterval(getPrinterFullState, 1000);
 						$('.file-list-icon-open').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 						$('.file-list-icon-print').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
+						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');

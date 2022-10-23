@@ -11,11 +11,12 @@ let fanFlag				= false;
 let toolTempFlag		= false;
 let bedTempFlag			= false;
 let submenuToggle		= false;
-let windowSize			= 2;
+let windowSize			= 3;
 let maxWindowSize		= 3;
 let panelPosition		= 1;
 let maxPanelPosition	= 4;
 let panel2Array			= [1,2];
+let panel4Array			= [1, 2, 3, 4];
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
@@ -394,6 +395,28 @@ $(function(){
 		triggerWindowSizeChange();
 	});
 	function triggerWindowSizeChange() {
+		function modeTreeTriangleSet(){
+			$$$.message('Call modeTreeTriangleSet', DEBUG, 'modeTreeTriangleSet');
+			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+		}
+		function modeTreeTriangleReset() {
+			$$$.message('Call modeTreeTriangleReset', DEBUG, 'modeTreeTriangleReset');
+			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+		}
 		if(windowSize > maxWindowSize) windowSize = 1;
 		$$$.message('Screen mode is ' + windowSize, INFO, 'triggerWindowSizeChange');
 		if(windowSize == 1) {
@@ -407,6 +430,7 @@ $(function(){
 			else if(panelPosition == 2) $('#file-window-ctrl').css({'z-index': 80});
 			else if(panelPosition == 3) $('#manu-window-ctrl').css({'z-index': 80});
 			else if(panelPosition == 4) $('#temp-window-ctrl').css({'z-index': 80});
+			modeTreeTriangleReset();
 		} else if(windowSize == 2) {
 			$$$.message('Window size is 800 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,240);
@@ -419,13 +443,15 @@ $(function(){
 			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
 			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
 			$$$.message('Set panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
+			modeTreeTriangleReset();
 		} else if(windowSize == 3) {
 			$$$.message('Window size is 800 x 480', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,480);
-			$('#main-window-ctrl').css({'z-index': 80, top: '0px', left: '0px'});
-			$('#file-window-ctrl').css({'z-index': 80, top: '0px', left: '400px'});
-			$('#manu-window-ctrl').css({'z-index': 80, top: '240px', left: '0px'});
-			$('#temp-window-ctrl').css({'z-index': 80, top: '240px', left: '400px'});
+			$('#' + windowList[panel4Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
+			$('#' + windowList[panel4Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
+			$('#' + windowList[panel4Array[2]]).css({'z-index': 80, top: '240px', left: '0px'});
+			$('#' + windowList[panel4Array[3]]).css({'z-index': 80, top: '240px', left: '400px'});
+			modeTreeTriangleSet();
 		}
 	}
 	/**
@@ -625,6 +651,13 @@ $(function(){
 		rightmarkClick(1);
 	});
 	/**
+	 * down mark main click event
+	 */
+	$('#down-mark-main').click(function(){
+		$$$.message('Click down-mark-main', DEBUG, '$down-mark-main');
+		downmarkClick(1);
+	});
+	/**
 	 * left mark file click event
 	 */
 	$('#left-mark-file').click(function(){
@@ -637,6 +670,13 @@ $(function(){
 	$('#right-mark-file').click(function(){
 		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
 		rightmarkClick(2);
+	});
+	/**
+	 * down mark main click event
+	 */
+	 $('#down-mark-file').click(function(){
+		$$$.message('Click down-mark-file', DEBUG, '$down-mark-file');
+		downmarkClick(2);
 	});
 	/**
 	 * left mark file click event
@@ -653,6 +693,13 @@ $(function(){
 		rightmarkClick(3);
 	});
 	/**
+	 * down mark main click event
+	 */
+	 $('#down-mark-manu').click(function(){
+		$$$.message('Click down-mark-manu', DEBUG, '$down-mark-manu');
+		downmarkClick(3);
+	});
+	/**
 	 * left mark file click event
 	 */
 	 $('#left-mark-temp').click(function(){
@@ -666,7 +713,15 @@ $(function(){
 		$$$.message('Click right-mark-temp', DEBUG, '$right-mark-temp.click');
 		rightmarkClick(4);
 	});
+	/**
+	 * down mark main click event
+	 */
+	 $('#down-mark-temp').click(function(){
+		$$$.message('Click down-mark-temp', DEBUG, '$down-mark-temp');
+		downmarkClick(4);
+	});
 	function leftmarkClick(p) {
+		$$$.message('Call leftmarkClick(' + p + ')', DEBUG, 'downmarkClick');
 		if(windowSize == 1) {
 			panelPosition--;
 			if(panelPosition < 1) panelPosition = maxPanelPosition;
@@ -695,9 +750,18 @@ $(function(){
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'leftmarkClick');
+		} else if(windowSize == 3) {
+			if(panel4Array[0] == p) {
+				$$$.message('Click upper left panel', DEBUG, 'leftmarkClick');
+				switchUpperPanel();
+			} else if(panel4Array[2] == p) {
+				$$$.message('Click upper left panel', DEBUG, 'leftmarkClick');
+				switchLowerPanel();
+			}
 		}
 	}
 	function rightmarkClick(p) {
+		$$$.message('Call rightmarkClick(' + p + ')', DEBUG, 'downmarkClick');
 		if(windowSize == 1) {
 			panelPosition++;
 			if(panelPosition > maxPanelPosition) panelPosition = 1;
@@ -726,6 +790,70 @@ $(function(){
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
+		} else if(windowSize == 3) {
+			if(panel4Array[1] == p) {
+				$$$.message('Click upper right panel', DEBUG, 'rightmarkClick');
+				switchUpperPanel();
+			} else if(panel4Array[3] == p) {
+				$$$.message('Click lower right panel', DEBUG, 'rightmarkClick');
+				switchLowerPanel();
+			}
+		}
+	}
+	function switchUpperPanel() {
+		$$$.message('Call switchUpperPanel', DEBUG, 'switchUpperPanel');
+		$('#' + windowList[panel4Array[0]]).css({left: '400px'});
+		$('#' + windowList[panel4Array[1]]).css({left: '0px'});
+		$$$.message('Switch upper panel', DEBUG, 'switchUpperPanel');
+		$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+		$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+		$$$.message('Change upper panel triangle css', DEBUG, 'switchUpperPanel');
+		var t = panel4Array[0];
+		 panel4Array[0] = panel4Array[1];
+		panel4Array[1] = t;
+		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'switchUpperPanel');
+	}
+	function switchLowerPanel() {
+		$$$.message('Call switchLowerPanel', DEBUG, 'switchLowerPanel');
+		$('#' + windowList[panel4Array[2]]).css({left: '400px'});
+		$('#' + windowList[panel4Array[3]]).css({left: '0px'});
+		$$$.message('Switch lower panel', DEBUG, 'switchLowerPanel');
+		$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
+		$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
+		$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+		$$$.message('Change lower panel triangle css', DEBUG, 'switchLowerPanel');
+		var t = panel4Array[2];
+		panel4Array[2] = panel4Array[3];
+		panel4Array[3] = t;
+		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'switchLowerPanel');
+	}
+	function downmarkClick(p) {
+		$$$.message('Call downmarkClick(' + p + ')', DEBUG, 'downmarkClick');
+		if(panel4Array[2] == p) {
+			$('#' + windowList[panel4Array[0]]).css({top: '240px'});
+			$('#' + windowList[panel4Array[2]]).css({top: '0px'});
+			$$$.message('Switch left panel', DEBUG, 'downmarkClick');
+			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$$$.message('Change left panel triangle css', DEBUG, 'downmarkClick');
+			var t = panel4Array[0];
+			panel4Array[0] = panel4Array[2];
+			panel4Array[2] = t;
+			$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'downmarkClick');
+		} else if(panel4Array[3] == p) {
+			$('#' + windowList[panel4Array[1]]).css({top: '240px'});
+			$('#' + windowList[panel4Array[3]]).css({top: '0px'});
+			$$$.message('Switch right panel', DEBUG, 'downmarkClick');
+			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$$$.message('Change right panel triangle css', DEBUG, 'downmarkClick');
+			var t = panel4Array[1];
+			panel4Array[1] = panel4Array[3];
+			panel4Array[3] = t;
+			$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'downmarkClick');
 		}
 	}
 	/**

@@ -60,7 +60,7 @@ function getFilelist() {
 						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
 						'<div class="middle-btn file-list-icon-trash" onclick="trashClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
 						'<div class="middle-btn file-list-icon-open" onclick="openClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
-						'<div class="right-btn file-list-icon-print"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
+						'<div class="right-btn file-list-icon-print" onclick="printClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 						$('#file-list-ctrl').append(element);
 			}
 			displayClick(0);	// test code
@@ -161,6 +161,16 @@ function openClick(e) {
 	} else {
 		client.files.select('local', fileInfoContainar.files[e].path);
 		$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
+	}
+}
+function printClick(e) {
+	$$$.message('Click the print icon in listing' + e, DEBUG, 'printClick');
+	if(!powerFlag) {
+		$$$.message('This button is not active(icon-print-' + e + ')', DEBUG, 'printClick');
+		return;
+	} else {
+		client.job.start();
+		$$$.message('Start printing ' + fileInfoContainar.files[e].display, INFO, 'printClick');
 	}
 }
 /**

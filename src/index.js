@@ -58,7 +58,7 @@ function getFilelist() {
 						'<div class="display-name" onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
 						'<div class="left-btn file-list-icon-download" onclick="downloadClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
 						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
-						'<div class="middle-btn file-list-icon-trash"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
+						'<div class="middle-btn file-list-icon-trash" onclick="trashClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
 						'<div class="middle-btn file-list-icon-open"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
 						'<div class="right-btn file-list-icon-print"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 						$('#file-list-ctrl').append(element);
@@ -145,6 +145,13 @@ function downloadClick(e) {
 			URL.revokeObjectURL(element.href);
 			$$$.message('Delete temporary files', DEBUG, 'downloadClick')
 		})
+}
+function trashClick(e) {
+	$$$.message('Click the trash icon in listing ' + e, DEBUG, 'trashClick');
+	var f = fileInfoContainar.files[e].path;
+	client.files.delete('local', f);
+	$$$.message('Delete ' + f, INFO, 'trashClick');
+	getFilelist();
 }
 /**
  * getPrinterFullSate()

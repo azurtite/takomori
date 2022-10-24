@@ -540,7 +540,7 @@ $(function(){
 	 * tool on remove btn click event
 	 */
 	$('#tool-on-remove-btn').click(function(){
-		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn.click');
+		$$$.message('Click tool-on-remove-btn', DEBUG, '$tool-on-remove-btn.click');
 		$('#slider-panel-tool-ctrl').css({'z-index': -1});
 		toolTempFlag = false;
 		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
@@ -591,6 +591,15 @@ $(function(){
 			.fail(function(){
 				$$$.message('Printer not found', ERROR, '$tool-on-sw-btn.click');
 			})
+	});
+	/**
+	 * bed on remove btn click event
+	 */
+	$('#bed-on-remove-btn').click(function(){
+		$$$.message('Click bed-on-remove-btn', DEBUG, '$bed-on-remove-btn.click');
+		$('#slider-panel-bed-ctrl').css({'z-index': -1});
+		bedTempFlag = false;
+		$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
 	/**
 	 * bed icon click event

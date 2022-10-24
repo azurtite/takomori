@@ -164,14 +164,21 @@ function openClick(e) {
 	}
 }
 function printClick(e) {
-	$$$.message('Click the print icon in listing' + e, DEBUG, 'printClick');
-	if(!powerFlag) {
-		$$$.message('This button is not active(icon-print-' + e + ')', DEBUG, 'printClick');
-		return;
-	} else {
-		client.job.start();
-		$$$.message('Start printing ' + fileInfoContainar.files[e].display, INFO, 'printClick');
-	}
+	$$$.message('Click the print icon in listing ' + e, DEBUG, 'printClick');
+	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		.done(function(data){
+			if(data.state.toLowerCase() != 'printing' && powerFlag) {
+				client.files.select('local', fileInfoContainar.files[e].path, true);
+				$$$.message('Start printing ' + fileInfoContainar.files[e].display, INFO, 'printClick');
+			} else {
+				if(!powerFlag) $$$.message('This button is not active(icon-print-' + e + ')', DEBUG, 'printClick');
+				else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, 'printClick');
+				return;
+			}
+		})
+		.fail(function(){
+			$$$.message('Printer not found', ERROR, '$printClick');
+		});
 }
 /**
  * getPrinterFullSate()

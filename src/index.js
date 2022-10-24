@@ -15,7 +15,7 @@ let windowSize			= 3;
 let maxWindowSize		= 3;
 let panelPosition		= 1;
 let maxPanelPosition	= 4;
-let panel2Array			= [1,2];
+let panel2Array			= [1, 2];
 let panel4Array			= [1, 2, 3, 4];
 let intervalID			= undefined;
 let fileIntervalID		= undefined;
@@ -31,9 +31,16 @@ let client = new OctoPrintClient({
 
 let $$$ = new logMan(true, false);
 
-if(windowSize == 1) window.resizeTo(400, 240);
-else if(windowSize == 2) window.resizeTo(800, 240);
-else if(windowSize == 3) window.resizeTo(800, 480);
+if(windowSize == 1) {
+	window.resizeTo(400, 240);
+	$$$.message('Window size is 400 x 240', LOWDEBUG, 'null');
+} else if(windowSize == 2) {
+	window.resizeTo(800, 240);
+	$$$.message('Window size is 800 x 240', LOWDEBUG, 'null');
+} else if(windowSize == 3) {
+	window.resizeTo(800, 480);
+	$$$.message('Window size is 800 x 480', LOWDEBUG, 'null');
+}
 
 /**
  * file list process
@@ -319,10 +326,11 @@ $(function(){
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
+							$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 							$('.file-list-icon-open').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -346,11 +354,12 @@ $(function(){
 						$$$.message('Connection success', INFO, '$power-btn.click');
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
+						$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 						intervalID = setInterval(getPrinterFullState, 1000);
 						$('.file-list-icon-open').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 						$('.file-list-icon-print').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
+						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');
@@ -422,23 +431,16 @@ $(function(){
 		if(windowSize == 1) {
 			$$$.message('Window size is 400 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(400,240);
-			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			if(panelPosition == 1) $('#main-window-ctrl').css({'z-index': 80});
-			else if(panelPosition == 2) $('#file-window-ctrl').css({'z-index': 80});
-			else if(panelPosition == 3) $('#manu-window-ctrl').css({'z-index': 80});
-			else if(panelPosition == 4) $('#temp-window-ctrl').css({'z-index': 80});
+			$('#main-window-ctrl, #file-window-ctrl, #manu-window-ctrl, #temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$$$.message('Reset panel position for screen mode 1', DEBUG, 'triggerWindowSizeChange')
+			$('#' + windowList[panelPosition]).css({'z-index': 80});
+			$$$.message('Set panel position for screen mode 1', DEBUG, 'triggerWindowSizeChange')
 			modeTreeTriangleReset();
 		} else if(windowSize == 2) {
 			$$$.message('Window size is 800 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,240);
 			// Main panel position set
-			$('#main-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			$('#file-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			$('#manu-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
-			$('#temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$('#main-window-ctrl, #file-window-ctrl, #manu-window-ctrl, #temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
 			$$$.message('Reset panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
 			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
 			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
@@ -538,7 +540,7 @@ $(function(){
 	 * tool on remove btn click event
 	 */
 	$('#tool-on-remove-btn').click(function(){
-		$$$.message('Click tool-on-remove', DEBUG, '$tool-on-remove-btn.click');
+		$$$.message('Click tool-on-remove-btn', DEBUG, '$tool-on-remove-btn.click');
 		$('#slider-panel-tool-ctrl').css({'z-index': -1});
 		toolTempFlag = false;
 		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
@@ -589,6 +591,15 @@ $(function(){
 			.fail(function(){
 				$$$.message('Printer not found', ERROR, '$tool-on-sw-btn.click');
 			})
+	});
+	/**
+	 * bed on remove btn click event
+	 */
+	$('#bed-on-remove-btn').click(function(){
+		$$$.message('Click bed-on-remove-btn', DEBUG, '$bed-on-remove-btn.click');
+		$('#slider-panel-bed-ctrl').css({'z-index': -1});
+		bedTempFlag = false;
+		$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
 	/**
 	 * bed icon click event

@@ -682,6 +682,26 @@ $(function(){
 			})
 	});
 	/**
+	 * print icon click event
+	 */
+	$('#print-icon').click(function(){
+		$$$.message('Click print-icon', DEBUG, '$print-icon.click');
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					client.job.start();
+					$$$.message('Start print.', DEBUG, '$print-icon.click')
+				} else {
+					if(!powerFlag) $$$.message('This button is not active(print-icon)', DEBUG, 'print$print-icon.clickClick');
+					else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, '$print-icon.click');
+					return;
+				}
+			})
+			.fail(function(){
+				$$$.message('Printer not found', ERROR, '$printClick');
+			});
+	});
+	/**
 	 * left mark main click event
 	 */
 	$('#left-mark-main').click(function(){

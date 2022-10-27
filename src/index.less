@@ -4,6 +4,8 @@
 @ceruleanblue:	#008DB7;
 @forestleaf:	#008554;
 @lapislazuli:	#261F87;
+@skyhigh:		#51A5DC;
+@peleskyblue:	#C2E5F9;
 
 body {
 	overflow:					hidden;
@@ -562,6 +564,34 @@ body {
 			text-align:		center;
 			vertical-align:	middle;
 		}
+	}
+	.file-notice {
+		position:			relative;
+		height:				200px;
+		width:				360px;
+		left:				20px;
+		top:				10px;
+		color:				@sunshine;
+		background-color:	@skyhigh;
+		visibility:			hidden;
+		.file-notice-text {
+			position:		relative;
+			height:			70px;
+			width:			150px;
+			left:			105px;
+			top:			65px;
+		}
+	}
+	.file-notice::after {
+		content:			'';
+		position:			absolute;
+		top:				0;
+		right:				0;
+		width:				0;
+		height:				0;
+		border-style:		solid;
+		border-color:		transparent @ceruleanblue @peleskyblue transparent;
+		border-width:		0 25px 25px 0;
 	}
 	.information-panel {
 		position:			absolute;

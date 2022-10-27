@@ -57,7 +57,7 @@ function getFilelist() {
 					element.innerHTML = 
 						'<div class="display-name" onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
 						'<div class="left-btn file-list-icon-download" onclick="downloadClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
-						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
+						'<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>' +
 						'<div class="middle-btn file-list-icon-trash" onclick="trashClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
 						'<div class="middle-btn file-list-icon-open" onclick="openClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
 						'<div class="right-btn file-list-icon-print" onclick="printClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
@@ -179,6 +179,10 @@ function printClick(e) {
 		.fail(function(){
 			$$$.message('Printer not found', ERROR, '$printClick');
 		});
+}
+function levelupClick(e) {
+	$$$.message('Click the level-up icon in listing ' + e, DEBUG, 'levelupClick');
+	$('#file-notice-ctrl').css({visibility: 'visible'});
 }
 /**
  * getPrinterFullSate()
@@ -927,5 +931,12 @@ $(function(){
 	$('#reload-btn').click(function(){
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn.click');
 		getFilelist();
+	});
+	/**
+	 * file notice click event
+	 */
+	$('#file-notice-ctrl').click(function(){
+		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
+		$('#file-notice-ctrl').css({visibility: 'hidden'});
 	});
 });

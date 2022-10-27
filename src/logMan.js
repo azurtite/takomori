@@ -16,6 +16,7 @@ const TYPE				= ['N/A', 'Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)',
  
 function logMan(hide, dispose) {
 	this.appendMills 		= true;
+	this.addPriodEOL		= true;
 	this.debugLevel			= 1;
 	this.dispose			= dispose;
 	this.hideLowPriority	= hide;
@@ -138,6 +139,7 @@ function logMan(hide, dispose) {
 			return false;
 		}
 
+		if(this.addPriodEOL) msg += '.';
 		data = {
 			msg:	msg,
 			time:	date[1],

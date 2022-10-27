@@ -60,7 +60,7 @@ function getFilelist() {
 						'<div class="middle-btn file-list-icon-scissors"><span class="glyphicon glyphicon glyphicon-scissors"></span></div>' +
 						'<div class="middle-btn file-list-icon-trash" onclick="trashClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
 						'<div class="middle-btn file-list-icon-open" onclick="openClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
-						'<div class="right-btn file-list-icon-print"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
+						'<div class="right-btn file-list-icon-print" onclick="printClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 						$('#file-list-ctrl').append(element);
 			}
 			displayClick(0);	// test code
@@ -162,6 +162,23 @@ function openClick(e) {
 		client.files.select('local', fileInfoContainar.files[e].path);
 		$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
 	}
+}
+function printClick(e) {
+	$$$.message('Click the print icon in listing ' + e, DEBUG, 'printClick');
+	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		.done(function(data){
+			if(data.state.toLowerCase() != 'printing' && powerFlag) {
+				client.files.select('local', fileInfoContainar.files[e].path, true);
+				$$$.message('Start printing ' + fileInfoContainar.files[e].display, INFO, 'printClick');
+			} else {
+				if(!powerFlag) $$$.message('This button is not active(icon-print-' + e + ')', DEBUG, 'printClick');
+				else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, 'printClick');
+				return;
+			}
+		})
+		.fail(function(){
+			$$$.message('Printer not found', ERROR, '$printClick');
+		});
 }
 /**
  * getPrinterFullSate()
@@ -663,6 +680,26 @@ $(function(){
 			.fail(function(err){
 				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
 			})
+	});
+	/**
+	 * print icon click event
+	 */
+	$('#print-icon').click(function(){
+		$$$.message('Click print-icon', DEBUG, '$print-icon.click');
+		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+			.done(function(data){
+				if(data.state.toLowerCase() != 'printing' && powerFlag) {
+					client.job.start();
+					$$$.message('Start print.', DEBUG, '$print-icon.click')
+				} else {
+					if(!powerFlag) $$$.message('This button is not active(print-icon)', DEBUG, 'print$print-icon.clickClick');
+					else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, '$print-icon.click');
+					return;
+				}
+			})
+			.fail(function(){
+				$$$.message('Printer not found', ERROR, '$printClick');
+			});
 	});
 	/**
 	 * left mark main click event

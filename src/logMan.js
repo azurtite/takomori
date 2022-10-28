@@ -12,6 +12,7 @@ const LOWDEBUG			= 7;
 const SENDCONSOLE		= 101;
 const NOTSENDCONSOLE	= 102;
 const DISPOSE			= 203;
+const NOBREAK			= -101;
 const TYPE				= ['N/A', 'Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)', 'Debug(low)'];
  
 function logMan(hide, dispose) {
@@ -167,9 +168,23 @@ function logMan(hide, dispose) {
 			return true;
 		}
 	}
+	/**
+	 * 
+	 * @param  {...any} args
+	 * 				use NOBREAK option		: 区切りなしタイムスタンプを生成 ex)20220501134805,getTime() 
+	 * 				no use NOREAK option	: 区切りありタイムスタンプを生成 ex)2000501T13:48:05.698,getTime()
+	 * 				positive number			: 入力値に対するタイムスタンプを生成
+	 * @returns	タイムスタンプ配列
+	 * 			[0]	生成したタイムスタンプ
+	 * 			[1] ECMAScript元期からの経過ミリ秒
+	 */
 	this.timeStamp		= function(...args) {
 		var now = new Date();
-		if(typeof args[0] == 'number') now.setTime(args[0]);
+		var nb	= false;
+		for(var i=0; i<args.length; i++)
+			if(typeof args[i] == 'number')
+				if(args[i] > 0) now.setTime(args[i]);
+				else if(args[i] == NOBREAK) nb = true;
 
 		var year	= String(now.getFullYear());
 		var month	= String(now.getMonth() + 1);
@@ -186,8 +201,12 @@ function logMan(hide, dispose) {
 		if(mills.length < 2) mills = '00' + mills;
 		else if(mills.length < 3) mills = '0' + mills;
 
-		var result =  [year + month + day + 'T' + hour  + ':' + minutes + ':' + second, now.getTime()];
-		if(this.appendMills) result[0] = result[0] + '.' + mills;
+		var result;
+		if(!nb) {
+			result =  [year + month + day + 'T' + hour  + ':' + minutes + ':' + second, now.getTime()];
+			if(this.appendMills) result[0] = result[0] + '.' + mills;
+		} else
+			result = [year + month + day + hour  + minutes + second, now.getTime()];
 		return result;
 	}
 }

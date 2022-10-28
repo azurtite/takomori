@@ -25,6 +25,24 @@ function logMan(hide, dispose) {
 	this.logLine			= 0;
 	this.sendConsole		= true;
 	/**
+	 * download ログファイルをJSON形式でダウンロードする
+	 */
+	this.download			= function() {
+		function changeStream(data) {
+			var length = data.length;
+			var result = new Uint8Array(length);
+			for(var i=0; i<length; i++) result[i] = data[i].charCodeAt(0);
+			return result;
+		}
+		var	stringfy = JSON.stringify(this.log);
+		var stream = new Uint8Array(changeStream(stringfy));
+		var element = document.createElement('a');
+		element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'application/json'}));
+		element.download = this.timeStamp(NOBREAK)[0] + '.json';
+		element.click();
+		URL.revokeObjectURL(element.href);
+	}
+	/**
 	 * fullDump ログを出力する
 	 * 
 	 * @param {JSON} options 

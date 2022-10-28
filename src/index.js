@@ -24,6 +24,9 @@ let bedTempValue		= 0;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 
+let baseURL				= 'http://192.168.0.14/';
+let apiKey				= '241B873D3FF8408FB95E1DB8510F81CC';
+
 let client = new OctoPrintClient({
 	baseurl:	'http://192.168.0.14/',
 	apikey:		'241B873D3FF8408FB95E1DB8510F81CC'
@@ -63,7 +66,6 @@ function getFilelist() {
 						'<div class="right-btn file-list-icon-print" onclick="printClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 						$('#file-list-ctrl').append(element);
 			}
-			displayClick(0);	// test code
 			$('.file-list-icon-open').css({color: peleskyblue});
 			$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
 			$('.file-list-icon-print').css({color: peleskyblue});
@@ -333,6 +335,33 @@ function postProcess() {
 		$('#tool-on-sw-btn').css({color: sunshine});
 		$('#tool-icon').css({color:sunshine});
 	}
+}
+/**
+ * upload test code
+ */
+function upload(elem) {
+	var apikey = '241B873D3FF8408FB95E1DB8510F81CC';
+	var form = new FormData();
+	form.append('file', elem.files[0]);
+	form.append('select', false);
+	form.append('print', false);
+
+	var settings = {
+		async:			true,
+		url:			'http://192.168.0.14/api/files/local',
+		method:			'POST',
+		headers:		{
+			'x-api-key':		apikey,
+			'cache-control':	'no-cache',
+		},
+		processData:	false,
+		contentType:	false,
+		mimeType:		'multipart/form-data',
+		data:			form
+	}
+	$.ajax(settings).done(function(response){
+		getFilelist();
+	});
 }
 
 $(function(){
@@ -931,6 +960,14 @@ $(function(){
 	$('#reload-btn').click(function(){
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn.click');
 		getFilelist();
+	});
+	/**
+	 * upload btn click event
+	 */
+	$('#upload-btn').click(function(){
+		$$$.message('Click upload-btn', DEBUG, '$upload-btn.click');
+		$$$.message('Trigger file-open-btn click event', DEBUG, '$upload-btn.click');
+		document.getElementById('file-open.btn').click();
 	});
 	/**
 	 * file notice click event

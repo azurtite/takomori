@@ -28,8 +28,8 @@ let baseURL				= 'http://192.168.0.14/';
 let apiKey				= '241B873D3FF8408FB95E1DB8510F81CC';
 
 let client = new OctoPrintClient({
-	baseurl:	'http://192.168.0.14/',
-	apikey:		'241B873D3FF8408FB95E1DB8510F81CC'
+	baseurl:	baseURL,
+	apikey:		apiKey
 });
 
 let $$$ = new logMan(true, false);
@@ -66,10 +66,17 @@ function getFilelist() {
 						'<div class="right-btn file-list-icon-print" onclick="printClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
 						$('#file-list-ctrl').append(element);
 			}
-			$('.file-list-icon-open').css({color: peleskyblue});
-			$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
-			$('.file-list-icon-print').css({color: peleskyblue});
-			$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+			if(powerFlag) {
+				$('.file-list-icon-open').css({color: sunshine});
+				$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+				$('.file-list-icon-print').css({color: sunshine});
+				$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
+			} else {
+				$('.file-list-icon-open').css({color: peleskyblue});
+				$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+				$('.file-list-icon-print').css({color: peleskyblue});
+				$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+			}
 		})
 }
 getFilelist();

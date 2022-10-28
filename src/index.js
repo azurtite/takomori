@@ -380,6 +380,13 @@ $(function(){
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	triggerWindowSizeChange();
 	/**
+	 * reload btn click event
+	 */
+	$('#reload-btn-ctrl').click(function(){
+		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
+		location.reload();
+	});
+	/**
 	 * Power button click event
 	 */
 	$('#power-btn').click(function(){

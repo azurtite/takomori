@@ -12,16 +12,36 @@ const LOWDEBUG			= 7;
 const SENDCONSOLE		= 101;
 const NOTSENDCONSOLE	= 102;
 const DISPOSE			= 203;
+const NOBREAK			= -101;
 const TYPE				= ['N/A', 'Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)', 'Debug(low)'];
  
 function logMan(hide, dispose) {
 	this.appendMills 		= true;
+	this.addPriodEOL		= true;
 	this.debugLevel			= 1;
 	this.dispose			= dispose;
 	this.hideLowPriority	= hide;
 	this.log				= [];
 	this.logLine			= 0;
-	this.sendConsole		= true; 
+	this.sendConsole		= true;
+	/**
+	 * download ログファイルをJSON形式でダウンロードする
+	 */
+	this.download			= function() {
+		function changeStream(data) {
+			var length = data.length;
+			var result = new Uint8Array(length);
+			for(var i=0; i<length; i++) result[i] = data[i].charCodeAt(0);
+			return result;
+		}
+		var	stringfy = JSON.stringify(this.log);
+		var stream = new Uint8Array(changeStream(stringfy));
+		var element = document.createElement('a');
+		element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'application/json'}));
+		element.download = this.timeStamp(NOBREAK)[0] + '.json';
+		element.click();
+		URL.revokeObjectURL(element.href);
+	}
 	/**
 	 * fullDump ログを出力する
 	 * 
@@ -138,6 +158,7 @@ function logMan(hide, dispose) {
 			return false;
 		}
 
+		if(this.addPriodEOL) msg += '.';
 		data = {
 			msg:	msg,
 			time:	date[1],
@@ -165,9 +186,23 @@ function logMan(hide, dispose) {
 			return true;
 		}
 	}
+	/**
+	 * 
+	 * @param  {...any} args
+	 * 				use NOBREAK option		: 区切りなしタイムスタンプを生成 ex)20220501134805,getTime() 
+	 * 				no use NOREAK option	: 区切りありタイムスタンプを生成 ex)2000501T13:48:05.698,getTime()
+	 * 				positive number			: 入力値に対するタイムスタンプを生成
+	 * @returns	タイムスタンプ配列
+	 * 			[0]	生成したタイムスタンプ
+	 * 			[1] ECMAScript元期からの経過ミリ秒
+	 */
 	this.timeStamp		= function(...args) {
 		var now = new Date();
-		if(typeof args[0] == 'number') now.setTime(args[0]);
+		var nb	= false;
+		for(var i=0; i<args.length; i++)
+			if(typeof args[i] == 'number')
+				if(args[i] > 0) now.setTime(args[i]);
+				else if(args[i] == NOBREAK) nb = true;
 
 		var year	= String(now.getFullYear());
 		var month	= String(now.getMonth() + 1);
@@ -184,8 +219,12 @@ function logMan(hide, dispose) {
 		if(mills.length < 2) mills = '00' + mills;
 		else if(mills.length < 3) mills = '0' + mills;
 
-		var result =  [year + month + day + 'T' + hour  + ':' + minutes + ':' + second, now.getTime()];
-		if(this.appendMills) result[0] = result[0] + '.' + mills;
+		var result;
+		if(!nb) {
+			result =  [year + month + day + 'T' + hour  + ':' + minutes + ':' + second, now.getTime()];
+			if(this.appendMills) result[0] = result[0] + '.' + mills;
+		} else
+			result = [year + month + day + hour  + minutes + second, now.getTime()];
 		return result;
 	}
 }

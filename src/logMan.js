@@ -22,7 +22,7 @@ function logMan(hide, dispose) {
 	this.hideLowPriority	= hide;
 	this.log				= [];
 	this.logLine			= 0;
-	this.sendConsole		= true; 
+	this.sendConsole		= true;
 	/**
 	 * fullDump ログを出力する
 	 * 

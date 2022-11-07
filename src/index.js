@@ -381,8 +381,11 @@ $(function(){
 	}
 
 	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
+	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');
 
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
+	$$$.message('Initialize progress-bar color', DEBUG, 'jQuery');
+	
 	triggerWindowSizeChange();
 	/**
 	 * reload btn click event

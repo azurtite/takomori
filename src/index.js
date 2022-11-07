@@ -3,6 +3,7 @@ let rescueorange		= '#EA5405';
 let ceruleanblue		= '#008DB7';
 let forestleaf			= '#008554';
 let peleskyblue			= '#C2E5F9';
+let lapislazuli			= '#261F87';
 
 let powerFlag			= false;
 let tool0Flag			= false;
@@ -21,8 +22,10 @@ let intervalID			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
+let seedRate			= 10;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
+let seedRates			= [0, 0.1, 1, 10, 100];
 
 let baseURL				= 'http://192.168.0.14/';
 let apiKey				= '241B873D3FF8408FB95E1DB8510F81CC';
@@ -376,7 +379,9 @@ $(function(){
 		$('.alert-text').text('Failed to create OctoPrint object')
 		$('.alert-panel').css({visibility: 'visible'});
 	}
-	
+
+	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
+
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	triggerWindowSizeChange();
 	/**

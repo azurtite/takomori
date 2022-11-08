@@ -1174,6 +1174,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-pb').click(function(){
+		$$$.message('Click manu-btn-pb', DEBUG, '$manu-btn-pb.click');
 		if(!waitNextClick) {
 			$('#manu-btn-pb').css({
 				color:				rescueorange,

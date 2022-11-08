@@ -1067,7 +1067,7 @@ $(function(){
 			if(powerFlag) {
 				client.control.sendGcode('G28 X0')
 					.done(function(response){
-						extruderPosition[0] = -1;
+						extruderPosition[0] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p1.click');
 					});
 			} else {
@@ -1132,7 +1132,7 @@ $(function(){
 			if(powerFlag) {
 				client.control.sendGcode('G28 Y0')
 					.done(function(){
-						extruderPosition[1] = -1;
+						extruderPosition[1] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p6.click');
 					});
 			} else {
@@ -1186,7 +1186,7 @@ $(function(){
 			if(powerFlag) {
 				client.control.sendGcode('G28 Z0')
 					.done(function(){
-						extruderPosition[1] = -1;
+						extruderPosition[2] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-pb.click');
 					});
 			} else {

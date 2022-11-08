@@ -1028,6 +1028,31 @@ $(function(){
 				break;
 		}
 	});
+	$('#seed-value-p1').click(function(){
+		$$$.message('Click seed-value-p1', DEBUG, '$seed-value-p1.click');
+		changeSeedRate(1);
+	});
+	$('#seed-value-p2').click(function(){
+		$$$.message('Click seed-value-p2', DEBUG, '$seed-value-p2.click');
+		changeSeedRate(2);
+	});
+	$('#seed-value-p3').click(function(){
+		$$$.message('Click seed-value-p3', DEBUG, '$seed-value-p3.click');
+		changeSeedRate(3);
+	});
+	$('#seed-value-p4').click(function(){
+		$$$.message('Click seed-value-p4', DEBUG, '$seed-value-p4.click');
+		changeSeedRate(4);
+	});
+	function changeSeedRate(p) {
+		$$$.message('Call changeSeedRate', DEBUG, 'changeSeedRate');
+		$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': ceruleanblue});
+		seedRate = Number($('#seed-value-p' + p).text().split('mm')[0]);
+		if(seedRate == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
+		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
+		$$$.message('Change css', DEBUG, 'changeSeedRate');
+		$$$.message('Seed rate is ' + seedRate, INFO, 'changeSeedRate');
+	}
 	$('#manu-btn-p1').click(function(){
 		if(!waitNextClick) {
 			$('#manu-btn-p1').css({
@@ -1039,7 +1064,7 @@ $(function(){
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p1.click');
 		}
 	});
-	$('#manu-btn-p2').click(function(){
+	$('#manu-btn-p1').click(function(){
 		if(!waitNextClick) {
 			$('#manu-btn-p2').css({
 				color:				rescueorange,

@@ -1055,6 +1055,7 @@ $(function(){
 		$$$.message('Seed rate is ' + seedRate, INFO, 'changeSeedRate');
 	}
 	$('#manu-btn-p1').click(function(){
+		$$$.message('Click manu-btn-p1', DEBUG, '$manu-btn-p1.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p1').css({
 				color:				rescueorange,

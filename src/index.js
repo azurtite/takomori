@@ -25,6 +25,7 @@ let bedTempValue		= 0;
 let seedRate			= 10;
 let buttonPosition		= 1;
 let maxButtonPosition	= 3;
+let waitNextClick		= false;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -1027,4 +1028,166 @@ $(function(){
 				break;
 		}
 	});
+	$('#manu-btn-p1').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p1').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p1')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p1.click');
+		}
+	});
+	$('#manu-btn-p2').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p2').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p2')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p2.click');
+		}
+	});
+	$('#manu-btn-p3').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p3').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p3')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p3.click');
+		}
+	});
+	$('#manu-btn-p4').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p4').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p4')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p4.click');
+		}
+	});
+	$('#manu-btn-p5').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p5').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p5')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p5.click');
+		}
+	});
+	$('#manu-btn-p6').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p6').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p6')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p6.click');
+		}
+	});
+	$('#manu-btn-p7').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p7').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p7')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p7.click');
+		}
+	});
+	$('#manu-btn-p9').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-p9').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('p9')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p9.click');
+		}
+	});
+	$('#manu-btn-pa').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-pa').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('pa')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pa.click');
+		}
+	});
+	$('#manu-btn-pb').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-pb').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('pb')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pb.click');
+		}
+	});
+	$('#manu-btn-pc').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-pc').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('pc')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pc.click');
+		}
+	});
+	$('#manu-btn-pd').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-pd').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('pd')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pd.click');
+		}
+	});
+	$('#manu-btn-pe').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-pe').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('pe')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pe.click');
+		}
+	});
+	$('#manu-btn-pf').click(function(){
+		if(!waitNextClick) {
+			$('#manu-btn-pf').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			setTimeout(()=>{restoreButtonCSS('pf')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pf.click');
+		}
+	});
+	function restoreButtonCSS(bn) {
+		$$$.message('Call restoreButtonCSS', DEBUG, 'restoreButtonCSS');
+		waitNextClick = false;
+		$('#manu-btn-' + bn).css({
+			color:				sunshine,
+			'background-color':	lapislazuli
+		})
+	}
 });

@@ -1063,6 +1063,7 @@ $(function(){
 					bedLevelingPosition(1);
 					break;
 				case 2:
+					diagonalMove(1);
 					break;
 				case 3:
 					break;
@@ -1106,6 +1107,45 @@ $(function(){
 				});
 		}
 	}
+	function diagonalMove(p) {
+		$$$.message('diagonalMove', DEBUG, 'diagonalMove');
+		var x, y;
+		if(powerFlag && extruderPosition[0] >= 0 && extruderPosition[1] >= 0) {
+			switch(p) {
+				case 1:
+					x = extruderPosition[0] - seedRate;
+					y = extruderPosition[1] + seedRate;
+					if(x < 0) x = 0;
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 2:
+					x = extruderPosition[0] + seedRate;
+					y = extruderPosition[1] + seedRate;
+					if(x > bedSize[0]) x = bedSize[0];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 3:
+					x = extruderPosition[0] - seedRate;
+					y = extruderPosition[1] - seedRate;
+					if(x < 0) x = 0;
+					if(y < 0) y = 0;
+					break;
+				case 4:
+					x = extruderPosition[0] + seedRate;
+					y = extruderPosition[1] - seedRate;
+					if(x > bedSize[0]) x = bedSize[0];
+					if(y < 0) y = 0;
+					break;
+			}
+			client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM')
+				.done(function(){
+					extruderPosition[0] = x;
+					extruderPosition[1] = y;
+					$$$.message('gCode succcess.', INFO, 'diagonalMove');
+					$$$.message('Extruder position is x=' + x + ' y=' + y + ' z=' + extruderPosition[2], INFO,  'diagonalMove');
+				});
+		}
+	}
 	$('#manu-btn-p3').click(function(){
 		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-p3.click');
 		if(!waitNextClick) {
@@ -1143,6 +1183,7 @@ $(function(){
 					bedLevelingPosition(2);
 					break;
 				case 2:
+					diagonalMove(2);
 					break;
 				case 3:
 					break;
@@ -1314,6 +1355,7 @@ $(function(){
 					bedLevelingPosition(3);
 					break;
 				case 2:
+					diagonalMove(3);
 					break;
 				case 3:
 					break;
@@ -1358,6 +1400,7 @@ $(function(){
 					bedLevelingPosition(4);
 					break;
 				case 2:
+					diagonalMove(4);
 					break;
 				case 3:
 					break;

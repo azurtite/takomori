@@ -1204,6 +1204,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-pa').click(function(){
+		$$$.message('Click manu-btn-pa', DEBUG, '$manu-btn-pa.click');
 		if(!waitNextClick) {
 			$('#manu-btn-pa').css({
 				color:				rescueorange,
@@ -1212,6 +1213,13 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pa')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pa.click');
+			if(powerFlag) {
+				client.control.sendGcode('G28 Z0')
+					.done(function(){
+						extruderPosition[2] = 0;
+						$$$.message('g-code success', DEBUG, '$manu-btn-pa.click');
+					});
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pa.click');
 		}
 	});
 	$('#manu-btn-pb').click(function(){

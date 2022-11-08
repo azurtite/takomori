@@ -1120,6 +1120,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-p6').click(function(){
+		$$$.message('Click manu-btn-p6', DEBUG, '$manu-btn-p6.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p6').css({
 				color:				rescueorange,

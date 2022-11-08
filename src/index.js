@@ -1105,9 +1105,7 @@ $(function(){
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p3.click');
 						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p3.click');
 					});
-			} else {
-				$$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-p3.click');
-			}
+			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-p3.click');
 		}
 	});
 	$('#manu-btn-p4').click(function(){
@@ -1227,6 +1225,17 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pd')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pd.click');
+			if(extruderPosition[1] >= 0) { 
+				var pos = extruderPosition[1] - seedRate;
+				if(pos < 0) pos = 0;
+				console.log(pos);
+				client.control.sendGcode('G0 Y' + pos + 'MM')
+					.done(function(){
+						extruderPosition[1] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-pd.click');
+						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-pd.click');
+					});
+			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-pd.click');
 		}
 	});
 	$('#manu-btn-pe').click(function(){

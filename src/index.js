@@ -26,7 +26,7 @@ let seedRate			= 10;
 let buttonPosition		= 1;
 let maxButtonPosition	= 3;
 let waitNextClick		= false;
-let bedSize				= [220, 220, 200];
+let bedSize				= [230, 220, 200];
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -1153,6 +1153,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-p7').click(function(){
+		$$$.message('Click manu-btn-p7', DEBUG, '$manu-btn-p7.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p7').css({
 				color:				rescueorange,
@@ -1161,9 +1162,20 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p7')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p7.click');
+			if(extruderPosition[0] >= 0) {
+				var pos = extruderPosition[0] - seedRate;
+				if(pos < 0) pos = 0;
+				client.control.sendGcode('G0 X' + pos + 'MM')
+					.done(function(){
+						extruderPosition[0] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-p7.click');
+						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p7.click');
+					});
+			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p7.click');
 		}
 	});
 	$('#manu-btn-p9').click(function(){
+		$$$.message('Click manu-btn-p9', DEBUG, '$manu-btn-p9.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p9').css({
 				color:				rescueorange,
@@ -1172,6 +1184,16 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p9')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p9.click');
+			if(extruderPosition[0] >= 0) {
+				var pos = extruderPosition[0] + seedRate;
+				if(pos > bedSize[0]) pos = bedSize[0];
+				client.control.sendGcode('G0 X' + pos + 'MM')
+					.done(function(){
+						extruderPosition[0] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-p9.click');
+						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p9.click');
+					});
+			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p9.click');
 		}
 	});
 	$('#manu-btn-pa').click(function(){

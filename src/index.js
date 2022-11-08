@@ -1001,6 +1001,7 @@ $(function(){
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
 	});
 	$('#manu-btn-p8').click(function(){
+		$$$.message('Click manu-btn-p8', DEBUG, '$manu-btn-p8.click');
 		buttonPosition++;
 		if(buttonPosition > maxButtonPosition) buttonPosition = 1;
 		$$$.message('Manual panel mode is ' + buttonPosition, DEBUG, '$manu-btn-p8.click');

@@ -1088,6 +1088,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-p3').click(function(){
+		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-p3.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p3').css({
 				color:				rescueorange,
@@ -1217,6 +1218,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-pd').click(function(){
+		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-pd.click');
 		if(!waitNextClick) {
 			$('#manu-btn-pd').css({
 				color:				rescueorange,

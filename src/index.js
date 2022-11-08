@@ -26,12 +26,13 @@ let seedRate			= 10;
 let buttonPosition		= 1;
 let maxButtonPosition	= 3;
 let waitNextClick		= false;
-let bedSize				= [230, 220, 200];
+let bedMargin			= 10;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
 let extruderPosition	= [-99, -99, -99];
-
+let bedSize				= [230, 220, 200];
+let bedPositionName		= ['rear-left', 'rear-right', 'front-left', 'front-right'];
 let baseURL				= 'http://192.168.0.14/';
 let apiKey				= '241B873D3FF8408FB95E1DB8510F81CC';
 
@@ -1047,7 +1048,8 @@ $(function(){
 			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p1.click');
 		}
 	});
-	$('#manu-btn-p1').click(function(){
+	$('#manu-btn-p2').click(function(){
+		$$$.message('Click manu-btn-p2', DEBUG, '$manu-btn-p2');
 		if(!waitNextClick) {
 			$('#manu-btn-p2').css({
 				color:				rescueorange,
@@ -1056,8 +1058,54 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p2')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p2.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(1);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
 		}
 	});
+	function bedLevelingPosition(p) {
+		$$$.message('Call bedLevelingPostion', DEBUG, 'bedLevelingPosition');
+		var x, y;
+		switch(p) {
+			case 1:
+				x = bedMargin;
+				y = bedSize[1] - bedMargin;
+				break;
+			case 2:
+				x = bedSize[0] - bedMargin;
+				y = bedSize[1] - bedMargin;
+				break;
+			case 3:
+				x = bedMargin;
+				y = bedMargin;
+				break;
+			case 4:
+				x = bedSize[0] - bedMargin;
+				y = bedMargin;
+				break;
+		}
+		$$$.message('Set ' + bedPositionName + ' position value. x=' + x + ' y=' + y, DEBUG, 'bedLevelingPosition');
+		if(powerFlag && extruderPosition[0] >= 0 && extruderPosition[1] >= 0 && extruderPosition[2] >= 0) {
+			$$$.message('Move z-axis up', DEBUG, 'bedLevelingPosition');
+			client.control.sendGcode('G0 Z5MM')
+				.done(function(){
+					$$$.message('Move x and y-axis up', DEBUG, 'bedLevelingPosition');
+					client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM')
+						.done(function(){
+							client.control.sendGcode('G28 Z0')
+								.done(function(){
+									$$$.message('Finish moving', DEBUG, 'bedLevelingPosition')
+								});
+						});
+				});
+		}
+	}
 	$('#manu-btn-p3').click(function(){
 		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-p3.click');
 		if(!waitNextClick) {
@@ -1081,6 +1129,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-p4').click(function(){
+		$$$.message('Click manu-btn-p4', DEBUG, '$manu-btn-p4');
 		if(!waitNextClick) {
 			$('#manu-btn-p4').css({
 				color:				rescueorange,
@@ -1089,6 +1138,15 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p4')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p4.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(2);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
 		}
 	});
 	$('#manu-btn-p5').click(function(){
@@ -1242,6 +1300,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-pc').click(function(){
+		$$$.message('Click manu-btn-pc', DEBUG, '$manu-btn-pc');
 		if(!waitNextClick) {
 			$('#manu-btn-pc').css({
 				color:				rescueorange,
@@ -1250,6 +1309,15 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pc')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pc.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(3);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
 		}
 	});
 	$('#manu-btn-pd').click(function(){
@@ -1276,6 +1344,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-pe').click(function(){
+		$$$.message('Click manu-btn-pe', DEBUG, '$manu-btn-pe');
 		if(!waitNextClick) {
 			$('#manu-btn-pe').css({
 				color:				rescueorange,
@@ -1284,6 +1353,15 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pe')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pe.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(4);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
 		}
 	});
 	$('#manu-btn-pf').click(function(){

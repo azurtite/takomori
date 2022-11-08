@@ -1003,33 +1003,6 @@ $(function(){
 		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
 	});
-	$('#manu-btn-p8').click(function(){
-		$$$.message('Click manu-btn-p8', DEBUG, '$manu-btn-p8.click');
-		buttonPosition++;
-		if(buttonPosition > maxButtonPosition) buttonPosition = 1;
-		$$$.message('Manual panel mode is ' + buttonPosition, DEBUG, '$manu-btn-p8.click');
-
-		switch(buttonPosition) {
-			case 1:
-				$('#manu-btn-p2').html('BL');
-				$('#manu-btn-p4').html('BR');
-				$('#manu-btn-pc').html('FL');
-				$('#manu-btn-pe').html('FR');
-				break;
-			case 2:
-				$('#manu-btn-p2').html('<span class="trans-bl glyphicon glyphicon glyphicon-arrow-left"></span>');
-				$('#manu-btn-p4').html('<span class="trans-br glyphicon glyphicon glyphicon-arrow-right"></span>');
-				$('#manu-btn-pc').html('<span class="trans-fl glyphicon glyphicon glyphicon-arrow-left"></span>');
-				$('#manu-btn-pe').html('<span class="trans-fr glyphicon glyphicon glyphicon-arrow-right"></span>');
-				break;
-			case 3:
-				$('#manu-btn-p2').html('M1');
-				$('#manu-btn-p4').html('M2');
-				$('#manu-btn-pc').html('M3');
-				$('#manu-btn-pe').html('M4');
-				break;
-		}
-	});
 	$('#seed-value-p1').click(function(){
 		$$$.message('Click seed-value-p1', DEBUG, '$seed-value-p1.click');
 		changeSeedRate(1);
@@ -1071,9 +1044,7 @@ $(function(){
 						extruderPosition[0] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p1.click');
 					});
-			} else {
-				$$$.message('Printer is not connect', ERROR, '$manu-btn-p1.click');
-			}
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p1.click');
 		}
 	});
 	$('#manu-btn-p1').click(function(){
@@ -1147,9 +1118,7 @@ $(function(){
 						extruderPosition[1] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p6.click');
 					});
-			} else {
-				$$$.message('Printer is not connect', ERROR, '$manu-btn-p6.click');
-			}
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p6.click');
 		}
 	});
 	$('#manu-btn-p7').click(function(){
@@ -1172,6 +1141,33 @@ $(function(){
 						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p7.click');
 					});
 			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p7.click');
+		}
+	});
+	$('#manu-btn-p8').click(function(){
+		$$$.message('Click manu-btn-p8', DEBUG, '$manu-btn-p8.click');
+		buttonPosition++;
+		if(buttonPosition > maxButtonPosition) buttonPosition = 1;
+		$$$.message('Manual panel mode is ' + buttonPosition, DEBUG, '$manu-btn-p8.click');
+
+		switch(buttonPosition) {
+			case 1:
+				$('#manu-btn-p2').html('BL');
+				$('#manu-btn-p4').html('BR');
+				$('#manu-btn-pc').html('FL');
+				$('#manu-btn-pe').html('FR');
+				break;
+			case 2:
+				$('#manu-btn-p2').html('<span class="trans-bl glyphicon glyphicon glyphicon-arrow-left"></span>');
+				$('#manu-btn-p4').html('<span class="trans-br glyphicon glyphicon glyphicon-arrow-right"></span>');
+				$('#manu-btn-pc').html('<span class="trans-fl glyphicon glyphicon glyphicon-arrow-left"></span>');
+				$('#manu-btn-pe').html('<span class="trans-fr glyphicon glyphicon glyphicon-arrow-right"></span>');
+				break;
+			case 3:
+				$('#manu-btn-p2').html('M1');
+				$('#manu-btn-p4').html('M2');
+				$('#manu-btn-pc').html('M3');
+				$('#manu-btn-pe').html('M4');
+				break;
 		}
 	});
 	$('#manu-btn-p9').click(function(){
@@ -1223,9 +1219,7 @@ $(function(){
 						extruderPosition[2] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-pb.click');
 					});
-			} else {
-				$$$.message('Printer is not connect', ERROR, '$manu-btn-pb.click');
-			}
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pb.click');
 		}
 	});
 	$('#manu-btn-pc').click(function(){

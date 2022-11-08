@@ -29,6 +29,7 @@ let waitNextClick		= false;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
+let extruderPosition	= [-99, -99, -99];
 
 let baseURL				= 'http://192.168.0.14/';
 let apiKey				= '241B873D3FF8408FB95E1DB8510F81CC';
@@ -1054,6 +1055,7 @@ $(function(){
 		$$$.message('Seed rate is ' + seedRate, INFO, 'changeSeedRate');
 	}
 	$('#manu-btn-p1').click(function(){
+		$$$.message('Click manu-btn-p1', DEBUG, '$manu-btn-p1.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p1').css({
 				color:				rescueorange,
@@ -1062,6 +1064,15 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p1')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p1.click');
+			if(powerFlag) {
+				client.control.sendGcode('G28 X0')
+					.done(function(response){
+						extruderPosition[0] = -1;
+						$$$.message('g-code success', DEBUG, '$manu-btn-p1.click');
+					});
+			} else {
+				$$$.message('Printer is not connect', ERROR, '$manu-btn-p1.click');
+			}
 		}
 	});
 	$('#manu-btn-p1').click(function(){

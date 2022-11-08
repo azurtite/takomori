@@ -1128,6 +1128,15 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p6')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p6.click');
+			if(powerFlag) {
+				client.control.sendGcode('G28 Y0')
+					.done(function(){
+						extruderPosition[1] = -1;
+						$$$.message('g-code success', DEBUG, '$manu-btn-p6.click');
+					});
+			} else {
+				$$$.message('Printer is not connect', ERROR, '$manu-btn-p6.click');
+			}
 		}
 	});
 	$('#manu-btn-p7').click(function(){

@@ -1070,7 +1070,7 @@ $(function(){
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p3.click');
 			var pos = extruderPosition[1] + seedRate;
 			if(pos > bedSize[1]) pos = bedSize[1];
-			if(extruderPosition[1] >= 0) {
+			if(powerFlag && extruderPosition[1] >= 0) {
 				client.control.sendGcode('G0 Y' + pos + 'MM')
 					.done(function(){
 						extruderPosition[1] = pos;
@@ -1101,7 +1101,7 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p5')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p5.click');
-			if(extruderPosition[2] >= 0) {
+			if(powerFlag && extruderPosition[2] >= 0) {
 				var pos = extruderPosition[2] + seedRate;
 				if(pos > bedSize[2]) pos = bedSize[2];
 				client.control.sendGcode('G0 Z' + pos + 'MM')
@@ -1142,7 +1142,7 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p7')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p7.click');
-			if(extruderPosition[0] >= 0) {
+			if(powerFlag && extruderPosition[0] >= 0) {
 				var pos = extruderPosition[0] - seedRate;
 				if(pos < 0) pos = 0;
 				client.control.sendGcode('G0 X' + pos + 'MM')
@@ -1191,7 +1191,7 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('p9')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p9.click');
-			if(extruderPosition[0] >= 0) {
+			if(powerFlag && extruderPosition[0] >= 0) {
 				var pos = extruderPosition[0] + seedRate;
 				if(pos > bedSize[0]) pos = bedSize[0];
 				client.control.sendGcode('G0 X' + pos + 'MM')
@@ -1262,7 +1262,7 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pd')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pd.click');
-			if(extruderPosition[1] >= 0) { 
+			if(powerFlag && extruderPosition[1] >= 0) { 
 				var pos = extruderPosition[1] - seedRate;
 				if(pos < 0) pos = 0;
 				console.log(pos);
@@ -1296,7 +1296,7 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pf')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pf.click');
-			if(extruderPosition[2] >= 0) {
+			if(powerFlag && extruderPosition[2] >= 0) {
 				var pos = extruderPosition[2] - seedRate;
 				if(pos < 0) pos = 0;
 				client.control.sendGcode('G0 Z' + pos + 'MM')

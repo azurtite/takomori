@@ -23,6 +23,8 @@ let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
 let seedRate			= 10;
+let buttonPosition		= 1;
+let maxButtonPosition	= 3;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -997,5 +999,31 @@ $(function(){
 	$('#file-notice-ctrl').click(function(){
 		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
+	});
+	$('#manu-btn-p8').click(function(){
+		buttonPosition++;
+		if(buttonPosition > maxButtonPosition) buttonPosition = 1;
+		$$$.message('Manual panel mode is ' + buttonPosition, DEBUG, '$manu-btn-p8.click');
+
+		switch(buttonPosition) {
+			case 1:
+				$('#manu-btn-p2').html('BL');
+				$('#manu-btn-p4').html('BR');
+				$('#manu-btn-pc').html('FL');
+				$('#manu-btn-pe').html('FR');
+				break;
+			case 2:
+				$('#manu-btn-p2').html('<span class="trans-bl glyphicon glyphicon glyphicon-arrow-left"></span>');
+				$('#manu-btn-p4').html('<span class="trans-br glyphicon glyphicon glyphicon-arrow-right"></span>');
+				$('#manu-btn-pc').html('<span class="trans-fl glyphicon glyphicon glyphicon-arrow-left"></span>');
+				$('#manu-btn-pe').html('<span class="trans-fr glyphicon glyphicon glyphicon-arrow-right"></span>');
+				break;
+			case 3:
+				$('#manu-btn-p2').html('M1');
+				$('#manu-btn-p4').html('M2');
+				$('#manu-btn-pc').html('M3');
+				$('#manu-btn-pe').html('M4');
+				break;
+		}
 	});
 });

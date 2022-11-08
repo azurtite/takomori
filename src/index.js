@@ -1279,6 +1279,7 @@ $(function(){
 		}
 	});
 	$('#manu-btn-pf').click(function(){
+		$$$.message('Click manu-btn-pf', DEBUG, '$manu-btn-pf.click');
 		if(!waitNextClick) {
 			$('#manu-btn-pf').css({
 				color:				rescueorange,
@@ -1287,6 +1288,16 @@ $(function(){
 			waitNextClick = true;
 			setTimeout(()=>{restoreButtonCSS('pf')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pf.click');
+			if(extruderPosition[2] >= 0) {
+				var pos = extruderPosition[2] - seedRate;
+				if(pos < 0) pos = 0;
+				client.control.sendGcode('G0 Z' + pos + 'MM')
+					.done(function(){
+						extruderPosition[2] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-pf.click');
+						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-pf.click');
+					});
+			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-pf.click');
 		}
 	});
 	function restoreButtonCSS(bn) {

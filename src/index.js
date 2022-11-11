@@ -1483,4 +1483,27 @@ $(function(){
 			}
 		}
 	});
+	$('#extruder-btn-down').click(function(){
+		$$$.message('Click extruder-btn-down', DEBUG, '$extruder-btn-down.click');
+		if(!waitNextClick) {
+			$('#extruder-btn-down').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			$$$.message('Change waitNextClick. value is ' + waitNextClick, DEBUG, '$extruder-btn-down.click');
+			setTimeout(()=>{restoreButtonCSS('down')}, 500);
+			if(powerFlag && canRunExtruder) {
+				console.log('G1 E' + $('#amount-value').val() + 'MM');
+				client.control.sendGcode('G92 E0')
+					.done(function(){
+						$$$.message('Reset extruder extrud position', DEBUG, '$extruder-btn-down.click');
+						client.control.sendGcode('G1 F500 E' + $('#amount-value').val() + 'MM')
+							.done(function(){
+								$$$.message('Extrud filament ' + $('#amount-value').val() + 'mm', DEBUG, '$extruder-btn-down.click');
+							});
+					});
+			}
+		}
+	});
 });

@@ -33,8 +33,6 @@ let seedRates			= [0, 0.1, 1, 10, 100];
 let extruderPosition	= [-99, -99, -99];
 let bedSize				= [230, 220, 200];
 let bedPositionName		= ['rear-left', 'rear-right', 'front-left', 'front-right'];
-let baseURL				= 'http://192.168.0.14/';
-let apiKey				= '241B873D3FF8408FB95E1DB8510F81CC';
 
 let client = new OctoPrintClient({
 	baseurl:	baseURL,

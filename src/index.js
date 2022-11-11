@@ -30,6 +30,7 @@ let waitNextClick		= false;
 let bedMargin			= 10;
 let canRunExtruder		= false;
 let extruderMovingTemp	= 200;
+let extruderPanelShown	= false;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -1504,6 +1505,24 @@ $(function(){
 							});
 					});
 			}
+		}
+	});
+	$('#extruder-tag').click(function(){
+		$$$.message('Click extruder-tag', DEBUG, '$extruder-tag.click');
+		if(extruderPanelShown) {
+			$('.extruder-panel').css({visibility: 'hidden'});
+			$('#extruder-tag').css({top: '0px'});
+			$$$.message('Change css(visibility:hidden) extruder-panel', DEBUG, '$extruder-tag.click');
+			$$$.message('Change css(top:0px) extruder-panel-tag', DEBUG, '$extruder-tag.click');
+			extruderPanelShown = false;
+			$$$.message('Change extruderPanelShown. value is ' + extruderPanelShown, DEBUG, '$extruder-tag.click');
+		} else {
+			$('.extruder-panel').css({visibility: 'visible'});
+			$('#extruder-tag').css({top: '80px'});
+			$$$.message('Change css(visibility:visible) extruder-panel', DEBUG, '$extruder-tag.click');
+			$$$.message('Change css(top:80px) extruder-panel-tag', DEBUG, '$extruder-tag.click');
+			extruderPanelShown = true;
+			$$$.message('Change extruderPanelShown. value is ' + extruderPanelShown, DEBUG, '$extruder-tag.click');
 		}
 	});
 });

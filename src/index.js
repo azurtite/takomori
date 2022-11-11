@@ -4,6 +4,7 @@ let ceruleanblue		= '#008DB7';
 let forestleaf			= '#008554';
 let peleskyblue			= '#C2E5F9';
 let lapislazuli			= '#261F87';
+let skyhigh				= '#51A5DC';
 
 let powerFlag			= false;
 let tool0Flag			= false;
@@ -12,7 +13,7 @@ let fanFlag				= false;
 let toolTempFlag		= false;
 let bedTempFlag			= false;
 let submenuToggle		= false;
-let windowSize			= 2;
+let windowSize			= 3;
 let maxWindowSize		= 3;
 let panelPosition		= 3;
 let maxPanelPosition	= 4;
@@ -27,6 +28,9 @@ let buttonPosition		= 1;
 let maxButtonPosition	= 3;
 let waitNextClick		= false;
 let bedMargin			= 10;
+let canRunExtruder		= false;
+let extruderMovingTemp	= 200;
+let extruderPanelShown	= false;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -300,8 +304,21 @@ function getPrinterFullState() {
 	client.printer.getFullState()
 		.done(function(response){
 			$$$.message('Update tool0 temperature value', LOWDEBUG, 'getFullState');
-			if('tool0' in response.temperature)
+			if('tool0' in response.temperature) {
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
+				if(response.temperature.tool0.actual >= extruderMovingTemp && !canRunExtruder) {
+					$('[id^=extruder-btn-]').css({'background-color': lapislazuli});
+					$$$.message('Change css(lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
+					canRunExtruder = true;
+					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
+				}
+				if(response.temperature.tool0.actual < extruderMovingTemp && canRunExtruder) {
+					$('[id^=extruder-btn-]').css({'background-color': skyhigh});
+					$$$.message('Change css(skyhigh) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
+					canRunExtruder = false;
+					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
+				}
+			}
 			$$$.message('Update bed temperature value', LOWDEBUG, 'getFullState');
 			if('bed' in response.temperature)
 				$('#bed-text').text(response.temperature.bed.actual+'C');
@@ -1430,9 +1447,82 @@ $(function(){
 	function restoreButtonCSS(bn) {
 		$$$.message('Call restoreButtonCSS', DEBUG, 'restoreButtonCSS');
 		waitNextClick = false;
-		$('#manu-btn-' + bn).css({
-			color:				sunshine,
-			'background-color':	lapislazuli
-		})
+		$$$.message('Change waitNextClick. value is ' + waitNextClick, DEBUG, 'restoreButtonCSS');
+		if(bn == 'up' || bn == 'down') {
+			$('#extruder-btn-' + bn).css({
+				color:				sunshine,
+				'background-color':	lapislazuli
+			});
+			$$$.message('Change css(lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+		} else {
+			$('#manu-btn-' + bn).css({
+				color:				sunshine,
+				'background-color':	lapislazuli
+			})
+			$$$.message('Change css(lapislazuli) manu-btn-' + bn, DEBUG, 'restoreButtonCSS');
+		}
 	}
+	$('#extruder-btn-up').click(function(){
+		$$$.message('Click extruder-btn-up', DEBUG, '$extruder-btn-up.click');
+		if(!waitNextClick) {
+			$('#extruder-btn-up').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			$$$.message('Change waitNextClick. value is ' + waitNextClick, DEBUG, '$extruder-btn-up.click');
+			setTimeout(()=>{restoreButtonCSS('up')}, 500);
+			if(powerFlag && canRunExtruder) {
+			client.control.sendGcode('G92 E0')
+				.done(function(){
+					$$$.message('Reset extruder retract position', DEBUG, '$extruder-btn-up.click');
+					client.control.sendGcode('G1 E-' + $('#amount-value').val() + 'MM')
+						.done(function(){
+							$$$.message('Retract filament ' + $('#amount-value').val() + 'mm', DEBUG, '$extruder-btn-up.click');
+						});
+				});
+			}
+		}
+	});
+	$('#extruder-btn-down').click(function(){
+		$$$.message('Click extruder-btn-down', DEBUG, '$extruder-btn-down.click');
+		if(!waitNextClick) {
+			$('#extruder-btn-down').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			waitNextClick = true;
+			$$$.message('Change waitNextClick. value is ' + waitNextClick, DEBUG, '$extruder-btn-down.click');
+			setTimeout(()=>{restoreButtonCSS('down')}, 500);
+			if(powerFlag && canRunExtruder) {
+				console.log('G1 E' + $('#amount-value').val() + 'MM');
+				client.control.sendGcode('G92 E0')
+					.done(function(){
+						$$$.message('Reset extruder extrud position', DEBUG, '$extruder-btn-down.click');
+						client.control.sendGcode('G1 F500 E' + $('#amount-value').val() + 'MM')
+							.done(function(){
+								$$$.message('Extrud filament ' + $('#amount-value').val() + 'mm', DEBUG, '$extruder-btn-down.click');
+							});
+					});
+			}
+		}
+	});
+	$('#extruder-tag').click(function(){
+		$$$.message('Click extruder-tag', DEBUG, '$extruder-tag.click');
+		if(extruderPanelShown) {
+			$('.extruder-panel').css({visibility: 'hidden'});
+			$('#extruder-tag').css({top: '0px'});
+			$$$.message('Change css(visibility:hidden) extruder-panel', DEBUG, '$extruder-tag.click');
+			$$$.message('Change css(top:0px) extruder-panel-tag', DEBUG, '$extruder-tag.click');
+			extruderPanelShown = false;
+			$$$.message('Change extruderPanelShown. value is ' + extruderPanelShown, DEBUG, '$extruder-tag.click');
+		} else {
+			$('.extruder-panel').css({visibility: 'visible'});
+			$('#extruder-tag').css({top: '80px'});
+			$$$.message('Change css(visibility:visible) extruder-panel', DEBUG, '$extruder-tag.click');
+			$$$.message('Change css(top:80px) extruder-panel-tag', DEBUG, '$extruder-tag.click');
+			extruderPanelShown = true;
+			$$$.message('Change extruderPanelShown. value is ' + extruderPanelShown, DEBUG, '$extruder-tag.click');
+		}
+	});
 });

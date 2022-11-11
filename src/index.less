@@ -778,6 +778,59 @@ div::-webkit-scrollbar-thumb {
 			transform:rotate(45deg);
 		}
 	}
+	.extruder-panel {
+		position:				absolute;
+		left:					32px;
+		top:					0px;
+		height:					80px;
+		width:					260px;
+		background-color:		@peleskyblue;
+		visibility:				hidden;
+		.amount {
+			position:			absolute;
+			left:				12px;
+			top:				24px;
+			height:				24px;
+			width:				120px;
+			-webkit-app-region:	no-drag;
+		}
+	}
+	.extruder-panel-tag {
+		position:				absolute;
+		left:					32px;
+		top:					0px;
+		height:					24px;
+		width:					110px;
+		text-align:				center;
+		color:					@rescueorange;
+		background-color:		@peleskyblue;
+		border-radius:			0px 0px 10px 10px;
+		cursor:					default;
+		-webkit-app-region:		no-drag;
+	}
+	.table1x2 {
+		position:				absolute;
+		left:					138px;
+		top:					15px;
+		td {
+			text-align:			center;
+			vertical-align:		middle;
+		}
+		.small-font {
+			font-size:			1pt;
+		}
+		.button-w3 {
+			height:				50px;
+			width:				3px;
+		}
+		.button-w50 {
+			height:				50px;
+			width:				50px;
+			border-radius:		10px;
+			-webkit-app-region:	no-drag;
+			background-color:	@skyhigh;
+		}
+	}
 	.dummy-text {
 		display:			table-cell;
 		text-align:			center;

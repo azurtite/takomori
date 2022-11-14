@@ -45,9 +45,6 @@ app.whenReady().then(() => {
 	ipcMain.on('counter-value', (_event, value) => {
 		console.log(value) // will print value to Node console
 	})
-	ipcMain.on('serial-data', (_event, value) => {
-		console.log('Data: ' + value)
-	})
 	win = createWindow()
 
 	app.on('activate', function () {

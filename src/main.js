@@ -1,4 +1,3 @@
-
 const {app, BrowserWindow, Menu, ipcMain} = require('electron')
 const path = require('path')
 
@@ -13,27 +12,6 @@ function createWindow () {
 		}
 	})
 
-	const menu = Menu.buildFromTemplate([
-		{
-			label: app.name,
-			submenu: [
-			{
-				click: () => mainWindow.webContents.send('update-counter', 1),
-				label: 'Increment',
-			},
-			{
-				click: () => mainWindow.webContents.send('update-counter', -1),
-				label: 'Decrement',
-			},
-			{
-				click: () => app.quit(),
-				label: 'Close',
-			}
-			]
-		}
-	])
-
-	Menu.setApplicationMenu(menu)
 	mainWindow.loadFile('index.html')
 
 	// Open the DevTools.
@@ -42,11 +20,8 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
-	ipcMain.on('counter-value', (_event, value) => {
-		console.log(value) // will print value to Node console
-	})
-	ipcMain.on('serial-data', (_event, value) => {
-		console.log('Data: ' + value)
+	ipcMain.on('minimize-window', (_event, value) => {
+		win.minimize();
 	})
 	win = createWindow()
 

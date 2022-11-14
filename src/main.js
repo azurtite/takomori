@@ -45,6 +45,9 @@ app.whenReady().then(() => {
 	ipcMain.on('counter-value', (_event, value) => {
 		console.log(value) // will print value to Node console
 	})
+	ipcMain.on('minimize-window', (_event, value) => {
+		win.minimize();
+	})
 	win = createWindow()
 
 	app.on('activate', function () {

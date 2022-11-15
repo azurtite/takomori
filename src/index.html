@@ -183,10 +183,6 @@
 									tooltipFormat:		"changeTooltipTool",
 									valueChange:		"changeValueTool"
 								});
-								client.printer.getFullState()
-									.done((response) => {
-										$('#handle1').roundSlider('setValue', response.temperature.tool0.target);
-									})
 								function changeTooltipTool(event) {
 									var val = event.value, temperature;
 									if(val < 180) temperature = 'Low';
@@ -241,11 +237,11 @@
 								#handle2 .rs-tooltip  {
 									top:				75%;
 									font-size:			11px;
-									color:				#FFDC00
+									color:				#FFDC00;
 								}
 								#handle2 .rs-tooltip div  {
 									text-align:			center;
-									color:				#FFDC00
+									color:				#FFDC00;
 									border-radius: 4px;
 									padding: 1px 5px 2px;
 									margin-top: 4px;
@@ -276,10 +272,6 @@
 									tooltipFormat:		"changeTooltipBed",
 									valueChange:		"changeValueBed"
 								});
-								client.printer.getFullState()
-									.done((response) => {
-										$('#handle2').roundSlider('setValue', response.temperature.bed.target);
-									})
 								function changeTooltipBed(event) {
 									var val = event.value, temperature;
 									if(val < 40) temperature = 'Low';
@@ -292,7 +284,7 @@
 								}
 								function changeValueBed(event) {
 									bedTempValue = event.value;
-									$$$.message('Bed value is ' + bedTempValue, DEBUG, 'changeValueTool');
+									$$$.message('Bed value is ' + bedTempValue, LOWDEBUG, 'changeValueTool');
 								}
 							</script>
 						</div>

@@ -62,7 +62,7 @@ if(windowSize == 1) {
 let fileInfoContainar;
 function getFilelist() {
 	$$$.message('Call REST api', DEBUG, 'getFilelist');
-	$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+	$.get(baseURL + 'api/files?apikey=' + apiKey)
 		.done(function(data){
 			fileInfoContainar = data;
 			$('#file-list-ctrl').html('');
@@ -79,14 +79,14 @@ function getFilelist() {
 			}
 			if(powerFlag) {
 				$('.file-list-icon-open').css({color: sunshine});
-				$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$function');
 				$('.file-list-icon-print').css({color: sunshine});
-				$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
+				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$function');
 			} else {
 				$('.file-list-icon-open').css({color: peleskyblue});
-				$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$function');
 				$('.file-list-icon-print').css({color: peleskyblue});
-				$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$function');
 			}
 		})
 }
@@ -125,7 +125,7 @@ function displayClick(e) {
 		length = length + Math.floor(f * 100) / 100 + 'mm';
 		return length;
 	}
-	$$$.message('Name tag click', DEBUG, 'displayClick');
+	$$$.message('Name tag click(' + e + ')', DEBUG, 'displayClick');
 	$('#information-panel-ctrl').html(
 		'<div class="title">' + detectName() + '</h3>'+
 		'<hr>' +
@@ -146,14 +146,15 @@ function displayClick(e) {
 }
 function downloadClick(e) {
 	function changeStream(data) {
-			$$$.message('Start encording ', DEBUG, 'downloadClick')
-			var length = data.length;
+		$$$.message('Call changeStream', DEBUG, 'changeStream')
+		$$$.message('Start encording ', DEBUG, 'changeStream')
+		var length = data.length;
 		var result = new Uint8Array(length);
 		for(var i=0; i<length; i++)
 			result[i] = data[i].charCodeAt(0);
 		return result;
 	}
-	$$$.message('Click the download icon in Listing ' + e, DEBUG, 'downloadClick');
+	$$$.message('Click the download icon in listing ' + e, DEBUG, 'downloadClick');
 	client.files.download('local', fileInfoContainar.files[e].path)
 		.done(function(data){
 			$$$.message('Download ' + fileInfoContainar.files[e].display, DEBUG, 'downloadClick')
@@ -168,10 +169,15 @@ function downloadClick(e) {
 }
 function trashClick(e) {
 	$$$.message('Click the trash icon in listing ' + e, DEBUG, 'trashClick');
-	var f = fileInfoContainar.files[e].path;
-	client.files.delete('local', f);
-	$$$.message('Delete ' + f, INFO, 'trashClick');
-	getFilelist();
+	$.get(baseURL + 'api/job?apikey=' + apiKey)
+		.done((data) => {
+			if(data.state.toLowerCase() != 'printing') {
+				var f = fileInfoContainar.files[e].path;
+				client.files.delete('local', f);
+				$$$.message('Delete ' + f, INFO, 'trashClick');
+				getFilelist();
+			} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'trashClick');
+		});
 }
 function openClick(e) {
 	$$$.message('Click the open icon in listing ' + e, DEBUG, 'openClick');
@@ -179,13 +185,18 @@ function openClick(e) {
 		$$$.message('This button is not active(icon-open-' + e + ')', DEBUG, 'openClick');
 		return;
 	} else {
-		client.files.select('local', fileInfoContainar.files[e].path);
-		$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
+			.done((data) => {
+				if(data.state.toLowerCase() != 'printing') {
+					client.files.select('local', fileInfoContainar.files[e].path);
+					$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
+				} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'openClick');
+			});
 	}
 }
 function printClick(e) {
 	$$$.message('Click the print icon in listing ' + e, DEBUG, 'printClick');
-	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+	$.get(baseURL + 'api/job?apikey=' + apiKey)
 		.done(function(data){
 			if(data.state.toLowerCase() != 'printing' && powerFlag) {
 				client.files.select('local', fileInfoContainar.files[e].path, true);
@@ -264,7 +275,7 @@ function getPrinterFullState() {
 			}
 			return result + printTime + 's'
 		}
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.job.file.name != null)
 					if($('#jobname').text() != data.job.file.name) {
@@ -297,7 +308,7 @@ function getPrinterFullState() {
 			})
 	}
 	if(client == undefined) {
-		$('.alert-text').text('hoge');
+		$('.alert-text').text('OctoPrint object is undefined');
 		return false;
 	}
 
@@ -308,13 +319,13 @@ function getPrinterFullState() {
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
 				if(response.temperature.tool0.actual >= extruderMovingTemp && !canRunExtruder) {
 					$('[id^=extruder-btn-]').css({'background-color': lapislazuli});
-					$$$.message('Change css(lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
+					$$$.message('Change css(background-color:lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
 					canRunExtruder = true;
 					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
 				}
 				if(response.temperature.tool0.actual < extruderMovingTemp && canRunExtruder) {
 					$('[id^=extruder-btn-]').css({'background-color': skyhigh});
-					$$$.message('Change css(skyhigh) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
+					$$$.message('Change css(background-color:skyhigh) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
 					canRunExtruder = false;
 					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
 				}
@@ -379,7 +390,7 @@ function upload(elem) {
 
 	var settings = {
 		async:			true,
-		url:			'http://192.168.0.14/api/files/local',
+		url:			baseURL + 'api/files/local',
 		method:			'POST',
 		headers:		{
 			'x-api-key':		apikey,
@@ -438,9 +449,9 @@ $(function(){
 							powerFlag = false;
 							$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 							$('.file-list-icon-open').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
+							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
+							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -467,9 +478,9 @@ $(function(){
 						$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 						intervalID = setInterval(getPrinterFullState, 1000);
 						$('.file-list-icon-open').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
+						$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 						$('.file-list-icon-print').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
+						$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');
@@ -664,7 +675,7 @@ $(function(){
 			$$$.message('Expanding subpanel. not show slider-panel-tool', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
@@ -684,7 +695,7 @@ $(function(){
 	 * tool on sw btn click event
 	 */
 	$('#tool-on-sw-btn').click(function(){
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
@@ -692,8 +703,9 @@ $(function(){
 					$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
 					if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
 					else $('#tool-on-sw-btn').css({color: sunshine});
-					$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
+					$$$.message('Change css(color:sunshine) tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					$('#slider-panel-tool-ctrl').css({'z-index': -1});
+					$$$.message('Change css(z-index:-1) tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					toolTempFlag = false;
 					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-on-sw-btn.click');
 				}
@@ -708,6 +720,7 @@ $(function(){
 	$('#bed-on-remove-btn').click(function(){
 		$$$.message('Click bed-on-remove-btn', DEBUG, '$bed-on-remove-btn.click');
 		$('#slider-panel-bed-ctrl').css({'z-index': -1});
+		$$$.message('Change css(z-index:-1) bed-on-remove-btn', DEBUG, '$tool-on-sw-btn.click');
 		bedTempFlag = false;
 		$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
@@ -720,7 +733,7 @@ $(function(){
 			$$$.message('Expanding subpanel. not show slider-panel-bed', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show bed temperature panel', INFO, '$bed-icon.click');
@@ -739,7 +752,7 @@ $(function(){
 	 * bed on sw btn click event
 	 */
 	$('#bed-on-sw-btn').click(function(){
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
@@ -747,8 +760,9 @@ $(function(){
 					$$$.message('Detect bed temperature. value is ' + bedTempValue, INFO, '$bed-on-sw-btn.click');
 					if(bedTempValue > 0) $('#bed-on-sw-btn').css({color: rescueorange});
 					else $('#bed-on-sw-btn').css({color: sunshine});
-					$$$.message('Change css. bed-on-sw-btn:color', DEBUG, '$bed-on-sw-btn.click');
+					$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
 					$('#slider-panel-bed-ctrl').css({'z-index': -1});
+					$$$.message('Change css(z-index:-1) bed-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					bedTempFlag = false;
 					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-on-sw-btn.click');
 				}
@@ -762,7 +776,7 @@ $(function(){
 	 */
 	$('#print-icon').click(function(){
 		$$$.message('Click print-icon', DEBUG, '$print-icon.click');
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					client.job.start();
@@ -886,8 +900,11 @@ $(function(){
 				left:		$('#' + windowList[p]).css('left'),
 				top:		$('#' + windowList[p]).css('top')
 			});
+			$$$.message('Change css(z-index:' + $('#' + windowList[p]).css('z-index') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
+			$$$.message('Change css(left:' + $('#' + windowList[p]).css('left') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
+			$$$.message('Change css(top:' + $('#' + windowList[p]).css('top') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
 			$('#' + windowList[p]).css({'z-index': -1});
-			$$$.message('Set css property', DEBUG, 'leftmarkClick');
+			$$$.message('Change css(z-index:-1) ' + windowList[p], DEBUG, 'leftmarkClick');
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'leftmarkClick');
@@ -926,8 +943,11 @@ $(function(){
 				left:		$('#' + windowList[p]).css('left'),
 				top:		$('#' + windowList[p]).css('top')
 			});
+			$$$.message('Change css(z-index:' + $('#' + windowList[p]).css('z-index') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
+			$$$.message('Change css(left:' + $('#' + windowList[p]).css('left') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
+			$$$.message('Change css(top:' + $('#' + windowList[p]).css('top') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
 			$('#' + windowList[p]).css({'z-index': -1});
-			$$$.message('Set css property', DEBUG, 'rightmarkClick');
+			$$$.message('Change css(z-index:-1) ' + windowList[p], DEBUG, 'leftmarkClick');
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
@@ -1041,7 +1061,7 @@ $(function(){
 		seedRate = Number($('#seed-value-p' + p).text().split('mm')[0]);
 		if(seedRate == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
 		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
-		$$$.message('Change css', DEBUG, 'changeSeedRate');
+		$$$.message('Change css(background-color:lapislazuli) seed-value-p', DEBUG, 'changeSeedRate');
 		$$$.message('Seed rate is ' + seedRate, INFO, 'changeSeedRate');
 	}
 	$('#manu-btn-p1').click(function(){
@@ -1112,7 +1132,7 @@ $(function(){
 			client.control.sendGcode('G0 Z5MM')
 				.done(function(){
 					$$$.message('Move x and y-axis up', DEBUG, 'bedLevelingPosition');
-					client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM')
+					client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM F1500')
 						.done(function(){
 							client.control.sendGcode('G28 Z0')
 								.done(function(){
@@ -1152,7 +1172,7 @@ $(function(){
 					if(y < 0) y = 0;
 					break;
 			}
-			client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM')
+			client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM F1500')
 				.done(function(){
 					extruderPosition[0] = x;
 					extruderPosition[1] = y;
@@ -1174,7 +1194,7 @@ $(function(){
 			var pos = extruderPosition[1] + seedRate;
 			if(pos > bedSize[1]) pos = bedSize[1];
 			if(powerFlag && extruderPosition[1] >= 0) {
-				client.control.sendGcode('G0 Y' + pos + 'MM')
+				client.control.sendGcode('G0 Y' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[1] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p3.click');
@@ -1218,7 +1238,7 @@ $(function(){
 			if(powerFlag && extruderPosition[2] >= 0) {
 				var pos = extruderPosition[2] + seedRate;
 				if(pos > bedSize[2]) pos = bedSize[2];
-				client.control.sendGcode('G0 Z' + pos + 'MM')
+				client.control.sendGcode('G0 Z' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[2] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p5.click');
@@ -1259,7 +1279,7 @@ $(function(){
 			if(powerFlag && extruderPosition[0] >= 0) {
 				var pos = extruderPosition[0] - seedRate;
 				if(pos < 0) pos = 0;
-				client.control.sendGcode('G0 X' + pos + 'MM')
+				client.control.sendGcode('G0 X' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[0] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p7.click');
@@ -1308,7 +1328,7 @@ $(function(){
 			if(powerFlag && extruderPosition[0] >= 0) {
 				var pos = extruderPosition[0] + seedRate;
 				if(pos > bedSize[0]) pos = bedSize[0];
-				client.control.sendGcode('G0 X' + pos + 'MM')
+				client.control.sendGcode('G0 X' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[0] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p9.click');
@@ -1391,7 +1411,7 @@ $(function(){
 				var pos = extruderPosition[1] - seedRate;
 				if(pos < 0) pos = 0;
 				console.log(pos);
-				client.control.sendGcode('G0 Y' + pos + 'MM')
+				client.control.sendGcode('G0 Y' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[1] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-pd.click');
@@ -1435,7 +1455,7 @@ $(function(){
 			if(powerFlag && extruderPosition[2] >= 0) {
 				var pos = extruderPosition[2] - seedRate;
 				if(pos < 0) pos = 0;
-				client.control.sendGcode('G0 Z' + pos + 'MM')
+				client.control.sendGcode('G0 Z' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[2] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-pf.click');
@@ -1453,13 +1473,15 @@ $(function(){
 				color:				sunshine,
 				'background-color':	lapislazuli
 			});
-			$$$.message('Change css(lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(color:sunshine) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(background-color:lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
 		} else {
 			$('#manu-btn-' + bn).css({
 				color:				sunshine,
 				'background-color':	lapislazuli
 			})
-			$$$.message('Change css(lapislazuli) manu-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(color:sunshine) manu-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(background-color:lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
 		}
 	}
 	$('#extruder-btn-up').click(function(){

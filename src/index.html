@@ -183,6 +183,10 @@
 									tooltipFormat:		"changeTooltipTool",
 									valueChange:		"changeValueTool"
 								});
+								client.printer.getFullState()
+									.done((response) => {
+										$('#handle1').roundSlider('setValue', response.temperature.tool0.target);
+									})
 								function changeTooltipTool(event) {
 									var val = event.value, temperature;
 									if(val < 180) temperature = 'Low';
@@ -272,6 +276,10 @@
 									tooltipFormat:		"changeTooltipBed",
 									valueChange:		"changeValueBed"
 								});
+								client.printer.getFullState()
+									.done((response) => {
+										$('#handle2').roundSlider('setValue', response.temperature.bed.target);
+									})
 								function changeTooltipBed(event) {
 									var val = event.value, temperature;
 									if(val < 40) temperature = 'Low';

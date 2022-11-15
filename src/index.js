@@ -79,14 +79,14 @@ function getFilelist() {
 			}
 			if(powerFlag) {
 				$('.file-list-icon-open').css({color: sunshine});
-				$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$function');
+				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$function');
 				$('.file-list-icon-print').css({color: sunshine});
-				$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$function');
+				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$function');
 			} else {
 				$('.file-list-icon-open').css({color: peleskyblue});
-				$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$function');
+				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$function');
 				$('.file-list-icon-print').css({color: peleskyblue});
-				$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$function');
+				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$function');
 			}
 		})
 }
@@ -309,13 +309,13 @@ function getPrinterFullState() {
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
 				if(response.temperature.tool0.actual >= extruderMovingTemp && !canRunExtruder) {
 					$('[id^=extruder-btn-]').css({'background-color': lapislazuli});
-					$$$.message('Change css(lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
+					$$$.message('Change css(background-color:lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
 					canRunExtruder = true;
 					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
 				}
 				if(response.temperature.tool0.actual < extruderMovingTemp && canRunExtruder) {
 					$('[id^=extruder-btn-]').css({'background-color': skyhigh});
-					$$$.message('Change css(skyhigh) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
+					$$$.message('Change css(background-color:skyhigh) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
 					canRunExtruder = false;
 					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
 				}
@@ -439,9 +439,9 @@ $(function(){
 							powerFlag = false;
 							$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 							$('.file-list-icon-open').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
+							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: peleskyblue});
-							$$$.message('Change css(peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
+							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
 						}).fail(function(response){
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -468,9 +468,9 @@ $(function(){
 						$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
 						intervalID = setInterval(getPrinterFullState, 1000);
 						$('.file-list-icon-open').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
+						$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 						$('.file-list-icon-print').css({color: sunshine});
-						$$$.message('Change css(sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
+						$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
 					}).fail(function(response){
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');
@@ -693,8 +693,9 @@ $(function(){
 					$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
 					if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
 					else $('#tool-on-sw-btn').css({color: sunshine});
-					$$$.message('Change css. tool-on-sw-btn:color', DEBUG, '$tool-on-sw-btn.click');
+					$$$.message('Change css(color:sunshine) tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					$('#slider-panel-tool-ctrl').css({'z-index': -1});
+					$$$.message('Change css(z-index:-1) tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					toolTempFlag = false;
 					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-on-sw-btn.click');
 				}
@@ -709,6 +710,7 @@ $(function(){
 	$('#bed-on-remove-btn').click(function(){
 		$$$.message('Click bed-on-remove-btn', DEBUG, '$bed-on-remove-btn.click');
 		$('#slider-panel-bed-ctrl').css({'z-index': -1});
+		$$$.message('Change css(z-index:-1) bed-on-remove-btn', DEBUG, '$tool-on-sw-btn.click');
 		bedTempFlag = false;
 		$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, 'tool-on-remove-btn.click');
 	});
@@ -748,8 +750,9 @@ $(function(){
 					$$$.message('Detect bed temperature. value is ' + bedTempValue, INFO, '$bed-on-sw-btn.click');
 					if(bedTempValue > 0) $('#bed-on-sw-btn').css({color: rescueorange});
 					else $('#bed-on-sw-btn').css({color: sunshine});
-					$$$.message('Change css. bed-on-sw-btn:color', DEBUG, '$bed-on-sw-btn.click');
+					$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
 					$('#slider-panel-bed-ctrl').css({'z-index': -1});
+					$$$.message('Change css(z-index:-1) bed-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					bedTempFlag = false;
 					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-on-sw-btn.click');
 				}
@@ -1042,7 +1045,7 @@ $(function(){
 		seedRate = Number($('#seed-value-p' + p).text().split('mm')[0]);
 		if(seedRate == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
 		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
-		$$$.message('Change css', DEBUG, 'changeSeedRate');
+		$$$.message('Change css(background-color:lapislazuli) seed-value-p', DEBUG, 'changeSeedRate');
 		$$$.message('Seed rate is ' + seedRate, INFO, 'changeSeedRate');
 	}
 	$('#manu-btn-p1').click(function(){
@@ -1454,13 +1457,15 @@ $(function(){
 				color:				sunshine,
 				'background-color':	lapislazuli
 			});
-			$$$.message('Change css(lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(color:sunshine) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(background-color:lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
 		} else {
 			$('#manu-btn-' + bn).css({
 				color:				sunshine,
 				'background-color':	lapislazuli
 			})
-			$$$.message('Change css(lapislazuli) manu-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(color:sunshine) manu-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message('Change css(background-color:lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
 		}
 	}
 	$('#extruder-btn-up').click(function(){

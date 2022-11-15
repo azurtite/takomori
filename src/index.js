@@ -900,8 +900,11 @@ $(function(){
 				left:		$('#' + windowList[p]).css('left'),
 				top:		$('#' + windowList[p]).css('top')
 			});
+			$$$.message('Change css(z-index:' + $('#' + windowList[p]).css('z-index') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
+			$$$.message('Change css(left:' + $('#' + windowList[p]).css('left') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
+			$$$.message('Change css(top:' + $('#' + windowList[p]).css('top') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
 			$('#' + windowList[p]).css({'z-index': -1});
-			$$$.message('Set css property', DEBUG, 'leftmarkClick');
+			$$$.message('Change css(z-index:-1) ' + windowList[p], DEBUG, 'leftmarkClick');
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'leftmarkClick');
@@ -940,8 +943,11 @@ $(function(){
 				left:		$('#' + windowList[p]).css('left'),
 				top:		$('#' + windowList[p]).css('top')
 			});
+			$$$.message('Change css(z-index:' + $('#' + windowList[p]).css('z-index') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
+			$$$.message('Change css(left:' + $('#' + windowList[p]).css('left') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
+			$$$.message('Change css(top:' + $('#' + windowList[p]).css('top') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
 			$('#' + windowList[p]).css({'z-index': -1});
-			$$$.message('Set css property', DEBUG, 'rightmarkClick');
+			$$$.message('Change css(z-index:-1) ' + windowList[p], DEBUG, 'leftmarkClick');
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
 			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');

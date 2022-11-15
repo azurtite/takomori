@@ -62,7 +62,7 @@ if(windowSize == 1) {
 let fileInfoContainar;
 function getFilelist() {
 	$$$.message('Call REST api', DEBUG, 'getFilelist');
-	$.get('http://192.168.0.14/api/files?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+	$.get(baseURL + 'api/files?apikey=' + apiKey)
 		.done(function(data){
 			fileInfoContainar = data;
 			$('#file-list-ctrl').html('');
@@ -196,7 +196,7 @@ function openClick(e) {
 }
 function printClick(e) {
 	$$$.message('Click the print icon in listing ' + e, DEBUG, 'printClick');
-	$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+	$.get(baseURL + 'api/job?apikey=' + apiKey)
 		.done(function(data){
 			if(data.state.toLowerCase() != 'printing' && powerFlag) {
 				client.files.select('local', fileInfoContainar.files[e].path, true);
@@ -275,7 +275,7 @@ function getPrinterFullState() {
 			}
 			return result + printTime + 's'
 		}
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.job.file.name != null)
 					if($('#jobname').text() != data.job.file.name) {
@@ -390,7 +390,7 @@ function upload(elem) {
 
 	var settings = {
 		async:			true,
-		url:			'http://192.168.0.14/api/files/local',
+		url:			baseURL + 'api/files/local',
 		method:			'POST',
 		headers:		{
 			'x-api-key':		apikey,
@@ -675,7 +675,7 @@ $(function(){
 			$$$.message('Expanding subpanel. not show slider-panel-tool', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
@@ -695,7 +695,7 @@ $(function(){
 	 * tool on sw btn click event
 	 */
 	$('#tool-on-sw-btn').click(function(){
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
@@ -733,7 +733,7 @@ $(function(){
 			$$$.message('Expanding subpanel. not show slider-panel-bed', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show bed temperature panel', INFO, '$bed-icon.click');
@@ -752,7 +752,7 @@ $(function(){
 	 * bed on sw btn click event
 	 */
 	$('#bed-on-sw-btn').click(function(){
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
@@ -776,7 +776,7 @@ $(function(){
 	 */
 	$('#print-icon').click(function(){
 		$$$.message('Click print-icon', DEBUG, '$print-icon.click');
-		$.get('http://192.168.0.14/api/job?apikey=241B873D3FF8408FB95E1DB8510F81CC')
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					client.job.start();

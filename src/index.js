@@ -146,14 +146,15 @@ function displayClick(e) {
 }
 function downloadClick(e) {
 	function changeStream(data) {
-			$$$.message('Start encording ', DEBUG, 'downloadClick')
-			var length = data.length;
+		$$$.message('Call changeStream', DEBUG, 'changeStream')
+		$$$.message('Start encording ', DEBUG, 'changeStream')
+		var length = data.length;
 		var result = new Uint8Array(length);
 		for(var i=0; i<length; i++)
 			result[i] = data[i].charCodeAt(0);
 		return result;
 	}
-	$$$.message('Click the download icon in Listing ' + e, DEBUG, 'downloadClick');
+	$$$.message('Click the download icon in listing ' + e, DEBUG, 'downloadClick');
 	client.files.download('local', fileInfoContainar.files[e].path)
 		.done(function(data){
 			$$$.message('Download ' + fileInfoContainar.files[e].display, DEBUG, 'downloadClick')

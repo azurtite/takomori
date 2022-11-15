@@ -125,7 +125,7 @@ function displayClick(e) {
 		length = length + Math.floor(f * 100) / 100 + 'mm';
 		return length;
 	}
-	$$$.message('Name tag click', DEBUG, 'displayClick');
+	$$$.message('Name tag click(' + e + ')', DEBUG, 'displayClick');
 	$('#information-panel-ctrl').html(
 		'<div class="title">' + detectName() + '</h3>'+
 		'<hr>' +

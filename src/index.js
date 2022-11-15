@@ -185,8 +185,13 @@ function openClick(e) {
 		$$$.message('This button is not active(icon-open-' + e + ')', DEBUG, 'openClick');
 		return;
 	} else {
-		client.files.select('local', fileInfoContainar.files[e].path);
-		$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
+		$.get(baseURL + 'api/job?apikey=' + apiKey)
+			.done((data) => {
+				if(data.state.toLowerCase() != 'printing') {
+					client.files.select('local', fileInfoContainar.files[e].path);
+					$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
+				} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'openClick');
+			});
 	}
 }
 function printClick(e) {

@@ -1126,7 +1126,7 @@ $(function(){
 			client.control.sendGcode('G0 Z5MM')
 				.done(function(){
 					$$$.message('Move x and y-axis up', DEBUG, 'bedLevelingPosition');
-					client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM')
+					client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM F1500')
 						.done(function(){
 							client.control.sendGcode('G28 Z0')
 								.done(function(){
@@ -1166,7 +1166,7 @@ $(function(){
 					if(y < 0) y = 0;
 					break;
 			}
-			client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM')
+			client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM F1500')
 				.done(function(){
 					extruderPosition[0] = x;
 					extruderPosition[1] = y;
@@ -1188,7 +1188,7 @@ $(function(){
 			var pos = extruderPosition[1] + seedRate;
 			if(pos > bedSize[1]) pos = bedSize[1];
 			if(powerFlag && extruderPosition[1] >= 0) {
-				client.control.sendGcode('G0 Y' + pos + 'MM')
+				client.control.sendGcode('G0 Y' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[1] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p3.click');
@@ -1232,7 +1232,7 @@ $(function(){
 			if(powerFlag && extruderPosition[2] >= 0) {
 				var pos = extruderPosition[2] + seedRate;
 				if(pos > bedSize[2]) pos = bedSize[2];
-				client.control.sendGcode('G0 Z' + pos + 'MM')
+				client.control.sendGcode('G0 Z' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[2] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p5.click');
@@ -1273,7 +1273,7 @@ $(function(){
 			if(powerFlag && extruderPosition[0] >= 0) {
 				var pos = extruderPosition[0] - seedRate;
 				if(pos < 0) pos = 0;
-				client.control.sendGcode('G0 X' + pos + 'MM')
+				client.control.sendGcode('G0 X' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[0] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p7.click');
@@ -1322,7 +1322,7 @@ $(function(){
 			if(powerFlag && extruderPosition[0] >= 0) {
 				var pos = extruderPosition[0] + seedRate;
 				if(pos > bedSize[0]) pos = bedSize[0];
-				client.control.sendGcode('G0 X' + pos + 'MM')
+				client.control.sendGcode('G0 X' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[0] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p9.click');
@@ -1405,7 +1405,7 @@ $(function(){
 				var pos = extruderPosition[1] - seedRate;
 				if(pos < 0) pos = 0;
 				console.log(pos);
-				client.control.sendGcode('G0 Y' + pos + 'MM')
+				client.control.sendGcode('G0 Y' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[1] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-pd.click');
@@ -1449,7 +1449,7 @@ $(function(){
 			if(powerFlag && extruderPosition[2] >= 0) {
 				var pos = extruderPosition[2] - seedRate;
 				if(pos < 0) pos = 0;
-				client.control.sendGcode('G0 Z' + pos + 'MM')
+				client.control.sendGcode('G0 Z' + pos + 'MM F1500')
 					.done(function(){
 						extruderPosition[2] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-pf.click');

@@ -169,10 +169,15 @@ function downloadClick(e) {
 }
 function trashClick(e) {
 	$$$.message('Click the trash icon in listing ' + e, DEBUG, 'trashClick');
-	var f = fileInfoContainar.files[e].path;
-	client.files.delete('local', f);
-	$$$.message('Delete ' + f, INFO, 'trashClick');
-	getFilelist();
+	$.get(baseURL + 'api/job?apikey=' + apiKey)
+		.done((data) => {
+			if(data.state.toLowerCase() != 'printing') {
+				var f = fileInfoContainar.files[e].path;
+				client.files.delete('local', f);
+				$$$.message('Delete ' + f, INFO, 'trashClick');
+				getFilelist();
+			} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'trashClick');
+		});
 }
 function openClick(e) {
 	$$$.message('Click the open icon in listing ' + e, DEBUG, 'openClick');

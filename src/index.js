@@ -90,7 +90,6 @@ function getFilelist() {
 			}
 		})
 }
-getFilelist();
 function displayClick(e) {
 	function calculateTime(t) {
 		let time, temp;
@@ -411,6 +410,7 @@ $(function(){
 		$('.alert-text').text('Failed to create OctoPrint object')
 		$('.alert-panel').css({visibility: 'visible'});
 	}
+	getFilelist();
 
 	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
 	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');

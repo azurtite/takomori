@@ -298,7 +298,7 @@ function getPrinterFullState() {
 			})
 	}
 	if(client == undefined) {
-		$('.alert-text').text('hoge');
+		$('.alert-text').text('OctoPrint object is undefined');
 		return false;
 	}
 

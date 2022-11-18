@@ -47,97 +47,105 @@ let $$$ = new logMan(true, false);
 
 if(windowSize == 1) {
 	window.resizeTo(400, 240);
-	$$$.message('Window size is 400 x 240', LOWDEBUG, 'null');
+	$$$.message(`Window size is 400 x 240`, LOWDEBUG, `null`);
 } else if(windowSize == 2) {
 	window.resizeTo(800, 240);
-	$$$.message('Window size is 800 x 240', LOWDEBUG, 'null');
+	$$$.message(`Window size is 800 x 240`, LOWDEBUG, `null`);
 } else if(windowSize == 3) {
 	window.resizeTo(800, 480);
-	$$$.message('Window size is 800 x 480', LOWDEBUG, 'null');
+	$$$.message(`Window size is 800 x 480`, LOWDEBUG, `null`);
 }
 
 /**
  * file list process
  */
-let fileInfoContainar;
+ let fileInfoContainar;
 function getFilelist() {
 	$$$.message('Call REST api', DEBUG, 'getFilelist');
-	$.get(baseURL + 'api/files?apikey=' + apiKey)
-		.done(function(data){
+	$.get(`${baseURL}api/files?apikey=${apiKey}`)
+		.done((data) => {
 			fileInfoContainar = data;
 			$('#file-list-ctrl').html('');
 			for(var i=0; i<data.files.length; i++) {
 				var element = document.createElement('div');
-					element.innerHTML = 
-						'<div class="display-name" onclick="displayClick(' + i + ')">' + data.files[i].display + '</div>' +
-						'<div class="left-btn file-list-icon-download" onclick="downloadClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>' +
-						'<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>' +
-						'<div class="middle-btn file-list-icon-trash" onclick="trashClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-trash"></span></div>' +
-						'<div class="middle-btn file-list-icon-open" onclick="openClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>' +
-						'<div class="right-btn file-list-icon-print" onclick="printClick(' + i + ')"><span class="glyphicon glyphicon glyphicon-print"></span></div>';
-						$('#file-list-ctrl').append(element);
+				element.innerHTML =
+					`<div class="display-name" onclick="displayClick(${i})">${data.files[i].display}</div>` + 
+					`<div class="left-btn file-list-icon-download" onclick="downloadClick(${i})"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>` +
+					`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${i})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
+					`<div class="middle-btn file-list-icon-open" onclick="openClick(${i})"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>` +
+					`<div class="right-btn file-list-icon-print" onclick="printClick(${i})"><span class="glyphicon glyphicon glyphicon-print"></span></div>`;
+				$('#file-list-ctrl').append(element);
+				$$$.message(`Append file in list. listing no ${i}`, DEBUG, 'getFilelist');
 			}
 			if(powerFlag) {
 				$('.file-list-icon-open').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$function');
+				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, 'getFilelist');
 				$('.file-list-icon-print').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$function');
+				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, 'getFilelist');
 			} else {
 				$('.file-list-icon-open').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$function');
+				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, 'getFilelist');
 				$('.file-list-icon-print').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$function');
+				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, 'getFilelist');
 			}
 		})
 }
+/**
+ * File control icons event
+ */
 function displayClick(e) {
 	function calculateTime(t) {
+		$$$.message(`Call calculateTime`, DEBUG, 'calculateTime');
 		let time, temp;
 		temp = Math.floor(t / 3600);
 		time = temp + 'h';
 		t = t - (temp * 3600);
-		$$$.message('Calculation hour. quotient is ' + temp + '. surplus is ' + t, DEBUG, 'calculateTime');
+		$$$.message(`Calculation hour. quotient is ${temp}. surplus is ${t}`, DEBUG, 'calculateTime');
 		temp = Math.floor(t / 60);
-		$$$.message('Calculation minutes. quotient is ' + temp + '. surplus is ' + (t - (temp * 60)), DEBUG, 'calculateTime');
+		$$$.message(`Calculation minutes. quotient is ${temp}. surplus is ${(t - (temp * 60))}`, DEBUG, 'calculateTime');
 		time = time + temp + 'm' + Math.floor((t - (temp * 60))*100)/100 + 's';
 		return time;
 	}
 	function detectName() {
+		$$$.message(`Call detectName`, DEBUG, 'detectName');
 		var name = '';
 		for(var i=0;i<fileInfoContainar.files[e].display.split('.').length - 1;i++) {
 			if(i > 0) name += '.';
 			name += fileInfoContainar.files[e].display.split('.')[i];
 		}
-		$$$.message('Detect display name', DEBUG, 'displayClick');
+		$$$.message(`Detect display name`, DEBUG, 'displayClick');
 		return name;
 	}
 	function calculateFilament(f) {
+		$$$.message(`Call calculateFilament`, DEBUG, 'calculateFilament');
 		var length,temp;
 		temp = Math.floor(f / 1000);
 		f = f - (temp * 1000);
 		length = temp + 'm';
-		$$$.message('Calculation meter. quotient is ' + temp + '. surplus is ' + f, DEBUG, 'calculateFilament');
+		$$$.message(`Calculation meter. quotient is ${temp}. surplus is ${f}`, DEBUG, 'calculateFilament');
 		temp = Math.floor(f / 10);
 		f = f - (temp * 10);
 		length = length + temp + 'cm';
-		$$$.message('Calculation centimeter. quotient is ' + temp + '. surplus is ' + f, DEBUG, 'calculateFilament');
+		$$$.message(`Calculation centimeter. quotient is ${temp}. surplus is ${f}`, DEBUG, 'calculateFilament');
 		length = length + Math.floor(f * 100) / 100 + 'mm';
 		return length;
 	}
+	$$$.message(`Call displayClick`, DEBUG, 'displayClick');
 	$$$.message('Name tag click(' + e + ')', DEBUG, 'displayClick');
 	$('#information-panel-ctrl').html(
-		'<div class="title">' + detectName() + '</h3>'+
+		`<div class="title">${detectName()}</h3>`+
 		'<hr>' +
 		'<table class="information-table">' +
-		'<tr><td>Type:</td><td>' + fileInfoContainar.files[e].display.split('.')[fileInfoContainar.files[e].display.split('.').length-1] + '</td></tr>' +
-		'<tr><td>Time:</td><td>' + calculateTime(fileInfoContainar.files[e].gcodeAnalysis.estimatedPrintTime) + '</td></tr>' +
+		`<tr><td>Type:</td><td>${fileInfoContainar.files[e].display.split('.')[fileInfoContainar.files[e].display.split('.').length-1]}</td></tr>` +
+		`<tr><td>Time:</td><td>${calculateTime(fileInfoContainar.files[e].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +
 		'<tr><td colspan="2">Filament:</td></tr>' +
-		'<tr><td colspan="2" class="right">' + calculateFilament(fileInfoContainar.files[e].gcodeAnalysis.filament.tool0.length) + '</td></tr>' +
+		`<tr><td colspan="2" class="right">${calculateFilament(fileInfoContainar.files[e].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
 		'<th>Size:</th>' +
-		'<tr><td colspan=2 class="right">' +
-		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.width*100)/100 + 'x' +
-		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.depth*100)/100 + 'x' +
-		Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.height*100)/100 + ' mm' +
+		`<tr><td colspan=2 class="right">
+		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.width*100)/100}x
+		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.depth*100)/100}x
+		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.height*100)/100} mm` +
 		'</td></tr>' +
 		'</table>'
 	);
@@ -151,12 +159,14 @@ function downloadClick(e) {
 		var result = new Uint8Array(length);
 		for(var i=0; i<length; i++)
 			result[i] = data[i].charCodeAt(0);
+		$$$.message('End encording', DEBUG, 'changeStream');
 		return result;
 	}
-	$$$.message('Click the download icon in listing ' + e, DEBUG, 'downloadClick');
+	$$$.message(`Call downloadClick`, DEBUG, 'downloadClick');
+	$$$.message(`Click the download icon in listing ${e}`, DEBUG, 'downloadClick');
 	client.files.download('local', fileInfoContainar.files[e].path)
-		.done(function(data){
-			$$$.message('Download ' + fileInfoContainar.files[e].display, DEBUG, 'downloadClick')
+		.done((data) => {
+			$$$.message(`Download ${fileInfoContainar.files[e].display}`, DEBUG, 'downloadClick');
 			var stream = new Uint8Array(changeStream(data));
 			var element = document.createElement('a');
 			element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'text/.gcode'}));
@@ -167,51 +177,55 @@ function downloadClick(e) {
 		})
 }
 function trashClick(e) {
-	$$$.message('Click the trash icon in listing ' + e, DEBUG, 'trashClick');
-	$.get(baseURL + 'api/job?apikey=' + apiKey)
+	$$$.message(`Call trashClick`, DEBUG, 'trashClick');
+	$$$.message(`Click the trash icon in listing ${e}`, DEBUG, 'trashClick');
+	$.get(`${baseURL}api/job?apikey=${apiKey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing') {
 				var f = fileInfoContainar.files[e].path;
 				client.files.delete('local', f);
-				$$$.message('Delete ' + f, INFO, 'trashClick');
+				$$$.message(`Delete ${f}`, INFO, 'trashClick');
 				getFilelist();
 			} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'trashClick');
 		});
 }
 function openClick(e) {
-	$$$.message('Click the open icon in listing ' + e, DEBUG, 'openClick');
+	$$$.message('Call openClick', DEBUG, 'openClick');
+	$$$.message(`Click the open icon in listing ${e}`, DEBUG, 'openClick');
 	if(!powerFlag) {
-		$$$.message('This button is not active(icon-open-' + e + ')', DEBUG, 'openClick');
+		$$$.message(`This button is not active(icon-open-${e})`, DEBUG, 'openClick');
 		return;
 	} else {
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing') {
 					client.files.select('local', fileInfoContainar.files[e].path);
-					$$$.message('Set ' + fileInfoContainar.files[e].display + ' to print', DEBUG, 'openClick');
+					$$$.message(`Set ${fileInfoContainar.files[e].display} to print`, DEBUG, 'openClick');
 				} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'openClick');
 			});
 	}
 }
 function printClick(e) {
-	$$$.message('Click the print icon in listing ' + e, DEBUG, 'printClick');
-	$.get(baseURL + 'api/job?apikey=' + apiKey)
-		.done(function(data){
+	$$$.message(`Call printClick`, DEBUG, 'printClick');
+	$$$.message(`Click the print icon in listing ${e}`, DEBUG, 'printClick');
+	$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		.done((data) => {
 			if(data.state.toLowerCase() != 'printing' && powerFlag) {
 				client.files.select('local', fileInfoContainar.files[e].path, true);
-				$$$.message('Start printing ' + fileInfoContainar.files[e].display, INFO, 'printClick');
+				$$$.message(`Start printing ${fileInfoContainar.files[e].display}`, INFO, 'printClick');
 			} else {
-				if(!powerFlag) $$$.message('This button is not active(icon-print-' + e + ')', DEBUG, 'printClick');
+				if(!powerFlag) $$$.message(`This button is not active(icon-print-${e})`, DEBUG, 'printClick');
 				else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, 'printClick');
 				return;
 			}
 		})
-		.fail(function(){
+		.fail(() => {
 			$$$.message('Printer not found', ERROR, '$printClick');
 		});
 }
 function levelupClick(e) {
-	$$$.message('Click the level-up icon in listing ' + e, DEBUG, 'levelupClick');
+	$$$.message(`Call levelupClick`, DEBUG, 'levelupClick');
+	$$$.message(`Click the level-up icon in listing ${e}`, DEBUG, 'levelupClick');
 	$('#file-notice-ctrl').css({visibility: 'visible'});
 }
 /**
@@ -219,9 +233,10 @@ function levelupClick(e) {
  */
 function getPrinterFullState() {
 	function bedTempertureCheck(response) {
+		$$$.message(`Call bedTempertureCheck`, DEBUG, 'bedTempertureCheck');
 		$$$.message('Target temperature check(bed)', LOWDEBUG, 'bedTemperatureCheck');
 		if('bed' in response.temperature) {
-			if(response.temperature.bed.target <=0) {
+			if(response.temperature.bed.target <= 0) {
 				if($('#bed-target-text').text() == 'N/A') return false;
 				else {
 					$$$.message('Update bed target temperature value and icon color(off)', DEBUG, 'bedTemperatureCheck');
@@ -230,7 +245,7 @@ function getPrinterFullState() {
 				}
 			} else {
 				var now = $('#bed-target-text').text();
-				if(now != (response.temperature.bed.target + 'C')) {
+				if(now != (`${response.temperature.bed.target}C`)) {
 					$$$.message('Update bed target temperature value and icon color(on)', DEBUG, 'bedTemperatureCheck');
 					$('#bed-target-text').text(response.temperature.bed.target + 'C');
 					$('#bed-icon').css({color: rescueorange});
@@ -239,9 +254,10 @@ function getPrinterFullState() {
 		}
 	}
 	function tool0TemperatureCheck(response) {
+		$$$.message(`Call tool0TemperatureCheck`, DEBUG, 'tool0TemperatureCheck');
 		$$$.message('Target temperature check(tool0)', LOWDEBUG, 'tool0TemperatureCheck');
 		if('tool0' in response.temperature) {
-			if(response.temperature.tool0.target <=0) {
+			if(response.temperature.tool0.target <= 0) {
 				if($('#tool-target-text').text() == 'N/A') return false;
 				else {
 					$$$.message('Update tool0 temperature value and icon color(off)', DEBUG, 'tool0TemperatureCheck');
@@ -250,7 +266,7 @@ function getPrinterFullState() {
 				}
 			} else {
 				var now = $('#tool-target-text').text();
-				if(now != (response.temperature.tool0.target + 'C')) {
+				if(now != (`${response.temperature.tool0.target}C`)) {
 					$$$.message('Update tool0 target temperature value and icon color(on)', DEBUG, 'bedTemperatureCheck');
 					$('#tool-target-text').text(response.temperature.tool0.target + 'C');
 					$('#tool-icon').css({color: rescueorange});
@@ -260,6 +276,7 @@ function getPrinterFullState() {
 	}
 	function jobNameCheck(response) {
 		function getTime(time) {
+			$$$.message(`Call getTime`, DEBUG, 'getTime');
 			let result		= '';
 			let printTime	= time;
 			let hour		= Math.floor(printTime / 3600);
@@ -267,15 +284,17 @@ function getPrinterFullState() {
 				result = result + hour + 'h';
 				printTime = printTime - (hour * 3600);
 			}
+			$$$.message(`Calculation hour`, DEBUG, 'getTime');
 			let minute = Math.floor(printTime / 60);
 			if(minute > 0) {
 				result = result + minute + 'm';
 				printTime = printTime - (minute * 60);
 			}
+			$$$.message(`Calculation minute`, DEBUG, 'getTime');
 			return result + printTime + 's'
 		}
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
-			.done(function(data){
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+			.done((data) => {
 				if(data.job.file.name != null)
 					if($('#jobname').text() != data.job.file.name) {
 						$$$.message('Update job name', INFO, 'jobNameCheck');
@@ -306,13 +325,14 @@ function getPrinterFullState() {
 				}
 			})
 	}
+	$$$.message(`Call getPrinterFullState`, DEBUG, 'getPrinterFullState');
 	if(client == undefined) {
 		$('.alert-text').text('OctoPrint object is undefined');
 		return false;
 	}
 
 	client.printer.getFullState()
-		.done(function(response){
+		.done((response) => {
 			$$$.message('Update tool0 temperature value', LOWDEBUG, 'getFullState');
 			if('tool0' in response.temperature) {
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
@@ -320,13 +340,13 @@ function getPrinterFullState() {
 					$('[id^=extruder-btn-]').css({'background-color': lapislazuli});
 					$$$.message('Change css(background-color:lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
 					canRunExtruder = true;
-					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
+					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, 'getPrinterFullState');
 				}
 				if(response.temperature.tool0.actual < extruderMovingTemp && canRunExtruder) {
 					$('[id^=extruder-btn-]').css({'background-color': skyhigh});
 					$$$.message('Change css(background-color:skyhigh) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
 					canRunExtruder = false;
-					$$$.message('Change canRunExtruder. value is ' + canRunExtruder, DEBUG, 'getPrinterFullState');
+					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, 'getPrinterFullState');
 				}
 			}
 			$$$.message('Update bed temperature value', LOWDEBUG, 'getFullState');
@@ -336,12 +356,13 @@ function getPrinterFullState() {
 			tool0TemperatureCheck(response);
 			bedTempertureCheck(response);
 			jobNameCheck();
-		}).fail(function(response){});
+		}).fail((response) => {});
 }
 /**
  * resetMonitorText()
  */
 function resetMonitorText() {
+	$$$.message(`Call resetMonitorText`, DEBUG, 'resetMonitorText');
 	$$$.message('Set tool text and icon to default', DEBUG, 'resetMonitorText');
 	$('#tool-text').text('N/A');
 	$('#tool-target-text').text('N/A');
@@ -360,10 +381,10 @@ function resetMonitorText() {
  * postProcess()
  */
 function postProcess() {
-	$$$.message('Start Function', DEBUG, 'postProcess');
+	$$$.message('Call postProcess', DEBUG, 'postProcess');
 	if(powerFlag) {
 		client.printerprofiles.get('_default')
-			.done(function(response){
+			.done((response) => {
 				switch(response.model.toUpperCase().match('MARLIN')[0]) {
 					case 'MARLIN':
 						client.control.sendGcode('M107');
@@ -380,8 +401,8 @@ function postProcess() {
 /**
  * upload test code
  */
-function upload(elem) {
-	var apikey = '241B873D3FF8408FB95E1DB8510F81CC';
+ function upload(elem) {
+	$$$.message('Call upload', DEBUG, 'upload');
 	var form = new FormData();
 	form.append('file', elem.files[0]);
 	form.append('select', false);
@@ -389,10 +410,10 @@ function upload(elem) {
 
 	var settings = {
 		async:			true,
-		url:			baseURL + 'api/files/local',
+		url:			`${baseURL}api/files/local`,
 		method:			'POST',
 		headers:		{
-			'x-api-key':		apikey,
+			'x-api-key':		apiKey,
 			'cache-control':	'no-cache',
 		},
 		processData:	false,
@@ -400,36 +421,30 @@ function upload(elem) {
 		mimeType:		'multipart/form-data',
 		data:			form
 	}
-	$.ajax(settings).done(function(response){
+	$.ajax(settings).done((response) => {
 		getFilelist();
 	});
 }
-
-$(function(){
+$(() => {
 	if(client == undefined) {
 		$('.alert-text').text('Failed to create OctoPrint object')
 		$('.alert-panel').css({visibility: 'visible'});
+		$$$.message('Change css(visibility:visible) alert-panel', DEBUG, 'jQuery');
 	}
 	getFilelist();
-
 	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
 	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');
-
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	$$$.message('Initialize progress-bar color', DEBUG, 'jQuery');
-	
 	triggerWindowSizeChange();
-	/**
-	 * reload btn click event
-	 */
-	$('#reload-btn-ctrl').click(function(){
+
+	$('#reload-btn-ctrl').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
 		location.reload();
 	});
-	/**
-	 * Power button click event
-	 */
-	$('#power-btn').click(function(){
+
+	$('#power-btn').click(() => {
+		$$$.message('Click power-btn', DEBUG, '$power-btn.click');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('power-btn operation prohibited (under toolTempFlag control)', DEBUG, 'power-btn.click');
 			return;
@@ -438,32 +453,33 @@ $(function(){
 			$$$.message('Click powerbtn(on>off)', DEBUG, '$power-btn.click');
 			postProcess();
 			client.connection.disconnect()
-				.done(function(response){
+				.done((response) => {
 					$$$.message('Disconnect success', INFO, '$power-btn.click')
 					client.browser.logout()
-						.done(function(response){
+						.done((response) => {
 							$$$.message('Logout success', INFO, '$power-btn.click');
 							$('.nav-off').css({color: sunshine});
 							clearInterval(intervalID);
 							resetMonitorText();
 							powerFlag = false;
-							$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
+							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
 							$('.file-list-icon-open').css({color: peleskyblue});
 							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: peleskyblue});
 							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
-						}).fail(function(response){
+						}).fail((response) => {
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
-				}).fail(function(response){
+				}).fail((response) => {
 					$$$.error('Disconnect failure', ERROR , '$power-btn.click');
 					$('.alert-text').text('Error: Failed to disconnect to printer');
 					$('#alert-pnl').css({visibility: 'visible'});
-				})
+					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+				});
 		} else {
 			$$$.message('Click powerbtn(off>on)', DEBUG), '$power-btn.click';
 			client.browser.login('mozukuSu', 'ooxot8795SH', true)
-				.done(function(response){
+				.done((response) => {
 					$$$.message('Login success', INFO, '$power-btn.click');
 					client.connection.connect({
 						port:			'/dev/ttyACM0',
@@ -471,32 +487,33 @@ $(function(){
 						printerProfile:	'_default',
 						save:			true,
 						autoconnect:	false
-					}).done(function(response){
+					}).done((response) => {
 						$$$.message('Connection success', INFO, '$power-btn.click');
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
-						$$$.message('Change powerFlag. value is ' + powerFlag, DEBUG, '$power-btn.click');
+						$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
 						intervalID = setInterval(getPrinterFullState, 1000);
 						$('.file-list-icon-open').css({color: sunshine});
 						$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 						$('.file-list-icon-print').css({color: sunshine});
 						$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
-					}).fail(function(response){
+					}).fail((response) => {
 						$$$.message('Connection failure', ERROR, '$power-btn.click');
 						$('.alert-text').text('Error: Failed to connect to printer');
 						$('#alert-pnl').css({visibility: 'visible'});
+						$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
 					});
-				}).fail(function(response){
+				}).fail((response) => {
 					$$$.message('Login failure', ERROR, '$power-btn.click');
 					$('.alert-text').text('Error: Failed to login to octoprint server');
 					$('#alert-pnl').css({visibility: 'visible'});
+					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
 				});
 		}
 	});
-	/**
-	 * Sub menu button click event
-	 */
-	$('#submenu-btn').click(function(){
+
+	$('#submenu-btn').click(() => {
+		$$$.message('Click submenu-btn', DEBUG, '$submenu-btn.click');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('submenu-btn operation prohibited (under toolTempFlag control)', DEBUG, 'submenu-btn.click');
 			return;
@@ -505,56 +522,60 @@ $(function(){
 		if(submenuToggle) {
 			$$$.message('Hide submenu', INFO, '$submenu-btn');
 			$('.nav-submenu').css({right: '-285px'});
+			$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$submenu-btn');
 			submenuToggle = false;
 		} else {
 			$$$.message('Show submenu', INFO, '$submenu-btn');
 			$('.nav-submenu').css({right: '0px'});
+			$$$.message('Change css(right:0px) nav-submenu', DEBUG, '$submenu-btn');
 			submenuToggle = true;
 		}
 	});
-	/**
-	 * Fullscreen button click event
-	 */
-	$('#fullscreen-btn').click(function(){
+
+	$('#fullscreen-btn').click(() => {
+		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn.click');
 		if(toolTempFlag || bedTempFlag) {
-			$$$.message('fullscreen-btn operation prohibited (under toolTempFlag control)', DEBUG, 'fullscreen-btn.click');
+			$$$.message('fullscreen-btn operation prohibited (under toolTempFlag control)', DEBUG, '$fullscreen-btn.click');
 			return;
 		}
-		$$$.message('Click fullscreen btn', DEBUG, '$fullscreen-btn');
 		windowSize++;
 		triggerWindowSizeChange();
 	});
 	function triggerWindowSizeChange() {
 		function modeTreeTriangleSet(){
 			$$$.message('Call modeTreeTriangleSet', DEBUG, 'modeTreeTriangleSet');
-			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-right`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-left`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-right`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-down`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-left`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-down`).css({visibility: 'visible'});
 		}
 		function modeTreeTriangleReset() {
 			$$$.message('Call modeTreeTriangleReset', DEBUG, 'modeTreeTriangleReset');
-			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
-			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-right`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-left`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-right`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-left`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
 		}
 		if(windowSize > maxWindowSize) windowSize = 1;
-		$$$.message('Screen mode is ' + windowSize, INFO, 'triggerWindowSizeChange');
+		$$$.message(`Screen mode is ${windowSize}`, INFO, 'triggerWindowSizeChange');
 		if(windowSize == 1) {
 			$$$.message('Window size is 400 x 240', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(400,240);
 			$('#main-window-ctrl, #file-window-ctrl, #manu-window-ctrl, #temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$$$.message('Change css(z-index:-1) main-window-ctrl, file-window-ctrl, manu-window-ctrl, temp-window-ctrl', DEBUG, '$submenu-btn');
+			$$$.message('Change css(top:0px) main-window-ctrl, file-window-ctrl, manu-window-ctrl, temp-window-ctrl', DEBUG, '$submenu-btn');
+			$$$.message('Change css(left:0px) main-window-ctrl, file-window-ctrl, manu-window-ctrl, temp-window-ctrl', DEBUG, '$submenu-btn');
 			$$$.message('Reset panel position for screen mode 1', DEBUG, 'triggerWindowSizeChange')
-			$('#' + windowList[panelPosition]).css({'z-index': 80});
+			$(`#${windowList[panelPosition]}`).css({'z-index': 80});
+			$$$.message(`Change css(z-index:80px) ${windowList[panelPosition]}`, DEBUG, '$submenu-btn');
 			$$$.message('Set panel position for screen mode 1', DEBUG, 'triggerWindowSizeChange')
 			modeTreeTriangleReset();
 		} else if(windowSize == 2) {
@@ -562,32 +583,52 @@ $(function(){
 			window.resizeTo(800,240);
 			// Main panel position set
 			$('#main-window-ctrl, #file-window-ctrl, #manu-window-ctrl, #temp-window-ctrl').css({'z-index': -1, top: '0px', left: '0px'});
+			$$$.message('Change css(z-index:-1) main-window-ctrl, file-window-ctrl, manu-window-ctrl, temp-window-ctrl', DEBUG, '$submenu-btn');
+			$$$.message('Change css(top:0px) main-window-ctrl, file-window-ctrl, manu-window-ctrl, temp-window-ctrl', DEBUG, '$submenu-btn');
+			$$$.message('Change css(left:0px) main-window-ctrl, file-window-ctrl, manu-window-ctrl, temp-window-ctrl', DEBUG, '$submenu-btn');
 			$$$.message('Reset panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
-			$('#' + windowList[panel2Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
+			$(`#${windowList[panel2Array[0]]}`).css({'z-index': 80, top: '0px', left: '0px'});
+			$$$.message(`Change css(z-index:80) ${windowList[panel2Array[0]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(top:0px) ${windowList[panel2Array[0]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(left:0px) ${windowList[panel2Array[0]]}`, DEBUG, '$submenu-btn');
 			$('#' + windowList[panel2Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
+			$$$.message(`Change css(z-index:80) ${windowList[panel2Array[1]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(top:0px) ${windowList[panel2Array[1]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(left:400px) ${windowList[panel2Array[1]]}`, DEBUG, '$submenu-btn');
+			$$$.message('Reset panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
 			$$$.message('Set panel position for screen mode 2', DEBUG, 'triggerWindowSizeChange')
 			modeTreeTriangleReset();
 		} else if(windowSize == 3) {
 			$$$.message('Window size is 800 x 480', LOWDEBUG, 'triggerWindowSizeChange');
 			window.resizeTo(800,480);
 			$('#' + windowList[panel4Array[0]]).css({'z-index': 80, top: '0px', left: '0px'});
+			$$$.message(`Change css(z-index:80) ${windowList[panel4Array[0]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(top:0px) ${windowList[panel4Array[0]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(left:0px) ${windowList[panel4Array[0]]}`, DEBUG, '$submenu-btn');
 			$('#' + windowList[panel4Array[1]]).css({'z-index': 80, top: '0px', left: '400px'});
+			$$$.message(`Change css(z-index:80) ${windowList[panel4Array[1]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(top:0px) ${windowList[panel4Array[1]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(left:400px) ${windowList[panel4Array[1]]}`, DEBUG, '$submenu-btn');
 			$('#' + windowList[panel4Array[2]]).css({'z-index': 80, top: '240px', left: '0px'});
+			$$$.message(`Change css(z-index:80) ${windowList[panel4Array[2]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(top:240px) ${windowList[panel4Array[2]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(left:0px) ${windowList[panel4Array[2]]}`, DEBUG, '$submenu-btn');
 			$('#' + windowList[panel4Array[3]]).css({'z-index': 80, top: '240px', left: '400px'});
+			$$$.message(`Change css(z-index:80) ${windowList[panel4Array[3]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(top:240px) ${windowList[panel4Array[3]]}`, DEBUG, '$submenu-btn');
+			$$$.message(`Change css(left:400px) ${windowList[panel4Array[3]]}`, DEBUG, '$submenu-btn');
 			modeTreeTriangleSet();
 		}
 	}
-	/**
-	 * alert ok button click event
-	 */
-	$('#alert-ok-btn').click(function(){
-		$$$.message('Click alert-ok btn', DEBUG, '$alert-ok-btn');
+
+	$('#alert-ok-btn').click(() => {
+		$$$.message('Click alert-ok-btn', DEBUG, '$alert-ok-btn');
 		$('.alert-panel').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) alert-panel', DEBUG, '$submenu-btn');
 	});
-	/**
-	 * Close button click event
-	 */
-	$('#remove-btn').click(function(){
+
+	$('#remove-btn').click(() => {
+		$$$.message('Click remove-btn', DEBUG, '$remove-btn');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('remove-btn operation prohibited (under toolTempFlag control)', DEBUG, 'remove-btn.click');
 			return;
@@ -595,7 +636,9 @@ $(function(){
 		$$$.message('Click close btn', DEBUG, '$remove-btn');
 		window.close();
 	});
-	$("#suspend-btn").click(function(){
+
+	$("#suspend-btn").click(() => {
+		$$$.message('Click suspend-btn', DEBUG, '$suspend-btn');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('suspend-btn operation prohibited (under toolTempFlag control)', DEBUG, 'suspend-btn.click');
 			return;
@@ -603,36 +646,34 @@ $(function(){
 		$$$.message('Click suspend btn', DEBUG, '$suspend-btn');
 		window.close();
 	});
-	/**
-	 * fan icon click event
-	 */
-	$('#fan-icon').click(function(){
+
+	$('#fan-icon').click(() => {
+		$$$.message('Click fan icon', DEBUG, '$fan-icon.click');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('fan-icon operation prohibited (under toolTempFlag control)', DEBUG, 'fan-icon.click');
 			return;
 		}
-		$$$.message('Click fan icon', DEBUG, '$fan-icon');
-		$$$.message('Detect firmware type', INFO, '$fan-icon');
+		$$$.message('Detect firmware type', INFO, '$fan-icon.click');
 		let firmType;
 		if(powerFlag) {
 			client.printerprofiles.get('_default')
-				.done(function(response){
+				.done((response) => {
 					firmType = response.model;
 					firmType = firmType.toUpperCase();
-					$$$.message('Firmware type is ' + firmType, INFO, '$fan-icon');
+					$$$.message(`Firmware type is ${firmType}`, INFO, '$fan-icon.click');
 		
 					var result = firmType.match('MARLIN');
 					if(fanFlag) {
 						switch(result[0]) {
 							case 'MARLIN':
 								client.control.sendGcode('M107 P1')
-									.done(function(){
-										$$$.message('Stop fan(0%)', INFO, '$fan-icon');
+									.done(() => {
+										$$$.message('Stop fan(0%)', INFO, '$fan-icon.click');
 										$('#fan-icon').css({color: sunshine});
 										$('#fan-text').text('0%');
 										fanFlag = false;
-									}).fail(function(){
-										$$$.message('Can not operate fan speed', ERROR, '$fan-icon');
+									}).fail(() => {
+										$$$.message('Can not operate fan speed', ERROR, '$fan-icon.click');
 									});
 								break;
 						}
@@ -640,144 +681,138 @@ $(function(){
 						switch(result[0]) {
 							case 'MARLIN':
 								client.control.sendGcode('M106 P1 S255')
-									.done(function(){
-										$$$.message('Rotate fan(speed 100%)', INFO, '$fan-icon');
+									.done(() => {
+										$$$.message('Rotate fan(speed 100%)', INFO, '$fan-icon.click');
 										$('#fan-icon').css({color: rescueorange});
 										$('#fan-text').text('100%');
 										fanFlag = true;
-									}).fail(function(){
-										$$$.message('Can not operate fan speed', ERROR, '$fan-icon');
+									}).fail(() => {
+										$$$.message('Can not operate fan speed', ERROR, '$fan-icon.click');
 									});
 								break;
 						}
 					}
 				});
 		} else {
-			$$$.message('Printer is not connect', ERROR, '$fan-icon');
+			$$$.message('Printer is not connect', ERROR, '$fan-icon.click');
 			return;
 		}
 	});
-	/**
-	 * tool on remove btn click event
-	 */
-	$('#tool-on-remove-btn').click(function(){
+
+	$('#tool-on-remove-btn').click(() => {
 		$$$.message('Click tool-on-remove-btn', DEBUG, '$tool-on-remove-btn.click');
 		$('#slider-panel-tool-ctrl').css({'z-index': -1});
+		$$$.message('Change css(z-index:-1) slider-panel-tool-ctrl', DEBUG, '$tool-on-remove-btn.click');
 		toolTempFlag = false;
-		$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, 'tool-on-remove-btn.click');
+		$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, '$tool-on-remove-btn.click');
 	});
-	/**
-	 * tool icon click event
-	 */
-	$('#tool-icon').click(function(){
+
+	$('#tool-icon').click(() => {
 		$$$.message('Click tool-icon', DEBUG, '$tool-icon.click');
 		if(submenuToggle) {
 			$$$.message('Expanding subpanel. not show slider-panel-tool', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
-			.done(function(data){
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
 					$('#slider-panel-tool-ctrl').css({'z-index': 80});
+					$$$.message('Change css(z-index:80) slider-panel-tool-ctrl', DEBUG, '$tool-icon.click');
 					toolTempFlag = true;
-					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-icon.click');
+					$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, '$tool-icon.click');
 				} else {
-					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel-tool', WARN, 'tool-icon');
+					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel-tool', WARN, '$tool-icon.click');
 					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$tool-icon.click');
 				}
 			})
-			.fail(function(){
+			.fail(() => {
 				$$$.message('Printer not found', ERROR, '$tool-icon.click');
 			})
 	});
-	/**
-	 * tool on sw btn click event
-	 */
-	$('#tool-on-sw-btn').click(function(){
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
-			.done(function(data){
+	
+	$('#tool-on-sw-btn').click(() => {
+		$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					client.printer.setToolTargetTemperatures({'tool0': toolTempValue});
-					$$$.message('Detect tool-0 temperature. value is ' + toolTempValue, INFO, '$tool-on-sw-btn.click');
+					$$$.message(`Detect tool-0 temperature. value is ${toolTempValue}`, INFO, '$tool-on-sw-btn.click');
 					if(toolTempValue > 0 ) $('#tool-on-sw-btn').css({color: rescueorange});
 					else $('#tool-on-sw-btn').css({color: sunshine});
 					$$$.message('Change css(color:sunshine) tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					$('#slider-panel-tool-ctrl').css({'z-index': -1});
 					$$$.message('Change css(z-index:-1) tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
 					toolTempFlag = false;
-					$$$.message('Change toolTempFlag. value is ' + toolTempFlag, DEBUG, '$tool-on-sw-btn.click');
+					$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, '$tool-on-sw-btn.click');
 				}
 			})
-			.fail(function(){
+			.fail(() => {
 				$$$.message('Printer not found', ERROR, '$tool-on-sw-btn.click');
 			})
 	});
-	/**
-	 * bed on remove btn click event
-	 */
-	$('#bed-on-remove-btn').click(function(){
+
+	$('#bed-on-remove-btn').click(() => {
 		$$$.message('Click bed-on-remove-btn', DEBUG, '$bed-on-remove-btn.click');
 		$('#slider-panel-bed-ctrl').css({'z-index': -1});
 		$$$.message('Change css(z-index:-1) bed-on-remove-btn', DEBUG, '$tool-on-sw-btn.click');
 		bedTempFlag = false;
-		$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, 'tool-on-remove-btn.click');
+		$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, 'tool-on-remove-btn.click');
 	});
-	/**
-	 * bed icon click event
-	 */
-	$('#bed-icon').click(function(){
+
+	$('#bed-icon').click(() => {
 		$$$.message('Click bed-icon', DEBUG, '$bed-icon.click');
 		if(submenuToggle) {
 			$$$.message('Expanding subpanel. not show slider-panel-bed', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
-			.done(function(data){
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show bed temperature panel', INFO, '$bed-icon.click');
 					$('#slider-panel-bed-ctrl').css({'z-index': 80});
+					$$$.message('Change css(z-index:80) slider-panel-bed-ctrl', DEBUG, '$bed-icon.click');
 					bedTempFlag = true;
-					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-icon.click');
+					$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, '$bed-icon.click');
 				} else {
 					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel-bed', WARN, '$bed-icon.click');
 					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$bed-icon.click');
 				}
-			}).fail(function(err){
+			}).fail(() =>{
 				$$$.message('Printer not found', ERROR, '$bed-icon.click');
 			})
 	});
-	/**
-	 * bed on sw btn click event
-	 */
-	$('#bed-on-sw-btn').click(function(){
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
+
+	$('#bed-on-sw-btn').click(() => {
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
 					client.printer.setBedTargetTemperature(bedTempValue);
-					$$$.message('Detect bed temperature. value is ' + bedTempValue, INFO, '$bed-on-sw-btn.click');
-					if(bedTempValue > 0) $('#bed-on-sw-btn').css({color: rescueorange});
-					else $('#bed-on-sw-btn').css({color: sunshine});
-					$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
+					$$$.message(`Detect bed temperature. value is ${bedTempValue}`, INFO, '$bed-on-sw-btn.click');
+					if(bedTempValue > 0) {
+						$('#bed-on-sw-btn').css({color: rescueorange});
+						$$$.message('Change css(color:rescueorange) bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
+					} else {
+						$('#bed-on-sw-btn').css({color: sunshine});
+						$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
+					}
 					$('#slider-panel-bed-ctrl').css({'z-index': -1});
-					$$$.message('Change css(z-index:-1) bed-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
+					$$$.message('Change css(z-index:-1) slider-panel-bed-ctrl', DEBUG, '$tool-on-sw-btn.click');
 					bedTempFlag = false;
-					$$$.message('Change bedTempFlag. value is ' + bedTempFlag, DEBUG, '$bed-on-sw-btn.click');
+					$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, '$bed-on-sw-btn.click');
 				}
 			})
 			.fail(function(err){
 				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
 			})
 	});
-	/**
-	 * print icon click event
-	 */
-	$('#print-icon').click(function(){
+
+	$('#print-icon').click(() => {
 		$$$.message('Click print-icon', DEBUG, '$print-icon.click');
-		$.get(baseURL + 'api/job?apikey=' + apiKey)
-			.done(function(data){
+		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					client.job.start();
 					$$$.message('Start print.', DEBUG, '$print-icon.click')
@@ -787,127 +822,103 @@ $(function(){
 					return;
 				}
 			})
-			.fail(function(){
+			.fail(() => {
 				$$$.message('Printer not found', ERROR, '$printClick');
 			});
 	});
-	/**
-	 * left mark main click event
-	 */
-	$('#left-mark-main').click(function(){
+
+	$('#left-mark-main').click(() => {
 		$$$.message('Click left-mark-main', DEBUG, '$left-mark-main.click');
 		leftmarkClick(1);
 	});
-	/**
-	 * right mark main click event
-	 */
-	$('#right-mark-main').click(function(){
+
+	$('#right-mark-main').click(() => {
 		$$$.message('Click right-mark-main', DEBUG, '$right-mark-main.click');
 		rightmarkClick(1);
 	});
-	/**
-	 * down mark main click event
-	 */
-	$('#down-mark-main').click(function(){
-		$$$.message('Click down-mark-main', DEBUG, '$down-mark-main');
+
+	$('#down-mark-main').click(() => {
+		$$$.message('Click down-mark-main', DEBUG, '$down-mark-main.click');
 		downmarkClick(1);
 	});
-	/**
-	 * left mark file click event
-	 */
-	$('#left-mark-file').click(function(){
+
+	$('#left-mark-file').click(() => {
 		$$$.message('Click left-mark-file', DEBUG, '$left-mark-file.click');
 		leftmarkClick(2);
 	});
-	/**
-	 * right mark file click event
-	 */
-	$('#right-mark-file').click(function(){
+
+	$('#right-mark-file').click(() => {
 		$$$.message('Click right-mark-file', DEBUG, '$right-mark-file.click');
 		rightmarkClick(2);
 	});
-	/**
-	 * down mark main click event
-	 */
-	 $('#down-mark-file').click(function(){
-		$$$.message('Click down-mark-file', DEBUG, '$down-mark-file');
+
+	$('#down-mark-file').click(() => {
+		$$$.message('Click down-mark-file', DEBUG, '$down-mark-file.click');
 		downmarkClick(2);
 	});
-	/**
-	 * left mark file click event
-	 */
-	 $('#left-mark-manu').click(function(){
+
+	$('#left-mark-manu').click(() => {
 		$$$.message('Click left-mark-manu', DEBUG, '$left-mark-manu.click');
 		leftmarkClick(3);
 	});
-	/**
-	 * right mark manu click event
-	 */
-	$('#right-mark-manu').click(function(){
+
+	$('#right-mark-manu').click(() => {
 		$$$.message('Click right-mark-manu', DEBUG, '$right-mark-manu.click');
 		rightmarkClick(3);
 	});
-	/**
-	 * down mark main click event
-	 */
-	 $('#down-mark-manu').click(function(){
-		$$$.message('Click down-mark-manu', DEBUG, '$down-mark-manu');
+
+	$('#down-mark-manu').click(() => {
+		$$$.message('Click down-mark-manu', DEBUG, '$down-mark-manu.click');
 		downmarkClick(3);
 	});
-	/**
-	 * left mark file click event
-	 */
-	 $('#left-mark-temp').click(function(){
+
+	$('#left-mark-temp').click(() => {
 		$$$.message('Click left-mark-temp', DEBUG, '$left-mark-temp.click');
 		leftmarkClick(4);
 	});
-	/**
-	 * right mark temp click event
-	 */
-	$('#right-mark-temp').click(function(){
+
+	$('#right-mark-temp').click(() => {
 		$$$.message('Click right-mark-temp', DEBUG, '$right-mark-temp.click');
 		rightmarkClick(4);
 	});
-	/**
-	 * down mark main click event
-	 */
-	 $('#down-mark-temp').click(function(){
-		$$$.message('Click down-mark-temp', DEBUG, '$down-mark-temp');
+
+	$('#down-mark-temp').click(() => {
+		$$$.message('Click down-mark-temp', DEBUG, '$down-mark-temp.click');
 		downmarkClick(4);
 	});
 	function leftmarkClick(p) {
-		$$$.message('Call leftmarkClick(' + p + ')', DEBUG, 'downmarkClick');
+		$$$.message(`Call leftmarkClick(${p})`, DEBUG, 'downmarkClick');
 		if(windowSize == 1) {
 			panelPosition--;
 			if(panelPosition < 1) panelPosition = maxPanelPosition;
-			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$left-mark.click');
-			$('#' + windowList[panelPosition]).css({'z-index': 80});
-			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$left-mark.click');
+			$$$.message(`Change panel position. position is ${panelPosition}`, DEBUG, '$left-mark.click');
+			$(`#${windowList[panelPosition]}`).css({'z-index': 80});
+			$$$.message(`#${windowList[panelPosition]} is shown`, DEBUG, '$left-mark.click');
 			if((panelPosition + 1) > maxPanelPosition) $('#' + windowList[1]).css({'z-index': -1});
 			else $('#' + windowList[panelPosition + 1]).css({'z-index': -1});
 			if((panelPosition + 1) > maxPanelPosition) $$$.message('#' + windowList[1] + ' is hidden', DEBUG, '$right-mark.click');
-			else $$$.message('#' + windowList[panelPosition + 1] + ' is hidden', DEBUG, '$right-mark.click');
+			else $$$.message(`#${windowList[panelPosition + 1]} is hidden`, DEBUG, '$right-mark.click');
 		} else if(windowSize == 2) {
 			var panelNo = p;
 			panelNo--;
 			if(panelNo < 1) panelNo = maxPanelPosition;
 			if(panelNo == panel2Array[0] || panelNo == panel2Array[1]) panelNo--;
 			if(panelNo < 1) panelNo = maxPanelPosition;
-			$$$.message('panelNo is ' + panelNo, DEBUG, 'leftmarkClick');
+			$$$.message(`panelNo is ${panelNo}`, DEBUG, 'leftmarkClick');
 			$$$.message('Identify panel to display', DEBUG, 'leftmarkClick');
-			$('#' + windowList[panelNo]).css({
+			$(`#${windowList[panelNo]}`).css({
 				'z-index':	$('#' + windowList[p]).css('z-index'),
 				left:		$('#' + windowList[p]).css('left'),
 				top:		$('#' + windowList[p]).css('top')
 			});
-			$$$.message('Change css(z-index:' + $('#' + windowList[p]).css('z-index') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
-			$$$.message('Change css(left:' + $('#' + windowList[p]).css('left') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
-			$$$.message('Change css(top:' + $('#' + windowList[p]).css('top') + ') ' + windowList[panelNo], DEBUG, 'leftmarkClick');
-			$('#' + windowList[p]).css({'z-index': -1});
-			$$$.message('Change css(z-index:-1) ' + windowList[p], DEBUG, 'leftmarkClick');
+			$$$.message(`Change css(z-index:${$('#' + windowList[p]).css('z-index')}) ${windowList[panelNo]}`, DEBUG, 'leftmarkClick');
+			$$$.message(`Change css(left: + ${$('#' + windowList[p]).css('left')}) ${windowList[panelNo]}`, DEBUG, 'leftmarkClick');
+			$$$.message(`Change css(top:' + ${$('#' + windowList[p]).css('top')}) ${windowList[panelNo]}`, DEBUG, 'leftmarkClick');
+			$(`#${windowList[p]}`).css({'z-index': -1});
+			$$$.message(`Change css(z-index:-1) ${windowList[p]}`, DEBUG, 'leftmarkClick');
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
-			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'leftmarkClick');
+			$$$.message(`Set panel2Array[${panel2Array[0]},${panel2Array[1]}]`, DEBUG, 'leftmarkClick');
 		} else if(windowSize == 3) {
 			if(panel4Array[0] == p) {
 				$$$.message('Click upper left panel', DEBUG, 'leftmarkClick');
@@ -919,38 +930,38 @@ $(function(){
 		}
 	}
 	function rightmarkClick(p) {
-		$$$.message('Call rightmarkClick(' + p + ')', DEBUG, 'downmarkClick');
+		$$$.message(`Call rightmarkClick(${p})`, DEBUG, 'downmarkClick');
 		if(windowSize == 1) {
 			panelPosition++;
 			if(panelPosition > maxPanelPosition) panelPosition = 1;
-			$$$.message('Change panel position. position is ' + panelPosition, DEBUG, '$right-mark.click');
-			$('#' + windowList[panelPosition]).css({'z-index': 80});
-			$$$.message('#' + windowList[panelPosition] + ' is shown', DEBUG, '$right-mark.click');
-			if((panelPosition - 1) < 1) $('#' + windowList[maxPanelPosition]).css({'z-index': -1});
-			else $('#' + windowList[panelPosition - 1]).css({'z-index': -1});
-			if((panelPosition - 1) < 1) $$$.message('#' + windowList[maxPanelPosition] + ' is hidden', DEBUG, '$left-mark.click');
-			else $$$.message('#' + windowList[panelPosition - 1] + ' is hidden', DEBUG, '$left-mark.click');
+			$$$.message(`Change panel position. position is ${panelPosition}`, DEBUG, '$right-mark.click');
+			$(`#${windowList[panelPosition]}`).css({'z-index': 80});
+			$$$.message(`#${windowList[panelPosition]} is shown`, DEBUG, '$right-mark.click');
+			if((panelPosition - 1) < 1) $(`#${windowList[maxPanelPosition]}`).css({'z-index': -1});
+			else $(`#${windowList[panelPosition - 1]}`).css({'z-index': -1});
+			if((panelPosition - 1) < 1) $$$.message(`#${windowList[maxPanelPosition]} is hidden`, DEBUG, '$left-mark.click');
+			else $$$.message(`#${windowList[panelPosition - 1]} is hidden`, DEBUG, '$left-mark.click');
 		} else if(windowSize == 2) {
 			var panelNo = p;
 			panelNo++;
 			if(panelNo > maxPanelPosition) panelNo = 1;
 			if(panelNo == panel2Array[0] || panelNo == panel2Array[1]) panelNo++;
 			if(panelNo > maxPanelPosition) PanelNo = 1;
-			$$$.message('panelNo is ' + panelNo, DEBUG, 'rightmarkClick');
+			$$$.message(`panelNo is ${panelNo}`, DEBUG, 'rightmarkClick');
 			$$$.message('Identify panel to display', DEBUG, 'rightmarkClick');
-			$('#' + windowList[panelNo]).css({
-				'z-index':	$('#' + windowList[p]).css('z-index'),
-				left:		$('#' + windowList[p]).css('left'),
-				top:		$('#' + windowList[p]).css('top')
+			$(`#${windowList[panelNo]}`).css({
+				'z-index':	$(`#${windowList[p]}`).css('z-index'),
+				left:		$(`#${windowList[p]}`).css('left'),
+				top:		$(`#${windowList[p]}`).css('top')
 			});
-			$$$.message('Change css(z-index:' + $('#' + windowList[p]).css('z-index') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
-			$$$.message('Change css(left:' + $('#' + windowList[p]).css('left') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
-			$$$.message('Change css(top:' + $('#' + windowList[p]).css('top') + ') ' + windowList[panelNo], DEBUG, 'rightmarkClick');
-			$('#' + windowList[p]).css({'z-index': -1});
-			$$$.message('Change css(z-index:-1) ' + windowList[p], DEBUG, 'leftmarkClick');
+			$$$.message(`Change css(z-index:${$('#' + windowList[p]).css('z-index')}) ${windowList[panelNo]}`, DEBUG, 'rightmarkClick');
+			$$$.message(`Change css(left:${$('#' + windowList[p]).css('left')}) ${windowList[panelNo]}`, DEBUG, 'rightmarkClick');
+			$$$.message(`Change css(top:${$('#' + windowList[p]).css('top')}) ${windowList[panelNo]}`, DEBUG, 'rightmarkClick');
+			$(`#${windowList[p]}`).css({'z-index': -1});
+			$$$.message(`Change css(z-index:-1) ${windowList[p]}`, DEBUG, 'leftmarkClick');
 			if(panel2Array[0] == p) panel2Array[0] = panelNo;
 			else if(panel2Array[1] == p) panel2Array[1] = panelNo;
-			$$$.message('Set panel2Array['+ panel2Array[0] + ',' + panel2Array[1] + ']', DEBUG, 'rightmarkClick');
+			$$$.message(`Set panel2Array[${panel2Array[0]},${panel2Array[1]}]`, DEBUG, 'rightmarkClick');
 		} else if(windowSize == 3) {
 			if(panel4Array[1] == p) {
 				$$$.message('Click upper right panel', DEBUG, 'rightmarkClick');
@@ -963,134 +974,141 @@ $(function(){
 	}
 	function switchUpperPanel() {
 		$$$.message('Call switchUpperPanel', DEBUG, 'switchUpperPanel');
-		$('#' + windowList[panel4Array[0]]).css({left: '400px'});
-		$('#' + windowList[panel4Array[1]]).css({left: '0px'});
+		$(`#${windowList[panel4Array[0]]}`).css({left: '400px'});
+		$(`#${windowList[panel4Array[1]]}`).css({left: '0px'});
 		$$$.message('Switch upper panel', DEBUG, 'switchUpperPanel');
-		$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
-		$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
-		$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
-		$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+		$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-left`).css({visibility: 'hidden'});
+		$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-right`).css({visibility: 'visible'});
+		$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-left`).css({visibility: 'visible'});
+		$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-right`).css({visibility: 'hidden'});
 		$$$.message('Change upper panel triangle css', DEBUG, 'switchUpperPanel');
 		var t = panel4Array[0];
 		 panel4Array[0] = panel4Array[1];
 		panel4Array[1] = t;
-		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'switchUpperPanel');
+		$$$.message(`Set panel4Array[${panel4Array[0]} ,${panel4Array[1]} ,${panel4Array[2]} ,${panel4Array[3]}]`, DEBUG, 'switchUpperPanel');
 	}
 	function switchLowerPanel() {
 		$$$.message('Call switchLowerPanel', DEBUG, 'switchLowerPanel');
-		$('#' + windowList[panel4Array[2]]).css({left: '400px'});
-		$('#' + windowList[panel4Array[3]]).css({left: '0px'});
+		$(`#${windowList[panel4Array[2]]}`).css({left: '400px'});
+		$(`#${windowList[panel4Array[3]]}`).css({left: '0px'});
 		$$$.message('Switch lower panel', DEBUG, 'switchLowerPanel');
-		$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-left').css({visibility: 'hidden'});
-		$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-right').css({visibility: 'visible'});
-		$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-left').css({visibility: 'visible'});
-		$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-right').css({visibility: 'hidden'});
+		$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-left`).css({visibility: 'hidden'});
+		$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-right`).css({visibility: 'visible'});
+		$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-left`).css({visibility: 'visible'});
+		$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-right`).css({visibility: 'hidden'});
 		$$$.message('Change lower panel triangle css', DEBUG, 'switchLowerPanel');
 		var t = panel4Array[2];
 		panel4Array[2] = panel4Array[3];
 		panel4Array[3] = t;
-		$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'switchLowerPanel');
+		$$$.message(`Set panel4Array[${panel4Array[0]} ,${panel4Array[1]} ,${panel4Array[2]} ,$panel4Array[3]}]`, DEBUG, 'switchLowerPanel');
 	}
 	function downmarkClick(p) {
 		$$$.message('Call downmarkClick(' + p + ')', DEBUG, 'downmarkClick');
 		if(panel4Array[2] == p) {
-			$('#' + windowList[panel4Array[0]]).css({top: '240px'});
-			$('#' + windowList[panel4Array[2]]).css({top: '0px'});
+			$(`#${windowList[panel4Array[0]]}`).css({top: '240px'});
+			$(`#${windowList[panel4Array[2]]}`).css({top: '0px'});
 			$$$.message('Switch left panel', DEBUG, 'downmarkClick');
-			$('.' + windowList[panel4Array[0]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[2]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[0]].split('-')[0]}-triangle-down`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[2]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
 			$$$.message('Change left panel triangle css', DEBUG, 'downmarkClick');
 			var t = panel4Array[0];
 			panel4Array[0] = panel4Array[2];
 			panel4Array[2] = t;
-			$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'downmarkClick');
+			$$$.message(`Set panel4Array[${panel4Array[0]} ,${panel4Array[1]} ,${panel4Array[2]} ,${panel4Array[3]}]`, DEBUG, 'downmarkClick');
 		} else if(panel4Array[3] == p) {
-			$('#' + windowList[panel4Array[1]]).css({top: '240px'});
-			$('#' + windowList[panel4Array[3]]).css({top: '0px'});
+			$(`#${windowList[panel4Array[1]]}`).css({top: '240px'});
+			$(`#${windowList[panel4Array[3]]}`).css({top: '0px'});
 			$$$.message('Switch right panel', DEBUG, 'downmarkClick');
-			$('.' + windowList[panel4Array[1]].split('-')[0] + '-triangle-down').css({visibility: 'visible'});
-			$('.' + windowList[panel4Array[3]].split('-')[0] + '-triangle-down').css({visibility: 'hidden'});
+			$(`.${windowList[panel4Array[1]].split('-')[0]}-triangle-down`).css({visibility: 'visible'});
+			$(`.${windowList[panel4Array[3]].split('-')[0]}-triangle-down`).css({visibility: 'hidden'});
 			$$$.message('Change right panel triangle css', DEBUG, 'downmarkClick');
 			var t = panel4Array[1];
 			panel4Array[1] = panel4Array[3];
 			panel4Array[3] = t;
-			$$$.message('Set panel4Array[' + panel4Array[0] + ' ,' + panel4Array[1] + ' ,' + panel4Array[2] + ' ,' + panel4Array[3] + ']', DEBUG, 'downmarkClick');
+			$$$.message(`Set panel4Array[${panel4Array[0]} ,${panel4Array[1]} ,${panel4Array[2]} ,${panel4Array[3]}]`, DEBUG, 'downmarkClick');
 		}
 	}
-	/**
-	 * reload btn click event
-	 */
-	$('#reload-btn').click(function(){
+
+	$('#reload-btn').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn.click');
 		getFilelist();
 	});
-	/**
-	 * upload btn click event
-	 */
-	$('#upload-btn').click(function(){
+
+	$('#upload-btn').click(() => {
 		$$$.message('Click upload-btn', DEBUG, '$upload-btn.click');
 		$$$.message('Trigger file-open-btn click event', DEBUG, '$upload-btn.click');
 		document.getElementById('file-open.btn').click();
 	});
-	/**
-	 * file notice click event
-	 */
-	$('#file-notice-ctrl').click(function(){
+
+	$('#file-notice-ctrl').click(() => {
 		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
 	});
-	$('#seed-value-p1').click(function(){
+
+	$('#seed-value-p1').click(() => {
 		$$$.message('Click seed-value-p1', DEBUG, '$seed-value-p1.click');
 		changeSeedRate(1);
 	});
-	$('#seed-value-p2').click(function(){
+
+	$('#seed-value-p2').click(() => {
 		$$$.message('Click seed-value-p2', DEBUG, '$seed-value-p2.click');
 		changeSeedRate(2);
 	});
-	$('#seed-value-p3').click(function(){
+
+	$('#seed-value-p3').click(() => {
 		$$$.message('Click seed-value-p3', DEBUG, '$seed-value-p3.click');
 		changeSeedRate(3);
 	});
-	$('#seed-value-p4').click(function(){
+
+	$('#seed-value-p4').click(() => {
 		$$$.message('Click seed-value-p4', DEBUG, '$seed-value-p4.click');
 		changeSeedRate(4);
 	});
 	function changeSeedRate(p) {
 		$$$.message('Call changeSeedRate', DEBUG, 'changeSeedRate');
-		$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': ceruleanblue});
-		seedRate = Number($('#seed-value-p' + p).text().split('mm')[0]);
+		$(`#seed-value-p${seedRates.indexOf(seedRate)}`).css({'background-color': ceruleanblue});
+		$$$.message(`Change css(background-color:ceruleanblue) #seed-value-p${seedRates.indexOf(seedRate)}`, DEBUG, 'changeSeedRate');
+		seedRate = Number($(`#seed-value-p${p}`).text().split('mm')[0]);
 		if(seedRate == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
 		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
 		$$$.message('Change css(background-color:lapislazuli) seed-value-p', DEBUG, 'changeSeedRate');
-		$$$.message('Seed rate is ' + seedRate, INFO, 'changeSeedRate');
+		$$$.message(`Seed rate is ${seedRate}`, INFO, 'changeSeedRate');
 	}
-	$('#manu-btn-p1').click(function(){
+
+	$('#manu-btn-p1').click(() => {
 		$$$.message('Click manu-btn-p1', DEBUG, '$manu-btn-p1.click');
 		if(!waitNextClick) {
 			$('#manu-btn-p1').css({
 				color:				rescueorange,
 				'background-color':	peleskyblue
 			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p1', DEBUG, '$manu-btn-p1.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p1', DEBUG, '$manu-btn-p1.click');
 			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p1.click');
 			setTimeout(()=>{restoreButtonCSS('p1')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p1.click');
 			if(powerFlag) {
 				client.control.sendGcode('G28 X0')
-					.done(function(response){
+					.done((response) => {
 						extruderPosition[0] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p1.click');
 					});
 			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p1.click');
 		}
 	});
-	$('#manu-btn-p2').click(function(){
+
+	$('#manu-btn-p2').click(() => {
 		$$$.message('Click manu-btn-p2', DEBUG, '$manu-btn-p2');
 		if(!waitNextClick) {
 			$('#manu-btn-p2').css({
 				color:				rescueorange,
 				'background-color':	peleskyblue
 			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p2', DEBUG, '$manu-btn-p2.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p2', DEBUG, '$manu-btn-p2.click');
 			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p2.click');
 			setTimeout(()=>{restoreButtonCSS('p2')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p2.click');
 			switch(buttonPosition) {
@@ -1103,6 +1121,338 @@ $(function(){
 				case 3:
 					break;
 			}
+		}
+	});
+
+	$('#manu-btn-p3').click(() => {
+		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-p3.click');
+		if(!waitNextClick) {
+			$('#manu-btn-p3').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p3', DEBUG, '$manu-btn-p3.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p3', DEBUG, '$manu-btn-p3.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p3.click');
+			setTimeout(()=>{restoreButtonCSS('p3')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p3.click');
+			var pos = extruderPosition[1] + seedRate;
+			if(pos > bedSize[1]) pos = bedSize[1];
+			if(powerFlag && extruderPosition[1] >= 0) {
+				client.control.sendGcode(`G0 Y${pos}MM F1500`)
+					.done(() => {
+						extruderPosition[1] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-p3.click');
+						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p3.click');
+					});
+			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-p3.click');
+		}
+	});
+
+	$('#manu-btn-p4').click(() => {
+		$$$.message('Click manu-btn-p4', DEBUG, '$manu-btn-p4');
+		if(!waitNextClick) {
+			$('#manu-btn-p4').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p4', DEBUG, '$manu-btn-p4.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p4', DEBUG, '$manu-btn-p4.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p4.click');
+			setTimeout(()=>{restoreButtonCSS('p4')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p4.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(2);
+					break;
+				case 2:
+					diagonalMove(2);
+					break;
+				case 3:
+					break;
+			}
+		}
+	});
+
+	$('#manu-btn-p5').click(() => {
+		$$$.message('Click manu-btn-p5', DEBUG, '$manu-btn-p5.click');
+		if(!waitNextClick) {
+			$('#manu-btn-p5').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p5', DEBUG, '$manu-btn-p5.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p5', DEBUG, '$manu-btn-p5.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p5.click');
+			setTimeout(()=>{restoreButtonCSS('p5')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p5.click');
+			if(powerFlag && extruderPosition[2] >= 0) {
+				var pos = extruderPosition[2] + seedRate;
+				if(pos > bedSize[2]) pos = bedSize[2];
+				client.control.sendGcode(`G0 Z${pos}MM F1500`)
+					.done(() => {
+						extruderPosition[2] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-p5.click');
+						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p5.click');
+					});
+			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-p5.click');
+		}
+	});
+
+	$('#manu-btn-p6').click(() => {
+		$$$.message('Click manu-btn-p6', DEBUG, '$manu-btn-p6.click');
+		if(!waitNextClick) {
+			$('#manu-btn-p6').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p6', DEBUG, '$manu-btn-p6.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p6', DEBUG, '$manu-btn-p6.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p6.click');
+			setTimeout(()=>{restoreButtonCSS('p6')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p6.click');
+			if(powerFlag) {
+				client.control.sendGcode('G28 Y0')
+					.done(() => {
+						extruderPosition[1] = 0;
+						$$$.message('g-code success', DEBUG, '$manu-btn-p6.click');
+					});
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p6.click');
+		}
+	});
+
+	$('#manu-btn-p7').click(() => {
+		$$$.message('Click manu-btn-p7', DEBUG, '$manu-btn-p7.click');
+		if(!waitNextClick) {
+			$('#manu-btn-p7').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p7', DEBUG, '$manu-btn-p7.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p7', DEBUG, '$manu-btn-p7.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p7.click');
+			setTimeout(()=>{restoreButtonCSS('p7')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p7.click');
+			if(powerFlag && extruderPosition[0] >= 0) {
+				var pos = extruderPosition[0] - seedRate;
+				if(pos < 0) pos = 0;
+				client.control.sendGcode(`G0 X${pos}MM F1500`)
+					.done(() => {
+						extruderPosition[0] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-p7.click');
+						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p7.click');
+					});
+			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p7.click');
+		}
+	});
+
+	$('#manu-btn-p8').click(() => {
+		$$$.message('Click manu-btn-p8', DEBUG, '$manu-btn-p8.click');
+		buttonPosition++;
+		if(buttonPosition > maxButtonPosition) buttonPosition = 1;
+		$$$.message(`Manual panel mode is ${buttonPosition}`, DEBUG, '$manu-btn-p8.click');
+
+		switch(buttonPosition) {
+			case 1:
+				$('#manu-btn-p2').html('BL');
+				$('#manu-btn-p4').html('BR');
+				$('#manu-btn-pc').html('FL');
+				$('#manu-btn-pe').html('FR');
+				break;
+			case 2:
+				$('#manu-btn-p2').html('<span class="trans-bl glyphicon glyphicon glyphicon-arrow-left"></span>');
+				$('#manu-btn-p4').html('<span class="trans-br glyphicon glyphicon glyphicon-arrow-right"></span>');
+				$('#manu-btn-pc').html('<span class="trans-fl glyphicon glyphicon glyphicon-arrow-left"></span>');
+				$('#manu-btn-pe').html('<span class="trans-fr glyphicon glyphicon glyphicon-arrow-right"></span>');
+				break;
+			case 3:
+				$('#manu-btn-p2').html('M1');
+				$('#manu-btn-p4').html('M2');
+				$('#manu-btn-pc').html('M3');
+				$('#manu-btn-pe').html('M4');
+				break;
+		}
+	});
+
+	$('#manu-btn-p9').click(() => {
+		$$$.message('Click manu-btn-p9', DEBUG, '$manu-btn-p9.click');
+		if(!waitNextClick) {
+			$('#manu-btn-p9').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-p9', DEBUG, '$manu-btn-p9.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-p9', DEBUG, '$manu-btn-p9.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p9.click');
+			setTimeout(()=>{restoreButtonCSS('p9')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-p9.click');
+			if(powerFlag && extruderPosition[0] >= 0) {
+				var pos = extruderPosition[0] + seedRate;
+				if(pos > bedSize[0]) pos = bedSize[0];
+				client.control.sendGcode(`G0 X${pos}MM F1500`)
+					.done(() => {
+						extruderPosition[0] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-p9.click');
+						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p9.click');
+					});
+			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p9.click');
+		}
+	});
+
+	$('#manu-btn-pa').click(() => {
+		$$$.message('Click manu-btn-pa', DEBUG, '$manu-btn-pa.click');
+		if(!waitNextClick) {
+			$('#manu-btn-pa').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pa', DEBUG, '$manu-btn-pa.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pa', DEBUG, '$manu-btn-pa.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-pa.click');
+			setTimeout(()=>{restoreButtonCSS('pa')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pa.click');
+			if(powerFlag) {
+				client.control.sendGcode('G28 Z0')
+					.done(() => {
+						extruderPosition[2] = 0;
+						$$$.message('g-code success', DEBUG, '$manu-btn-pa.click');
+					});
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pa.click');
+		}
+	});
+
+	$('#manu-btn-pb').click(() => {
+		$$$.message('Click manu-btn-pb', DEBUG, '$manu-btn-pb.click');
+		if(!waitNextClick) {
+			$('#manu-btn-pb').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pb', DEBUG, '$manu-btn-pb.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pb', DEBUG, '$manu-btn-pb.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-pb.click');
+			setTimeout(()=>{restoreButtonCSS('pb')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pb.click');
+			if(powerFlag) {
+				client.control.sendGcode('G28 Z0')
+					.done(() => {
+						extruderPosition[2] = 0;
+						$$$.message('g-code success', DEBUG, '$manu-btn-pb.click');
+					});
+			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pb.click');
+		}
+	});
+
+	$('#manu-btn-pc').click(() => {
+		$$$.message('Click manu-btn-pc', DEBUG, '$manu-btn-pc');
+		if(!waitNextClick) {
+			$('#manu-btn-pc').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pc', DEBUG, '$manu-btn-pc.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pc', DEBUG, '$manu-btn-pc.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-pc.click');
+			setTimeout(()=>{restoreButtonCSS('pc')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pc.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(3);
+					break;
+				case 2:
+					diagonalMove(3);
+					break;
+				case 3:
+					break;
+			}
+		}
+	});
+
+	$('#manu-btn-pd').click(() => {
+		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-pd.click');
+		if(!waitNextClick) {
+			$('#manu-btn-pd').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pd', DEBUG, '$manu-btn-pd.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pd', DEBUG, '$manu-btn-pd.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-pd.click');
+			setTimeout(()=>{restoreButtonCSS('pd')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pd.click');
+			if(powerFlag && extruderPosition[1] >= 0) { 
+				var pos = extruderPosition[1] - seedRate;
+				if(pos < 0) pos = 0;
+				console.log(pos);
+				client.control.sendGcode(`G0 Y${pos}MM F1500`)
+					.done(() => {
+						extruderPosition[1] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-pd.click');
+						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-pd.click');
+					});
+			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-pd.click');
+		}
+	});
+
+	$('#manu-btn-pe').click(() => {
+		$$$.message('Click manu-btn-pe', DEBUG, '$manu-btn-pe');
+		if(!waitNextClick) {
+			$('#manu-btn-pe').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pe', DEBUG, '$manu-btn-pe.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pe', DEBUG, '$manu-btn-pe.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-pe.click');
+			setTimeout(()=>{restoreButtonCSS('pe')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pe.click');
+			switch(buttonPosition) {
+				case 1:
+					bedLevelingPosition(4);
+					break;
+				case 2:
+					diagonalMove(4);
+					break;
+				case 3:
+					break;
+			}
+		}
+	});
+
+	$('#manu-btn-pf').click(() => {
+		$$$.message('Click manu-btn-pf', DEBUG, '$manu-btn-pf.click');
+		if(!waitNextClick) {
+			$('#manu-btn-pf').css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pf', DEBUG, '$manu-btn-pf.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pf', DEBUG, '$manu-btn-pf.click');
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-pf.click');
+			setTimeout(()=>{restoreButtonCSS('pf')}, 500);
+			$$$.message('Execute button click process', DEBUG, '$manu-btn-pf.click');
+			if(powerFlag && extruderPosition[2] >= 0) {
+				var pos = extruderPosition[2] - seedRate;
+				if(pos < 0) pos = 0;
+				client.control.sendGcode(`G0 Z${pos}MM F1500`)
+					.done(() => {
+						extruderPosition[2] = pos;
+						$$$.message('gCode succcess.', INFO, '$manu-btn-pf.click');
+						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-pf.click');
+					});
+			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-pf.click');
 		}
 	});
 	function bedLevelingPosition(p) {
@@ -1126,16 +1476,16 @@ $(function(){
 				y = bedMargin;
 				break;
 		}
-		$$$.message('Set ' + bedPositionName + ' position value. x=' + x + ' y=' + y, DEBUG, 'bedLevelingPosition');
+		$$$.message(`Set${bedPositionName} position value. x=${x} y=${y}`, DEBUG, 'bedLevelingPosition');
 		if(powerFlag && extruderPosition[0] >= 0 && extruderPosition[1] >= 0 && extruderPosition[2] >= 0) {
 			$$$.message('Move z-axis up', DEBUG, 'bedLevelingPosition');
 			client.control.sendGcode('G0 Z5MM')
-				.done(function(){
+				.done(() => {
 					$$$.message('Move x and y-axis up', DEBUG, 'bedLevelingPosition');
-					client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM F1500')
-						.done(function(){
+					client.control.sendGcode(`G0 X${x}MM Y${y}MM F1500`)
+						.done(() => {
 							client.control.sendGcode('G28 Z0')
-								.done(function(){
+								.done(() => {
 									$$$.message('Finish moving', DEBUG, 'bedLevelingPosition')
 								});
 						});
@@ -1172,298 +1522,15 @@ $(function(){
 					if(y < 0) y = 0;
 					break;
 			}
-			client.control.sendGcode('G0 X' + x + 'MM Y' + y + 'MM F1500')
-				.done(function(){
+			client.control.sendGcode(`G0 X${x}MM Y${y}MM F1500`)
+				.done(() => {
 					extruderPosition[0] = x;
 					extruderPosition[1] = y;
 					$$$.message('gCode succcess.', INFO, 'diagonalMove');
-					$$$.message('Extruder position is x=' + x + ' y=' + y + ' z=' + extruderPosition[2], INFO,  'diagonalMove');
+					$$$.message(`Extruder position is x=${x} y=${y} z=${extruderPosition[2]}`, INFO,  'diagonalMove');
 				});
 		}
 	}
-	$('#manu-btn-p3').click(function(){
-		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-p3.click');
-		if(!waitNextClick) {
-			$('#manu-btn-p3').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('p3')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-p3.click');
-			var pos = extruderPosition[1] + seedRate;
-			if(pos > bedSize[1]) pos = bedSize[1];
-			if(powerFlag && extruderPosition[1] >= 0) {
-				client.control.sendGcode('G0 Y' + pos + 'MM F1500')
-					.done(function(){
-						extruderPosition[1] = pos;
-						$$$.message('gCode succcess.', INFO, '$manu-btn-p3.click');
-						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p3.click');
-					});
-			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-p3.click');
-		}
-	});
-	$('#manu-btn-p4').click(function(){
-		$$$.message('Click manu-btn-p4', DEBUG, '$manu-btn-p4');
-		if(!waitNextClick) {
-			$('#manu-btn-p4').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('p4')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-p4.click');
-			switch(buttonPosition) {
-				case 1:
-					bedLevelingPosition(2);
-					break;
-				case 2:
-					diagonalMove(2);
-					break;
-				case 3:
-					break;
-			}
-		}
-	});
-	$('#manu-btn-p5').click(function(){
-		$$$.message('Click manu-btn-p5', DEBUG, '$manu-btn-p5.click');
-		if(!waitNextClick) {
-			$('#manu-btn-p5').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('p5')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-p5.click');
-			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] + seedRate;
-				if(pos > bedSize[2]) pos = bedSize[2];
-				client.control.sendGcode('G0 Z' + pos + 'MM F1500')
-					.done(function(){
-						extruderPosition[2] = pos;
-						$$$.message('gCode succcess.', INFO, '$manu-btn-p5.click');
-						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p5.click');
-					});
-			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-p5.click');
-		}
-	});
-	$('#manu-btn-p6').click(function(){
-		$$$.message('Click manu-btn-p6', DEBUG, '$manu-btn-p6.click');
-		if(!waitNextClick) {
-			$('#manu-btn-p6').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('p6')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-p6.click');
-			if(powerFlag) {
-				client.control.sendGcode('G28 Y0')
-					.done(function(){
-						extruderPosition[1] = 0;
-						$$$.message('g-code success', DEBUG, '$manu-btn-p6.click');
-					});
-			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p6.click');
-		}
-	});
-	$('#manu-btn-p7').click(function(){
-		$$$.message('Click manu-btn-p7', DEBUG, '$manu-btn-p7.click');
-		if(!waitNextClick) {
-			$('#manu-btn-p7').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('p7')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-p7.click');
-			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] - seedRate;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode('G0 X' + pos + 'MM F1500')
-					.done(function(){
-						extruderPosition[0] = pos;
-						$$$.message('gCode succcess.', INFO, '$manu-btn-p7.click');
-						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p7.click');
-					});
-			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p7.click');
-		}
-	});
-	$('#manu-btn-p8').click(function(){
-		$$$.message('Click manu-btn-p8', DEBUG, '$manu-btn-p8.click');
-		buttonPosition++;
-		if(buttonPosition > maxButtonPosition) buttonPosition = 1;
-		$$$.message('Manual panel mode is ' + buttonPosition, DEBUG, '$manu-btn-p8.click');
-
-		switch(buttonPosition) {
-			case 1:
-				$('#manu-btn-p2').html('BL');
-				$('#manu-btn-p4').html('BR');
-				$('#manu-btn-pc').html('FL');
-				$('#manu-btn-pe').html('FR');
-				break;
-			case 2:
-				$('#manu-btn-p2').html('<span class="trans-bl glyphicon glyphicon glyphicon-arrow-left"></span>');
-				$('#manu-btn-p4').html('<span class="trans-br glyphicon glyphicon glyphicon-arrow-right"></span>');
-				$('#manu-btn-pc').html('<span class="trans-fl glyphicon glyphicon glyphicon-arrow-left"></span>');
-				$('#manu-btn-pe').html('<span class="trans-fr glyphicon glyphicon glyphicon-arrow-right"></span>');
-				break;
-			case 3:
-				$('#manu-btn-p2').html('M1');
-				$('#manu-btn-p4').html('M2');
-				$('#manu-btn-pc').html('M3');
-				$('#manu-btn-pe').html('M4');
-				break;
-		}
-	});
-	$('#manu-btn-p9').click(function(){
-		$$$.message('Click manu-btn-p9', DEBUG, '$manu-btn-p9.click');
-		if(!waitNextClick) {
-			$('#manu-btn-p9').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('p9')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-p9.click');
-			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] + seedRate;
-				if(pos > bedSize[0]) pos = bedSize[0];
-				client.control.sendGcode('G0 X' + pos + 'MM F1500')
-					.done(function(){
-						extruderPosition[0] = pos;
-						$$$.message('gCode succcess.', INFO, '$manu-btn-p9.click');
-						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-p9.click');
-					});
-			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p9.click');
-		}
-	});
-	$('#manu-btn-pa').click(function(){
-		$$$.message('Click manu-btn-pa', DEBUG, '$manu-btn-pa.click');
-		if(!waitNextClick) {
-			$('#manu-btn-pa').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('pa')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-pa.click');
-			if(powerFlag) {
-				client.control.sendGcode('G28 Z0')
-					.done(function(){
-						extruderPosition[2] = 0;
-						$$$.message('g-code success', DEBUG, '$manu-btn-pa.click');
-					});
-			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pa.click');
-		}
-	});
-	$('#manu-btn-pb').click(function(){
-		$$$.message('Click manu-btn-pb', DEBUG, '$manu-btn-pb.click');
-		if(!waitNextClick) {
-			$('#manu-btn-pb').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('pb')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-pb.click');
-			if(powerFlag) {
-				client.control.sendGcode('G28 Z0')
-					.done(function(){
-						extruderPosition[2] = 0;
-						$$$.message('g-code success', DEBUG, '$manu-btn-pb.click');
-					});
-			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pb.click');
-		}
-	});
-	$('#manu-btn-pc').click(function(){
-		$$$.message('Click manu-btn-pc', DEBUG, '$manu-btn-pc');
-		if(!waitNextClick) {
-			$('#manu-btn-pc').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('pc')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-pc.click');
-			switch(buttonPosition) {
-				case 1:
-					bedLevelingPosition(3);
-					break;
-				case 2:
-					diagonalMove(3);
-					break;
-				case 3:
-					break;
-			}
-		}
-	});
-	$('#manu-btn-pd').click(function(){
-		$$$.message('Click manu-btn-pd', DEBUG, '$manu-btn-pd.click');
-		if(!waitNextClick) {
-			$('#manu-btn-pd').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('pd')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-pd.click');
-			if(powerFlag && extruderPosition[1] >= 0) { 
-				var pos = extruderPosition[1] - seedRate;
-				if(pos < 0) pos = 0;
-				console.log(pos);
-				client.control.sendGcode('G0 Y' + pos + 'MM F1500')
-					.done(function(){
-						extruderPosition[1] = pos;
-						$$$.message('gCode succcess.', INFO, '$manu-btn-pd.click');
-						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-pd.click');
-					});
-			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-pd.click');
-		}
-	});
-	$('#manu-btn-pe').click(function(){
-		$$$.message('Click manu-btn-pe', DEBUG, '$manu-btn-pe');
-		if(!waitNextClick) {
-			$('#manu-btn-pe').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('pe')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-pe.click');
-			switch(buttonPosition) {
-				case 1:
-					bedLevelingPosition(4);
-					break;
-				case 2:
-					diagonalMove(4);
-					break;
-				case 3:
-					break;
-			}
-		}
-	});
-	$('#manu-btn-pf').click(function(){
-		$$$.message('Click manu-btn-pf', DEBUG, '$manu-btn-pf.click');
-		if(!waitNextClick) {
-			$('#manu-btn-pf').css({
-				color:				rescueorange,
-				'background-color':	peleskyblue
-			});
-			waitNextClick = true;
-			setTimeout(()=>{restoreButtonCSS('pf')}, 500);
-			$$$.message('Execute button click process', DEBUG, '$manu-btn-pf.click');
-			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] - seedRate;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode('G0 Z' + pos + 'MM F1500')
-					.done(function(){
-						extruderPosition[2] = pos;
-						$$$.message('gCode succcess.', INFO, '$manu-btn-pf.click');
-						$$$.message('Extruder position is x=' + extruderPosition[0] + ' y=' + extruderPosition[1] + ' z=' + extruderPosition[2], INFO,  '$manu-btn-pf.click');
-					});
-			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-pf.click');
-		}
-	});
 	function restoreButtonCSS(bn) {
 		$$$.message('Call restoreButtonCSS', DEBUG, 'restoreButtonCSS');
 		waitNextClick = false;
@@ -1473,63 +1540,70 @@ $(function(){
 				color:				sunshine,
 				'background-color':	lapislazuli
 			});
-			$$$.message('Change css(color:sunshine) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
-			$$$.message('Change css(background-color:lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message(`Change css(color:sunshine) extruder-btn-${bn}`, DEBUG, 'restoreButtonCSS');
+			$$$.message(`Change css(background-color:lapislazuli) extruder-btn-${bn}`, DEBUG, 'restoreButtonCSS');
 		} else {
 			$('#manu-btn-' + bn).css({
 				color:				sunshine,
 				'background-color':	lapislazuli
 			})
-			$$$.message('Change css(color:sunshine) manu-btn-' + bn, DEBUG, 'restoreButtonCSS');
-			$$$.message('Change css(background-color:lapislazuli) extruder-btn-' + bn, DEBUG, 'restoreButtonCSS');
+			$$$.message(`Change css(color:sunshine) manu-btn-${bn}`, DEBUG, 'restoreButtonCSS');
+			$$$.message(`Change css(background-color:lapislazuli) extruder-btn-${bn}`, DEBUG, 'restoreButtonCSS');
 		}
 	}
-	$('#extruder-btn-up').click(function(){
+
+	$('#extruder-btn-up').click(() => {
 		$$$.message('Click extruder-btn-up', DEBUG, '$extruder-btn-up.click');
 		if(!waitNextClick) {
 			$('#extruder-btn-up').css({
 				color:				rescueorange,
 				'background-color':	peleskyblue
 			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pe', DEBUG, '$extruder-btn-up.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pe', DEBUG, '$extruder-btn-up.click');
 			waitNextClick = true;
-			$$$.message('Change waitNextClick. value is ' + waitNextClick, DEBUG, '$extruder-btn-up.click');
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$extruder-btn-up.click');
 			setTimeout(()=>{restoreButtonCSS('up')}, 500);
 			if(powerFlag && canRunExtruder) {
 			client.control.sendGcode('G92 E0')
-				.done(function(){
+				.done(() => {
 					$$$.message('Reset extruder retract position', DEBUG, '$extruder-btn-up.click');
-					client.control.sendGcode('G1 E-' + $('#amount-value').val() + 'MM')
-						.done(function(){
-							$$$.message('Retract filament ' + $('#amount-value').val() + 'mm', DEBUG, '$extruder-btn-up.click');
+					client.control.sendGcode(`G1 E-${$('#amount-value').val()}MM`)
+						.done(() => {
+							$$$.message(`Retract filament ${$('#amount-value').val()}mm`, DEBUG, '$extruder-btn-up.click');
 						});
 				});
 			}
 		}
 	});
-	$('#extruder-btn-down').click(function(){
+
+	$('#extruder-btn-down').click(() => {
 		$$$.message('Click extruder-btn-down', DEBUG, '$extruder-btn-down.click');
 		if(!waitNextClick) {
 			$('#extruder-btn-down').css({
 				color:				rescueorange,
 				'background-color':	peleskyblue
 			});
+			$$$.message('Change css(color:rescueorange) manu-btn-pe', DEBUG, '$extruder-btn-down.click');
+			$$$.message('Change css(background-color:peleskyblue) manu-btn-pe', DEBUG, '$extruder-btn-down.click');
 			waitNextClick = true;
-			$$$.message('Change waitNextClick. value is ' + waitNextClick, DEBUG, '$extruder-btn-down.click');
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$extruder-btn-down.click');
 			setTimeout(()=>{restoreButtonCSS('down')}, 500);
 			if(powerFlag && canRunExtruder) {
-				console.log('G1 E' + $('#amount-value').val() + 'MM');
+				console.log(`G1 E${$('#amount-value').val()}MM`);
 				client.control.sendGcode('G92 E0')
-					.done(function(){
+					.done(() => {
 						$$$.message('Reset extruder extrud position', DEBUG, '$extruder-btn-down.click');
-						client.control.sendGcode('G1 F500 E' + $('#amount-value').val() + 'MM')
-							.done(function(){
-								$$$.message('Extrud filament ' + $('#amount-value').val() + 'mm', DEBUG, '$extruder-btn-down.click');
+						client.control.sendGcode(`G1 F500 E${$('#amount-value').val()}MM`)
+							.done(() => {
+								$$$.message(`Extrud filament ${$('#amount-value').val()}mm`, DEBUG, '$extruder-btn-down.click');
 							});
 					});
 			}
 		}
 	});
-	$('#extruder-tag').click(function(){
+
+	$('#extruder-tag').click(() => {
 		$$$.message('Click extruder-tag', DEBUG, '$extruder-tag.click');
 		if(extruderPanelShown) {
 			$('.extruder-panel').css({visibility: 'hidden'});
@@ -1537,14 +1611,14 @@ $(function(){
 			$$$.message('Change css(visibility:hidden) extruder-panel', DEBUG, '$extruder-tag.click');
 			$$$.message('Change css(top:0px) extruder-panel-tag', DEBUG, '$extruder-tag.click');
 			extruderPanelShown = false;
-			$$$.message('Change extruderPanelShown. value is ' + extruderPanelShown, DEBUG, '$extruder-tag.click');
+			$$$.message(`Change extruderPanelShown. value is ${extruderPanelShown}`, DEBUG, '$extruder-tag.click');
 		} else {
 			$('.extruder-panel').css({visibility: 'visible'});
 			$('#extruder-tag').css({top: '80px'});
 			$$$.message('Change css(visibility:visible) extruder-panel', DEBUG, '$extruder-tag.click');
 			$$$.message('Change css(top:80px) extruder-panel-tag', DEBUG, '$extruder-tag.click');
 			extruderPanelShown = true;
-			$$$.message('Change extruderPanelShown. value is ' + extruderPanelShown, DEBUG, '$extruder-tag.click');
+			$$$.message(`Change extruderPanelShown. value is ${extruderPanelShown}`, DEBUG, '$extruder-tag.click');
 		}
 	});
 });

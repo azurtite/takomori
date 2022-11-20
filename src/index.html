@@ -190,12 +190,12 @@
 									else if(val < 230) temperature = 'ABS';
 									else temperature = 'Very high';
 
-									if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
-									else return val + " C" + "<div>" + temperature + "<div>";
+									if(val == 0) return `N/A<div>${temperature}</div>`; 
+									else return `${val}C<div>${temperature}</div>`;
 								}
 								function changeValueTool(event) {
 									toolTempValue = event.value;
-									$$$.message('Tool value is ' + toolTempValue, LOWDEBUG, 'changeValueTool');
+									$$$.message(`Tool value is ${toolTempValue}`, LOWDEBUG, 'changeValueTool');
 								}
 							</script>
 						</div>
@@ -279,12 +279,12 @@
 									else if(val < 121) temperature = 'ABS';
 									else temperature = 'Very high';
 
-									if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
-									else return val + " C" + "<div>" + temperature + "<div>";
+									if(val == 0) return `N/A<div>${temperature}</div>`;
+									else return `${val}C<div>${temperature}</div>`;
 								}
 								function changeValueBed(event) {
 									bedTempValue = event.value;
-									$$$.message('Bed value is ' + bedTempValue, LOWDEBUG, 'changeValueTool');
+									$$$.message(`Bed value is ${bedTempValue}`, LOWDEBUG, 'changeValueTool');
 								}
 							</script>
 						</div>

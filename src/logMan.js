@@ -91,9 +91,10 @@ function logMan(hide, dispose) {
 
 		for(var i=0; i<this.log.length; i++) {
 			let date	= this.timeStamp(this.log[i].time);
-			let out		= date[0] + ' [' + TYPE[this.log[i].type] + ']';
-			if('position' in this.log[i]) out = out +'(' + this.log[i].position + ')';
+			let out		= `date[0] [${TYPE[this.log[i].type]}]`;
+			if('position' in this.log[i]) out = `${out}(${this.log[i].position})`;
 			out += this.log[i].msg;
+			if('once' in this.log[i]) out = `${out}{ONCE-MESSAGE}`;
 
 			if(typeof options == 'object') {
 				if('types' in options)
@@ -172,6 +173,9 @@ function logMan(hide, dispose) {
 			msg:	msg,
 			time:	date[1],
 			type:	type
+		}
+		if(once) {
+			data['once'] = once;
 		}
 		if(position != undefined) data.position = position;
 

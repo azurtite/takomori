@@ -276,7 +276,7 @@ function getPrinterFullState() {
 	}
 	function jobNameCheck(response) {
 		function getTime(time) {
-			$$$.message(`Call getTime`, DEBUG, 'getTime');
+			$$$.message(`Call getTime`, LOWDEBUG, 'getTime', ONCE);
 			let result		= '';
 			let printTime	= time;
 			let hour		= Math.floor(printTime / 3600);
@@ -284,13 +284,13 @@ function getPrinterFullState() {
 				result = result + hour + 'h';
 				printTime = printTime - (hour * 3600);
 			}
-			$$$.message(`Calculation hour`, DEBUG, 'getTime');
+			$$$.message(`Calculation hour`, LOWDEBUG, 'getTime', ONCE);
 			let minute = Math.floor(printTime / 60);
 			if(minute > 0) {
 				result = result + minute + 'm';
 				printTime = printTime - (minute * 60);
 			}
-			$$$.message(`Calculation minute`, DEBUG, 'getTime');
+			$$$.message(`Calculation minute`, LOWDEBUG, 'getTime', ONCE);
 			return result + printTime + 's'
 		}
 		$.get(`${baseURL}api/job?apikey=${apiKey}`)

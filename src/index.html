@@ -507,6 +507,19 @@
 						borderColor: '#484',
 					}],
 				};
+				let intervalIDtmp;
+				let powerFlagTmp = false;
+				$('#power-btn').click(() => {
+					$$$.message('Click power-btn(HTML part)', DEBUG, '$power-btn.click(html)');
+					if(powerFlagTmp) {
+						clearInterval(intervalIDtmp);
+					} else {
+						intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
+						powerFlagTmp = true;
+					}
+				});
+				function updateTemperatureGraph() {
+				}
 				let myChart = new Chart(ctx, {
 					type: 'line',
 					data: dataset,

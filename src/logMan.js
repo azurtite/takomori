@@ -1,20 +1,31 @@
 /**
  * define constants
  */
-const NOTASSIGN			= 0;
-const DEADLY			= 1;
-const ERROR				= 2;
-const WARN				= 3;
-const INFO				= 4;
-const DEBUG				= 5;
-const LOWINFO			= 6;
-const LOWDEBUG			= 7;
-const SENDCONSOLE		= 101;
-const NOTSENDCONSOLE	= 102;
-const DISPOSE			= 203;
-const NOBREAK			= -101;
-const TYPE				= ['N/A', 'Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)', 'Debug(low)'];
+const NOTASSIGN				= 0;
+const DEADLY				= 1;
+const ERROR					= 2;
+const WARN					= 3;
+const INFO					= 4;
+const DEBUG					= 5;
+const LOWINFO				= 6;
+const LOWDEBUG				= 7;
+const SENDCONSOLE			= 101;
+const NOTSENDCONSOLE		= 102;
+const DISPOSE				= 203;
+const ONCE					= 301;
+const INTERMITTENT			= 302;
+const NOBREAK				= -101;
+const TYPE					= ['N/A', 'Deadly', 'Error', 'Warn', 'Info', 'Debug', 'Info(low)', 'Debug(low)'];
  
+let onceCollection			= [];
+let intermittentCollection	= {};
+
+async function sha1hash(text) {
+	const unit8 = new TextEncoder().encode(text);
+	const digest = await crypto.subtle.digest('SHA-1', unit8);
+	return Array.from(new Uint8Array(digest)).map((v) => v.toString(16).padStart(2, '0')).join('');
+}
+
 function logMan(hide, dispose) {
 	this.appendMills 		= true;
 	this.addPriodEOL		= true;
@@ -22,7 +33,6 @@ function logMan(hide, dispose) {
 	this.dispose			= dispose;
 	this.hideLowPriority	= hide;
 	this.log				= [];
-	this.logLine			= 0;
 	this.sendConsole		= true;
 	/**
 	 * download ログファイルをJSON形式でダウンロードする
@@ -88,9 +98,11 @@ function logMan(hide, dispose) {
 
 		for(var i=0; i<this.log.length; i++) {
 			let date	= this.timeStamp(this.log[i].time);
-			let out		= date[0] + ' [' + TYPE[this.log[i].type] + ']';
-			if('position' in this.log[i]) out = out +'(' + this.log[i].position + ')';
+			let out		= `${date[0]} [${TYPE[this.log[i].type]}]`;
+			if('position' in this.log[i]) out = `${out}(${this.log[i].position})`;
 			out += this.log[i].msg;
+			if('once' in this.log[i]) out = `${out}{ONCE-MESSAGE}`;
+			if('intermittent' in this.log[i]) out = `${out}{IMTERMITTENT-MESSAGE, loop=${this.log[i].intermittent}}`;
 
 			if(typeof options == 'object') {
 				if('types' in options)
@@ -125,6 +137,7 @@ function logMan(hide, dispose) {
 	 * 					SENDCONSOLE:	メッセージをコンソールに表する
 	 * 					NOSENDCONSOLE:	メッセージをコンソールに表示しない
 	 * 					(String):		メッセージにしおりを追加する
+	 * 					ONCE			１度だけメッセージを出力する、２回目以降は記録もしません
 	 * 					※不要パラメータは省略可能
 	 * 					
 	 * 					ex) logMan.message('this is test Message', 'test-point1',ERROR, SENDCONSOLE);
@@ -133,26 +146,39 @@ function logMan(hide, dispose) {
 	 */
 	this.message			= function(msg, ...args) {
 		function consoleOut() {
-			let out = date[0] + ' [' + TYPE[type] + ']';
-			if('position' in data) out = out + '(' + data.position + ')';
-			out += msg;
-			if(type < 3) console.error(out);
-			else if(type == 3) console.warn(out);
-			else console.info(out);
+			let output;
+			if(once) output = `${out}{ONCE-MESSAGE}`;
+			else output = out;
+
+			if(once && hitOnce) return;
+			else if(type < 3) console.error(output);
+			else if(type == 3) console.warn(output);
+			else console.info(output);
 		}
 		
 		let data, position, type;
-		let date	= this.timeStamp();
-		let dispose	= this.dispose;
-		let send	= this.sendConsole;
+		let date			= this.timeStamp();
+		let dispose			= this.dispose;
+		let send			= this.sendConsole;
+		let once			= false;
+		let hitOnce			= false;
+		let intermittent	= false;
+		let loop			= 0;
 
 		for(var i=0; i<args.length; i++) {
 			if(args[i] < 100) type = args[i];
 			else if(args[i] == SENDCONSOLE) send = true;
 			else if(args[i] == NOTSENDCONSOLE) send = false;
 			else if(args[i] == DISPOSE) dispose = true;
+			else if(args[i] == ONCE) once = true;
 			else if(typeof args[i] == 'string') position = args[i];
+			else if(args[i] == INTERMITTENT) {
+				i++;
+				loop = args[i];
+				intermittent = true;
+			}
 		}
+
 		if(type == undefined) {
 			console.error('No log level specified');
 			return false;
@@ -164,27 +190,78 @@ function logMan(hide, dispose) {
 			time:	date[1],
 			type:	type
 		}
+		if(once) {
+			data['once'] = once;
+		}
 		if(position != undefined) data.position = position;
 
-		if(send) {
-			if(this.hideLowPriority) {
-				if(type < 6) consoleOut();
-			} else {
-				consoleOut();
+		let out = `[${TYPE[type]}]`;
+		if('position' in data) out = `${out}(${data.position})`;
+		out += msg;
+
+		if(once) {
+			if(onceCollection.indexOf(out) != -1) hitOnce = true;
+			else {
+				onceCollection[onceCollection.length] = out;
+				hitOnce = false;
 			}
 		}
 
-		if(dispose) {
-			if(type < 6) {
-				this.log[this.logLine] = data;
-				this.logLine++;
-				return true;
-			}
-		} else {
-			this.log[this.logLine] = data;
-			this.logLine++;
-			return true;
+		if(intermittent) {
+			let hash;
+			sha1hash(out).then((h) => {
+				hash = h;
+				if(hash in intermittentCollection) {
+					intermittentCollection[hash] = intermittentCollection[hash] + 1;
+					if(intermittentCollection[hash] < loop) return;
+					else {
+					  intermittentCollection[hash] = 0;
+					  out = `${date[0]} ${out}{INTERMITTENT, loop=${loop}}`;
+					  if(this.hideLowPriority) {
+						if(type < 6) consoleOut(once);
+					  } else {
+						consoleOut(once);
+					  }
+					}
+				  } else {
+					intermittentCollection[hash] = 0;
+					out = `${date[0]} ${out}{INTERMITTENT, loop=${loop}}`;
+					if(this.hideLowPriority) {
+					  if(type < 6) consoleOut(once);
+					} else {
+					  consoleOut(once);
+					}
+				}
+				if(hash in intermittentCollection)
+					if(intermittentCollection[hash] == 0) {
+						data['intermittent'] = loop;
+						if(dispose) {
+							if(type < 6) this.log[this.log.length] = data;
+						} else {
+							this.log[this.log.length] = data;
+						}
+					}
+			});
 		}
+
+		out = `${date[0]} ${out}`;
+
+		if(send && !intermittent) {
+			if(this.hideLowPriority) {
+				if(type < 6) consoleOut(once);
+			} else {
+				consoleOut(once);
+			}
+		}
+
+		if(hitOnce || intermittent) return;
+		else if(dispose) {
+			if(type < 6) this.log[this.log.length] = data;
+		} else {
+			this.log[this.log.length] = data;
+		}
+
+		return true;
 	}
 	/**
 	 * 

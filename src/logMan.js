@@ -209,11 +209,10 @@ function logMan(hide, dispose) {
 
 		if(intermittent) {
 			let hash;
-			sha1hash('out').then((h) => {
+			sha1hash(out).then((h) => {
 				hash = h;
 				if(hash in intermittentCollection) {
 					intermittentCollection[hash] = intermittentCollection[hash] + 1;
-					console.log(`count=>${intermittentCollection[hash]}`);
 					if(intermittentCollection[hash] < loop) return;
 					else {
 					  intermittentCollection[hash] = 0;

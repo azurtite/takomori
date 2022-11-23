@@ -233,8 +233,8 @@ function levelupClick(e) {
  */
 function getPrinterFullState() {
 	function bedTempertureCheck(response) {
-		$$$.message(`Call bedTempertureCheck`, DEBUG, 'bedTempertureCheck');
-		$$$.message('Target temperature check(bed)', LOWDEBUG, 'bedTemperatureCheck');
+		$$$.message(`Call bedTempertureCheck`, DEBUG, 'bedTempertureCheck', ONCE);
+		$$$.message('Target temperature check(bed)', DEBUG, 'bedTemperatureCheck', ONCE);
 		if('bed' in response.temperature) {
 			if(response.temperature.bed.target <= 0) {
 				if($('#bed-target-text').text() == 'N/A') return false;
@@ -254,8 +254,8 @@ function getPrinterFullState() {
 		}
 	}
 	function tool0TemperatureCheck(response) {
-		$$$.message(`Call tool0TemperatureCheck`, DEBUG, 'tool0TemperatureCheck');
-		$$$.message('Target temperature check(tool0)', LOWDEBUG, 'tool0TemperatureCheck');
+		$$$.message(`Call tool0TemperatureCheck`, DEBUG, 'tool0TemperatureCheck', ONCE);
+		$$$.message('Target temperature check(tool0)', DEBUG, 'tool0TemperatureCheck', ONCE);
 		if('tool0' in response.temperature) {
 			if(response.temperature.tool0.target <= 0) {
 				if($('#tool-target-text').text() == 'N/A') return false;
@@ -325,7 +325,7 @@ function getPrinterFullState() {
 				}
 			})
 	}
-	$$$.message(`Call getPrinterFullState`, DEBUG, 'getPrinterFullState');
+	$$$.message(`Call getPrinterFullState`, DEBUG, 'getPrinterFullState', ONCE);
 	if(client == undefined) {
 		$('.alert-text').text('OctoPrint object is undefined');
 		return false;
@@ -333,9 +333,9 @@ function getPrinterFullState() {
 
 	client.printer.getFullState()
 		.done((response) => {
-			$$$.message('Update tool0 temperature value', LOWDEBUG, 'getFullState');
 			if('tool0' in response.temperature) {
 				$('#tool-text').text(response.temperature.tool0.actual+'C');
+				$$$.message(`Update tool0 temperature value is ${response.temperature.tool0.actual}C`, LOWDEBUG, 'getFullState');
 				if(response.temperature.tool0.actual >= extruderMovingTemp && !canRunExtruder) {
 					$('[id^=extruder-btn-]').css({'background-color': lapislazuli});
 					$$$.message('Change css(background-color:lapislazuli) extruder-btn-up/down', DEBUG, 'getPrinterFullState');
@@ -349,9 +349,10 @@ function getPrinterFullState() {
 					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, 'getPrinterFullState');
 				}
 			}
-			$$$.message('Update bed temperature value', LOWDEBUG, 'getFullState');
-			if('bed' in response.temperature)
+			if('bed' in response.temperature) {
+				$$$.message(`Update bed temperature value is ${response.temperature.bed.actual}C`, LOWDEBUG, 'getFullState');
 				$('#bed-text').text(response.temperature.bed.actual+'C');
+			}
 
 			tool0TemperatureCheck(response);
 			bedTempertureCheck(response);

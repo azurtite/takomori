@@ -234,7 +234,7 @@ function levelupClick(e) {
 function getPrinterFullState() {
 	function bedTempertureCheck(response) {
 		$$$.message(`Call bedTempertureCheck`, DEBUG, 'bedTempertureCheck', ONCE);
-		$$$.message('Target temperature check(bed)', DEBUG, 'bedTemperatureCheck', ONCE);
+		$$$.message('Target temperature check(bed)', LOWDEBUG, 'bedTemperatureCheck', INTERMITTENT, 10);
 		if('bed' in response.temperature) {
 			if(response.temperature.bed.target <= 0) {
 				if($('#bed-target-text').text() == 'N/A') return false;
@@ -255,7 +255,7 @@ function getPrinterFullState() {
 	}
 	function tool0TemperatureCheck(response) {
 		$$$.message(`Call tool0TemperatureCheck`, DEBUG, 'tool0TemperatureCheck', ONCE);
-		$$$.message('Target temperature check(tool0)', DEBUG, 'tool0TemperatureCheck', ONCE);
+		$$$.message('Target temperature check(tool0)', LOWDEBUG, 'tool0TemperatureCheck', INTERMITTENT, 10);
 		if('tool0' in response.temperature) {
 			if(response.temperature.tool0.target <= 0) {
 				if($('#tool-target-text').text() == 'N/A') return false;

@@ -21,7 +21,7 @@ Run the following command in the takomori/src folder.
 ## Special Thanks  
 - [Node.js](https://nodejs.org/) 18.12.1  
 - [jQuery](https://jquery.com/) 3.6.1
-- [Electron](https://www.electronjs.org/) 23.1.0  
+- [Electron](https://www.electronjs.org/) 21.3.0  
 - [roundSlider](https://roundsliderui.com/) 1.6.1  
 - [Bootstrap glyphicons](https://getbootstrap.com/docs/3.3/components/) 3.4.1  
 

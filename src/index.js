@@ -19,7 +19,7 @@ let panelPosition		= 3;
 let maxPanelPosition	= 4;
 let panel2Array			= [3, 1];
 let panel4Array			= [3, 1, 2, 4];
-let intervalID			= undefined;
+let intervalIDprn			= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
@@ -460,7 +460,7 @@ $(() => {
 						.done((response) => {
 							$$$.message('Logout success', INFO, '$power-btn.click');
 							$('.nav-off').css({color: sunshine});
-							clearInterval(intervalID);
+							clearInterval(intervalIDprn);
 							resetMonitorText();
 							powerFlag = false;
 							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
@@ -493,7 +493,7 @@ $(() => {
 						$('.nav-off').css({color: rescueorange});
 						powerFlag = true;
 						$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-						intervalID = setInterval(getPrinterFullState, 1000);
+						intervalIDprn = setInterval(getPrinterFullState, 1000);
 						$('.file-list-icon-open').css({color: sunshine});
 						$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 						$('.file-list-icon-print').css({color: sunshine});

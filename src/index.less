@@ -901,10 +901,14 @@ div::-webkit-scrollbar-thumb {
 	color:					@sunshine;
 	background-color:		@ceruleanblue;
 	z-index:				-1;
-	.dummy-text {
-		display:			table-cell;
-		text-align:			center;
-		vertical-align:		middle;
+	.temperature-panel {
+		position: absolute;
+		top: 				24px;
+		left:				24px;
+		height:				182px;
+		width:				352px;
+
+		background-color:	@peleskyblue;
 	}
 	.temp-triangle-left {
 		position:			absolute;

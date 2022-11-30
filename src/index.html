@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-			<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' http://192.168.0.14/ localhost;">
+			<!--meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' http://192.168.0.14/ localhost;"-->
 		<!-- install less.js -->
 			<link rel="stylesheet/less" type="text/css" href="./index.less" />
 			<script src="../node_modules/less/dist/less.min.js"></script>
@@ -23,7 +23,7 @@
 			<script src="../node_modules/lodash/lodash.min.js"></script>
 			<script src="./octoprint.client.1.8.4.js"></script>
 			<script src="./roundslider.min.js"></script>
-		<!-- install self javascript -->
+			<script src="../node_modules/chart.js/dist/chart.min.js"></script>
 			<script src="./logMan.js"></script>
 			<script src="./location.js"></script>
 			<script src="./index.js"></script>
@@ -489,8 +489,138 @@
 		</div>
 	<!-- temp window -->
 		<div class="temp-window" id="temp-window-ctrl">
-			<strong class="dummy-text">Temperature view Panel</strong>
-			<!-- left angle -->
+			<div class="temperature-panel">
+				<canvas class="temperature-canvas" id="graph-window"></canvas>
+			</div>
+			<script>
+				let ctx = document.getElementById('graph-window');
+				let myChart = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: [],
+						datasets: [{
+							label: 'tool0',
+							data: [],
+							// データライン
+							borderColor: '#f88',
+						}, {
+							label: 'bed',
+							data: [],
+							borderColor: '#484',
+						}],
+					},
+					options: {
+						plugins: {
+							// グラフタイトル
+							title: {
+								display: false,
+							},
+							// 凡例
+							legend: {
+								position: 'right',
+								align: 'start',
+								// 凡例ラベル
+								labels: {
+									boxWidth: 10,
+									boxHeight: 8,
+								},
+							},
+							// ツールチップ
+							tooltip: {
+								backgroundColor: '#933',
+							},
+						},
+						scales: {
+							y: {
+								// 最小値・最大値
+								min: 0,
+								max: 240,
+								// 軸タイトル
+								title: {
+									display: true,
+								},
+								// 目盛ラベル
+								ticks: {
+									color: lapislazuli,
+									stepSize: 20,
+									showLabelBackdrop: true,
+									backdropColor: peleskyblue,
+									backdropPadding: { x: 1, y: 1 },
+									major: {
+										enabled: true,
+									},
+									align: 'end',
+									crossAlign: 'center',
+									sampleSize: 2,
+								},
+								grid: {
+									// 軸線
+									borderColor: 'orange',
+									borderWidth: 2,
+									drawBorder: true,
+									// 目盛線＆グリッド線
+									color: '#080',
+									display: true,
+									// グリッド線
+									borderDash: [3, 3],
+									borderDashOffset: 0,
+									// 目盛線
+									drawTicks: true,
+									tickColor: 'blue',
+									tickLength: 10,
+									tickWidth: 2,
+									tickBorderDash: [2, 2],
+									tickBorderDashOffset: 0,
+								},
+							},
+							x: {
+								grid: {
+									borderColor: 'orange',
+									borderWidth: 2,
+								},
+							},
+						},
+					},
+				});
+				let intervalIDtmp;
+				let powerFlagTmp = false;
+				$('#power-btn').click(() => {
+					$$$.message('Click power-btn(HTML part)', DEBUG, '$power-btn.click(html)');
+					if(powerFlagTmp) {
+						clearInterval(intervalIDtmp);
+						myChart.data.labels = [];
+						myChart.data.datasets[0].data = [];
+						myChart.data.datasets[1].data = [];
+						myChart.update();
+					} else {
+						intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
+						powerFlagTmp = true;
+					}
+				});
+				function updateTemperatureGraph() {
+					client.printer.getFullState()
+						.done((response) => {
+							if('tool0' in response.temperature) {
+								if(myChart.data.labels.length == 10) {
+									for(var i=1; i<10; i++) {
+										myChart.data.labels[i - 1] = myChart.data.labels[i];
+										myChart.data.datasets[0].data[i - 1] = myChart.data.datasets[0].data[i];
+										myChart.data.datasets[1].data[i - 1] = myChart.data.datasets[1].data[i];
+									}
+									myChart.data.labels[9] = new Date().getSeconds();
+									myChart.data.datasets[0].data[9] = response.temperature.tool0.actual;
+									myChart.data.datasets[1].data[9] = response.temperature.bed.actual;
+								} else {
+									myChart.data.labels.push(new Date().getSeconds());
+									myChart.data.datasets[0].data.push(response.temperature.tool0.actual);
+									myChart.data.datasets[1].data.push(response.temperature.bed.actual);
+								}
+								myChart.update();
+							}
+					})
+				}
+			</script>
+		<!-- left angle -->
 			<div class="temp-triangle-left">
 				<div class="temp-triangle-left-mark">
 					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>

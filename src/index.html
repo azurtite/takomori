@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-		<!-- meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" -->
+			<!--meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' http://192.168.0.14/ localhost;"-->
 		<!-- install less.js -->
 			<link rel="stylesheet/less" type="text/css" href="./index.less" />
 			<script src="../node_modules/less/dist/less.min.js"></script>
@@ -21,13 +21,14 @@
 		<!-- install liblary -->
 			<script src="../node_modules/jquery/dist/jquery.min.js"></script>
 			<script src="../node_modules/lodash/lodash.min.js"></script>
-			<script src="./client.js"></script>
-			<script src="./roundslider.min.js"></script>
-		<!-- install self javascript -->
+			<script src="./octoprint.client.1.8.4.js"></script>
+			<script src="../node_modules/round-slider/dist/roundslider.min.js"></script>
+			<script src="../node_modules/chart.js/dist/chart.min.js"></script>
 			<script src="./logMan.js"></script>
+			<script src="./location.js"></script>
 			<script src="./index.js"></script>
 		<!-- install liblary css -->
-			<link rel="stylesheet" href="./roundslider.min.css">
+			<link rel="stylesheet" href="../node_modules/round-slider/dist/roundslider.min.css">
 		<title>tokomori</title>
 	</head>
 	<body>
@@ -118,10 +119,6 @@
 					<td class="printtime-value" id="printtimeleft-text">0s</td>
 				</tr>
 			</table>
-			<!-- reload button -->
-			<div class="reload-btn">
-				<span class="glyphicon glyphicon glyphicon-repeat" id="reload-btn-ctrl"></span>
-			</div>
 			<!-- slider panel tool -->
 			<div class="slider-panel-tool" id="slider-panel-tool-ctrl">
 				<strong class="slider-text">Tool temperature</strong>
@@ -193,12 +190,12 @@
 									else if(val < 230) temperature = 'ABS';
 									else temperature = 'Very high';
 
-									if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
-									else return val + " C" + "<div>" + temperature + "<div>";
+									if(val == 0) return `N/A<div>${temperature}</div>`; 
+									else return `${val}C<div>${temperature}</div>`;
 								}
 								function changeValueTool(event) {
 									toolTempValue = event.value;
-									$$$.message('Tool value is ' + toolTempValue, LOWDEBUG, 'changeValueTool');
+									$$$.message(`Tool value is ${toolTempValue}`, LOWDEBUG, 'changeValueTool');
 								}
 							</script>
 						</div>
@@ -240,11 +237,11 @@
 								#handle2 .rs-tooltip  {
 									top:				75%;
 									font-size:			11px;
-									color:				#FFDC00
+									color:				#FFDC00;
 								}
 								#handle2 .rs-tooltip div  {
 									text-align:			center;
-									color:				#FFDC00
+									color:				#FFDC00;
 									border-radius: 4px;
 									padding: 1px 5px 2px;
 									margin-top: 4px;
@@ -282,12 +279,12 @@
 									else if(val < 121) temperature = 'ABS';
 									else temperature = 'Very high';
 
-									if(val == 0) return "N/A" + "<div>" + temperature + "<div>"; 
-									else return val + " C" + "<div>" + temperature + "<div>";
+									if(val == 0) return `N/A<div>${temperature}</div>`;
+									else return `${val}C<div>${temperature}</div>`;
 								}
 								function changeValueBed(event) {
 									bedTempValue = event.value;
-									$$$.message('Bed value is ' + bedTempValue, DEBUG, 'changeValueTool');
+									$$$.message(`Bed value is ${bedTempValue}`, LOWDEBUG, 'changeValueTool');
 								}
 							</script>
 						</div>
@@ -359,6 +356,118 @@
 	<!-- manu window -->
 		<div class="manu-window" id="manu-window-ctrl">
 			<strong class="dummy-text">Manual control Panel</strong>
+			<!-- manual operation butt&nbsp;n panel -->
+			<table class="table3x3">
+				<tr>
+					<td class="header-50">&nbsp;</td>
+					<td class="header-25">&nbsp;</td>
+					<td class="header-25">&nbsp;</td>
+					<td id="seed-value-p1" class="header header-53" colspan="3">0.1mm</td>
+					<td id="seed-value-p2" class="header header-53" colspan="3">1mm</td>
+					<td id="seed-value-p3" class="header header-50" colspan="2">10mm</td>
+					<td id="seed-value-p4" class="header header-50">100mm</td>
+				</tr>
+				<tr>
+					<td class="small-font space-w50b">&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w3b" >&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w3b" >&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w25b">&nbsp;</td>
+					<td class="small-font space-w50b">&nbsp;</td>
+				</tr>
+				<tr>
+					<td id="manu-btn-p1" class="button-w50">Hx</td>
+					<td class="button-w25">&nbsp;</td>
+					<td id="manu-btn-p2" class="button-w50" colspan="2">BL</td>
+					<td class="button-w3 small-font">&nbsp;</td>
+					<td id="manu-btn-p3" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+					<td class="button-w3 small-font">8</td>
+					<td id="manu-btn-p4" class="button-w50" colspan="2">BR</td>
+					<td class="button-w25">&nbsp;</td>
+					<td id="manu-btn-p5" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+				</tr>
+				<tr>
+					<td class="small-font space-50">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-3" >&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-3" >&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-50">&nbsp;</td>
+				</tr>
+				<tr>
+					<td id="manu-btn-p6" class="button-w50">Hy</td>
+					<td class="button-w25">&nbsp;</td>
+					<td id="manu-btn-p7" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-left"></td>
+					<td class="button-w3 small-font">&nbsp;</td>
+					<td id="manu-btn-p8" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-repeat"></span></td>
+					<td class="button-w3 small-font">8</td>
+					<td id="manu-btn-p9" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-right"></td>
+					<td class="button-w25">&nbsp;</td>
+					<td id="manu-btn-pa" class="button-w50"><span class="glyphicon glyphicon glyphicon-home"></span></td>
+				</tr>
+				<tr>
+					<td class="small-font space-50">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-3" >&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-3" >&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-25">&nbsp;</td>
+					<td class="small-font space-50">&nbsp;</td>
+				</tr>
+				<tr>
+					<td id="manu-btn-pb" class="button-w50">Hz</td>
+					<td class="button-w25">&nbsp;</td>
+					<td id="manu-btn-pc" class="button-w50" colspan="2">FL</td>
+					<td class="button-w3 small-font">&nbsp;</td>
+					<td id="manu-btn-pd" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+					<td class="button-w3 small-font">8</td>
+					<td id="manu-btn-pe" class="button-w50" colspan="2">FR</td>
+					<td class="button-w25">&nbsp;</td>
+					<td id="manu-btn-pf" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+				</tr>
+				<tr>
+					<td class="header-50">Home</td>
+					<td class="header-25">&nbsp;</td>
+					<td class="header-25" colspan="8">X and Y</td>
+					<td class="header-25">&nbsp;</td>
+					<td class="header-50">Z</td>
+				</tr>
+			</table>
+			<div class="extruder-panel">
+				<div class="amount">
+					<div class="input-group">
+						<input type="number" id="amount-value" class="form-control" placeholder="amount" aria-describedby="basic-addon1" value="5" style="text-align:right">
+						<span class="input-group-addon" id="basic-addon1">mm</span>
+					</div>
+				</div>
+				<table class="table1x2">
+					<tr>
+						<td id="extruder-btn-up" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+						<td class="button-w3 smallfont">&nbsp;</td>
+						<td id="extruder-btn-down" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+					</tr>
+				</table>
+			</div>
+			<div id="extruder-tag" class="extruder-panel-tag">
+				<span>ExtruderPanel</span>
+			</div>
 			<!-- left angle -->
 			<div class="manu-triangle-left">
 				<div class="manu-triangle-left-mark">
@@ -380,8 +489,138 @@
 		</div>
 	<!-- temp window -->
 		<div class="temp-window" id="temp-window-ctrl">
-			<strong class="dummy-text">Temperature view Panel</strong>
-			<!-- left angle -->
+			<div class="temperature-panel">
+				<canvas class="temperature-canvas" id="graph-window"></canvas>
+			</div>
+			<script>
+				let ctx = document.getElementById('graph-window');
+				let myChart = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: [],
+						datasets: [{
+							label: 'tool0',
+							data: [],
+							// データライン
+							borderColor: '#f88',
+						}, {
+							label: 'bed',
+							data: [],
+							borderColor: '#484',
+						}],
+					},
+					options: {
+						plugins: {
+							// グラフタイトル
+							title: {
+								display: false,
+							},
+							// 凡例
+							legend: {
+								position: 'right',
+								align: 'start',
+								// 凡例ラベル
+								labels: {
+									boxWidth: 10,
+									boxHeight: 8,
+								},
+							},
+							// ツールチップ
+							tooltip: {
+								backgroundColor: '#933',
+							},
+						},
+						scales: {
+							y: {
+								// 最小値・最大値
+								min: 0,
+								max: 240,
+								// 軸タイトル
+								title: {
+									display: true,
+								},
+								// 目盛ラベル
+								ticks: {
+									color: lapislazuli,
+									stepSize: 20,
+									showLabelBackdrop: true,
+									backdropColor: peleskyblue,
+									backdropPadding: { x: 1, y: 1 },
+									major: {
+										enabled: true,
+									},
+									align: 'end',
+									crossAlign: 'center',
+									sampleSize: 2,
+								},
+								grid: {
+									// 軸線
+									borderColor: 'orange',
+									borderWidth: 2,
+									drawBorder: true,
+									// 目盛線＆グリッド線
+									color: '#080',
+									display: true,
+									// グリッド線
+									borderDash: [3, 3],
+									borderDashOffset: 0,
+									// 目盛線
+									drawTicks: true,
+									tickColor: 'blue',
+									tickLength: 10,
+									tickWidth: 2,
+									tickBorderDash: [2, 2],
+									tickBorderDashOffset: 0,
+								},
+							},
+							x: {
+								grid: {
+									borderColor: 'orange',
+									borderWidth: 2,
+								},
+							},
+						},
+					},
+				});
+				let intervalIDtmp;
+				let powerFlagTmp = false;
+				$('#power-btn').click(() => {
+					$$$.message('Click power-btn(HTML part)', DEBUG, '$power-btn.click(html)');
+					if(powerFlagTmp) {
+						clearInterval(intervalIDtmp);
+						myChart.data.labels = [];
+						myChart.data.datasets[0].data = [];
+						myChart.data.datasets[1].data = [];
+						myChart.update();
+					} else {
+						intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
+						powerFlagTmp = true;
+					}
+				});
+				function updateTemperatureGraph() {
+					client.printer.getFullState()
+						.done((response) => {
+							if('tool0' in response.temperature) {
+								if(myChart.data.labels.length == 10) {
+									for(var i=1; i<10; i++) {
+										myChart.data.labels[i - 1] = myChart.data.labels[i];
+										myChart.data.datasets[0].data[i - 1] = myChart.data.datasets[0].data[i];
+										myChart.data.datasets[1].data[i - 1] = myChart.data.datasets[1].data[i];
+									}
+									myChart.data.labels[9] = new Date().getSeconds();
+									myChart.data.datasets[0].data[9] = response.temperature.tool0.actual;
+									myChart.data.datasets[1].data[9] = response.temperature.bed.actual;
+								} else {
+									myChart.data.labels.push(new Date().getSeconds());
+									myChart.data.datasets[0].data.push(response.temperature.tool0.actual);
+									myChart.data.datasets[1].data.push(response.temperature.bed.actual);
+								}
+								myChart.update();
+							}
+					})
+				}
+			</script>
+		<!-- left angle -->
 			<div class="temp-triangle-left">
 				<div class="temp-triangle-left-mark">
 					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>
@@ -402,7 +641,7 @@
 		</div>
 	<!-- winctrl -->
 		<div class="nav-winctrl">
-			<div class="nav-minimum">
+			<div class="nav-minimum" id="minimize-btn">
 				<span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fullscreen" id="fullscreen-btn">
@@ -474,6 +713,10 @@
 			<div class="alert-ok" id="alert-ok-btn">
 				<strong>OK</strong>
 			</div>
+		</div>
+	<!-- reload button -->
+		<div class="reload-btn">
+			<span class="glyphicon glyphicon glyphicon-repeat" id="reload-btn-ctrl"></span>
 		</div>
 
 	<!-- scripts -->

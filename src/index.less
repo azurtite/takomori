@@ -254,15 +254,6 @@ body {
 			color:			@sunshine;
 		}
 	}
-	.reload-btn {
-		position:			absolute;
-		height:				32px;
-		width:				32px;
-		left:				368px;
-		top:				0px;
-		font-size:			20pt;
-		z-index:			100;
-	}
 }
 .progress-bar-forestleaf {
 	color:				@sunshine	!important;
@@ -292,6 +283,7 @@ body {
 		font-size:			12pt;
 		text-align:			center;
 		vertical-align:		middle;
+		-webkit-app-region:	no-drag;
 	}
 	.nav-remove {
 		display:			table-cell;
@@ -687,17 +679,164 @@ div::-webkit-scrollbar-thumb {
 	border-radius:		5px;
 }
 .manu-window{
-	position:				absolute;
-	display:				table;
-	height:					240px;
-	width:					400px;
-	color:					@sunshine;
-	background-color:		@ceruleanblue;
-	z-index:				-1;
+	position:					absolute;
+	display:					table;
+	height:						240px;
+	width:						400px;
+	color:						@sunshine;
+	background-color:			@ceruleanblue;
+	-webkit-app-region:			drag;
+	z-index:					-1;
+	.table3x3 {
+		position:				absolute;
+		left:					47px;
+		top:					16px;
+		td {
+			text-align:			center;
+			vertical-align:		middle;
+		}
+		.small-font {
+			font-size:			1pt;
+		}
+		.button-w25 {
+			height:				50px;
+			width:				25px;
+		}
+		.button-w3 {
+			height:				50px;
+			width:				3px;
+		}
+		.button-w50 {
+			height:				50px;
+			width:				50px;
+			border-radius:		10px;
+			-webkit-app-region:	no-drag;
+			background-color:	@lapislazuli;
+		}
+		.header {
+			border:				1px solid @sunshine;
+			cursor:				default;
+			-webkit-app-region:	no-drag;
+		}
+		.header-w156 {
+			height:				16px;
+			width:				156px;
+		}
+		.header-w25 {
+			height:				16px;
+			width:				25px;
+		}
+		.header-w3 {
+			height:				16px;
+			width:				3px;
+		}
+		.header-w50 {
+			height:				16px;
+			width:				50px;
+		}
+		.header-w53 {
+			height:				16px;
+			width:				53px;
+		}
+		.header-w78 {
+			height:				16px;
+			width:				78px;
+		}
+		.space-w25 {
+			height:				3px;
+			width:				25px;
+		}
+		.space-w25b {
+			height:				6px;
+			width:				25px;
+		}
+		.space-w3 {
+			height:				3px;
+			width:				3px;
+		}
+		.space-w3b {
+			height:				6px;
+			width:				3px;
+		}
+		.space-w50 {
+			height:				3px;
+			width:				50px;
+		}
+		.space-w50b {
+			height:				6px;
+			width:				50px;
+		}
+		.trans-bl {
+			transform:rotate(45deg);
+		}
+		.trans-br {
+			transform:rotate(-45deg);
+		}
+		.trans-fl {
+			transform:rotate(-45deg);
+		}
+		.trans-fr {
+			transform:rotate(45deg);
+		}
+	}
+	.extruder-panel {
+		position:				absolute;
+		left:					32px;
+		top:					0px;
+		height:					80px;
+		width:					260px;
+		background-color:		@peleskyblue;
+		visibility:				hidden;
+		.amount {
+			position:			absolute;
+			left:				12px;
+			top:				24px;
+			height:				24px;
+			width:				120px;
+			-webkit-app-region:	no-drag;
+		}
+	}
+	.extruder-panel-tag {
+		position:				absolute;
+		left:					32px;
+		top:					0px;
+		height:					24px;
+		width:					110px;
+		text-align:				center;
+		color:					@rescueorange;
+		background-color:		@peleskyblue;
+		border-radius:			0px 0px 10px 10px;
+		cursor:					default;
+		-webkit-app-region:		no-drag;
+	}
+	.table1x2 {
+		position:				absolute;
+		left:					138px;
+		top:					15px;
+		td {
+			text-align:			center;
+			vertical-align:		middle;
+		}
+		.small-font {
+			font-size:			1pt;
+		}
+		.button-w3 {
+			height:				50px;
+			width:				3px;
+		}
+		.button-w50 {
+			height:				50px;
+			width:				50px;
+			border-radius:		10px;
+			-webkit-app-region:	no-drag;
+			background-color:	@skyhigh;
+		}
+	}
 	.dummy-text {
 		display:			table-cell;
 		text-align:			center;
 		vertical-align:		middle;
+		visibility:			hidden;
 	}
 	.manu-triangle-left {
 		position:			absolute;
@@ -706,6 +845,7 @@ div::-webkit-scrollbar-thumb {
 		width:				24px;
 		top:				0px;
 		left:				0px;
+		-webkit-app-region:	no-drag;
 		.manu-triangle-left-mark {
 			display:		table-cell;
 			height:			100%;
@@ -723,6 +863,7 @@ div::-webkit-scrollbar-thumb {
 		width:				24px;
 		top:				0px;
 		left:				376px;
+		-webkit-app-region:	no-drag;
 		.manu-triangle-right-mark {
 			display:		table-cell;
 			height:			100%;
@@ -760,10 +901,14 @@ div::-webkit-scrollbar-thumb {
 	color:					@sunshine;
 	background-color:		@ceruleanblue;
 	z-index:				-1;
-	.dummy-text {
-		display:			table-cell;
-		text-align:			center;
-		vertical-align:		middle;
+	.temperature-panel {
+		position: absolute;
+		top: 				24px;
+		left:				24px;
+		height:				182px;
+		width:				352px;
+
+		background-color:	@peleskyblue;
 	}
 	.temp-triangle-left {
 		position:			absolute;
@@ -817,4 +962,15 @@ div::-webkit-scrollbar-thumb {
 			z-index:		90;
 		}
 	}
+}
+.reload-btn {
+	position:			absolute;
+	height:				32px;
+	width:				32px;
+	left:				0px;
+	top:				208px;
+	font-size:			20pt;
+	z-index:			100;
+	color:				@sunshine;
+	-webkit-app-region:	no-drag;
 }

@@ -533,7 +533,7 @@
 						scales: {
 							y: {
 								// 最小値・最大値
-								min: 20,
+								min: 0,
 								max: 240,
 								// 軸タイトル
 								title: {
@@ -605,12 +605,15 @@
 									for(var i=1; i<10; i++) {
 										myChart.data.labels[i - 1] = myChart.data.labels[i];
 										myChart.data.datasets[0].data[i - 1] = myChart.data.datasets[0].data[i];
+										myChart.data.datasets[1].data[i - 1] = myChart.data.datasets[1].data[i];
 									}
 									myChart.data.labels[9] = new Date().getSeconds();
 									myChart.data.datasets[0].data[9] = response.temperature.tool0.actual;
+									myChart.data.datasets[1].data[9] = response.temperature.bed.actual;
 								} else {
 									myChart.data.labels.push(new Date().getSeconds());
 									myChart.data.datasets[0].data.push(response.temperature.tool0.actual);
+									myChart.data.datasets[1].data.push(response.temperature.bed.actual);
 								}
 								myChart.update();
 							}

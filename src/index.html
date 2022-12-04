@@ -592,6 +592,7 @@
 						myChart.data.datasets[0].data = [];
 						myChart.data.datasets[1].data = [];
 						myChart.update();
+						powerFlagTmp = false;
 					} else {
 						intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
 						powerFlagTmp = true;

@@ -582,22 +582,31 @@
 						},
 					},
 				});
+				$$$.message('Create new temperature graph', DEBUG, '$power-btn.click(html)');
 				let intervalIDtmp;
 				let powerFlagTmp = false;
+				$$$.message(`Create powerFlagTmp. value is ${powerFlagTmp}`, DEBUG, '$power-btn.click(html)');
 				$('#power-btn').click(() => {
 					$$$.message('Click power-btn(HTML part)', DEBUG, '$power-btn.click(html)');
 					if(powerFlagTmp) {
 						clearInterval(intervalIDtmp);
+						$$$.message('Start updateTemperatureGraph function', DEBUG, '$power-btn.click(html)');
 						myChart.data.labels = [];
 						myChart.data.datasets[0].data = [];
 						myChart.data.datasets[1].data = [];
 						myChart.update();
+						$$$.message('Clear myChart', DEBUG, '$power-btn.click(html)');
+						powerFlagTmp = false;
+						$$$.message(`Change powerFlagTmp. value is ${powerFlagTmp}`, DEBUG, '$power-btn.click(html)');
 					} else {
 						intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
+						$$$.message('Stop updateTemperatureGraph function', DEBUG, '$power-btn.click(html)');
 						powerFlagTmp = true;
+						$$$.message(`Change powerFlagTmp. value is ${powerFlagTmp}`, DEBUG, '$power-btn.click(html)');
 					}
 				});
 				function updateTemperatureGraph() {
+					$$$.message('Call updateTemperatureGraph', LOWDEBUG, 'updateTemperatureGraph', INTERMITTENT, 10);
 					client.printer.getFullState()
 						.done((response) => {
 							if('tool0' in response.temperature) {
@@ -617,7 +626,10 @@
 								}
 								myChart.update();
 							}
-					})
+						}).fail((err) => {
+							$('#alart-panel-text').html('getFullState Failure<br>position : updateTemperatureGraph<br>error code : 00001');
+							$$$.message('getFullState Failure', ERROR, 'updateTemperatureGraph');
+						});
 				}
 			</script>
 		<!-- left angle -->

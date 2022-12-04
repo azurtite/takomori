@@ -626,7 +626,10 @@
 								}
 								myChart.update();
 							}
-					})
+						}).fail((err) => {
+							$('#alart-panel-text').html('getFullState Failure<br>position : updateTemperatureGraph<br>error code : 00001');
+							$$$.message('getFullState Failure', ERROR, 'updateTemperatureGraph');
+						});
 				}
 			</script>
 		<!-- left angle -->

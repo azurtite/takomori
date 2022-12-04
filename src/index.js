@@ -31,6 +31,7 @@ let bedMargin			= 10;
 let canRunExtruder		= false;
 let extruderMovingTemp	= 200;
 let extruderPanelShown	= false;
+let actionPowerBtnClick	= false;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -468,6 +469,8 @@ $(() => {
 							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: peleskyblue});
 							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
+							$('input[name="powerFlag"]').prop('checked', false);
+							$$$.message(`Change powerFlag tag value. value is false`, DEBUG, '$power-btn.click');
 						}).fail((response) => {
 							$$$.message('Logout failure', ERROR, '$power-btn.click');
 						});
@@ -479,37 +482,49 @@ $(() => {
 				});
 		} else {
 			$$$.message('Click powerbtn(off>on)', DEBUG), '$power-btn.click';
-			client.browser.login('mozukuSu', 'ooxot8795SH', true)
-				.done((response) => {
-					$$$.message('Login success', INFO, '$power-btn.click');
-					client.connection.connect({
-						port:			'/dev/ttyACM0',
-						baudrate:		115200,
-						printerProfile:	'_default',
-						save:			true,
-						autoconnect:	false
-					}).done((response) => {
-						$$$.message('Connection success', INFO, '$power-btn.click');
-						$('.nav-off').css({color: rescueorange});
-						powerFlag = true;
-						$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-						intervalIDprn = setInterval(getPrinterFullState, 1000);
-						$('.file-list-icon-open').css({color: sunshine});
-						$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
-						$('.file-list-icon-print').css({color: sunshine});
-						$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
+			if(!actionPowerBtnClick) {
+				actionPowerBtnClick = true;
+				$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				client.browser.login('mozukuSu', 'ooxot8795SH', true)
+					.done((response) => {
+						$$$.message('Login success', INFO, '$power-btn.click');
+						client.connection.connect({
+							port:			'/dev/ttyACM0',
+							baudrate:		115200,
+							printerProfile:	'_default',
+							save:			true,
+							autoconnect:	false
+						}).done((response) => {
+							$$$.message('Connection success', INFO, '$power-btn.click');
+							$('.nav-off').css({color: rescueorange});
+							powerFlag = true;
+							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
+							intervalIDprn = setInterval(getPrinterFullState, 1000);
+							$('.file-list-icon-open').css({color: sunshine});
+							$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
+							$('.file-list-icon-print').css({color: sunshine});
+							$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+							$('input[name="powerFlag"]').prop('checked', true);
+							$$$.message(`Change powerFlag tag value. value is true`, DEBUG, '$power-btn.click');
+						}).fail((response) => {
+							$$$.message('Connection failure', ERROR, '$power-btn.click');
+							$('.alert-text').text('Error: Failed to connect to printer');
+							$('#alert-pnl').css({visibility: 'visible'});
+							$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+						});
 					}).fail((response) => {
-						$$$.message('Connection failure', ERROR, '$power-btn.click');
-						$('.alert-text').text('Error: Failed to connect to printer');
+						$$$.message('Login failure', ERROR, '$power-btn.click');
+						$('.alert-text').text('Error: Failed to login to octoprint server');
 						$('#alert-pnl').css({visibility: 'visible'});
 						$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
 					});
-				}).fail((response) => {
-					$$$.message('Login failure', ERROR, '$power-btn.click');
-					$('.alert-text').text('Error: Failed to login to octoprint server');
-					$('#alert-pnl').css({visibility: 'visible'});
-					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
-				});
+			} else {
+				$$$.message('actionPowerBtnClick is true', WARN, '$power-btn.click')
+			}
 		}
 	});
 

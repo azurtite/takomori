@@ -491,8 +491,11 @@
 		<div class="temp-window" id="temp-window-ctrl">
 			<div class="temperature-panel">
 				<canvas class="temperature-canvas" id="graph-window"></canvas>
+				<input type="checkbox" name="powerFlag" id="ID-powerFlag" style="visibility: hidden;">
 			</div>
 			<script>
+				let intervalIDtmp = undefined;
+				let powerFlagTemp = false;
 				let ctx = document.getElementById('graph-window');
 				let myChart = new Chart(ctx, {
 					type: 'line',
@@ -583,53 +586,50 @@
 					},
 				});
 				$$$.message('Create new temperature graph', DEBUG, '$power-btn.click(html)');
-				let intervalIDtmp;
-				let powerFlagTmp = false;
-				$$$.message(`Create powerFlagTmp. value is ${powerFlagTmp}`, DEBUG, '$power-btn.click(html)');
-				$('#power-btn').click(() => {
-					$$$.message('Click power-btn(HTML part)', DEBUG, '$power-btn.click(html)');
-					if(powerFlagTmp) {
-						clearInterval(intervalIDtmp);
-						$$$.message('Start updateTemperatureGraph function', DEBUG, '$power-btn.click(html)');
-						myChart.data.labels = [];
-						myChart.data.datasets[0].data = [];
-						myChart.data.datasets[1].data = [];
-						myChart.update();
-						$$$.message('Clear myChart', DEBUG, '$power-btn.click(html)');
-						powerFlagTmp = false;
-						$$$.message(`Change powerFlagTmp. value is ${powerFlagTmp}`, DEBUG, '$power-btn.click(html)');
-					} else {
-						intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
-						$$$.message('Stop updateTemperatureGraph function', DEBUG, '$power-btn.click(html)');
-						powerFlagTmp = true;
-						$$$.message(`Change powerFlagTmp. value is ${powerFlagTmp}`, DEBUG, '$power-btn.click(html)');
-					}
-				});
+
+				intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
 				function updateTemperatureGraph() {
 					$$$.message('Call updateTemperatureGraph', LOWDEBUG, 'updateTemperatureGraph', INTERMITTENT, 10);
-					client.printer.getFullState()
-						.done((response) => {
-							if('tool0' in response.temperature) {
-								if(myChart.data.labels.length == 10) {
-									for(var i=1; i<10; i++) {
-										myChart.data.labels[i - 1] = myChart.data.labels[i];
-										myChart.data.datasets[0].data[i - 1] = myChart.data.datasets[0].data[i];
-										myChart.data.datasets[1].data[i - 1] = myChart.data.datasets[1].data[i];
+					if($('input[name="powerFlag"]').prop('checked') == true) {
+						if(!powerFlagTemp) {
+							$$$.message(`Change powerFlagTemp. value is true`, DEBUG, 'updateTemperatureGraph');
+							powerFlagTemp = true;
+						}
+						client.printer.getFullState()
+							.done((response) => {
+								if('tool0' in response.temperature) {
+									if(myChart.data.labels.length == 10) {
+										for(var i=1; i<10; i++) {
+											myChart.data.labels[i - 1] = myChart.data.labels[i];
+											myChart.data.datasets[0].data[i - 1] = myChart.data.datasets[0].data[i];
+											myChart.data.datasets[1].data[i - 1] = myChart.data.datasets[1].data[i];
+										}
+										myChart.data.labels[9] = new Date().getSeconds();
+										myChart.data.datasets[0].data[9] = response.temperature.tool0.actual;
+										myChart.data.datasets[1].data[9] = response.temperature.bed.actual;
+									} else {
+										myChart.data.labels.push(new Date().getSeconds());
+										myChart.data.datasets[0].data.push(response.temperature.tool0.actual);
+										myChart.data.datasets[1].data.push(response.temperature.bed.actual);
 									}
-									myChart.data.labels[9] = new Date().getSeconds();
-									myChart.data.datasets[0].data[9] = response.temperature.tool0.actual;
-									myChart.data.datasets[1].data[9] = response.temperature.bed.actual;
-								} else {
-									myChart.data.labels.push(new Date().getSeconds());
-									myChart.data.datasets[0].data.push(response.temperature.tool0.actual);
-									myChart.data.datasets[1].data.push(response.temperature.bed.actual);
+									myChart.update();
 								}
-								myChart.update();
-							}
-						}).fail((err) => {
-							$('#alart-panel-text').html('getFullState Failure<br>position : updateTemperatureGraph<br>error code : 00001');
-							$$$.message('getFullState Failure', ERROR, 'updateTemperatureGraph');
-						});
+							}).fail((err) => {
+								$('#alart-panel-text').html('getFullState Failure<br>position : updateTemperatureGraph<br>error code : 00001');
+								$$$.message('getFullState Failure', ERROR, 'updateTemperatureGraph');
+							});
+					} else {
+						if(powerFlagTemp) {
+							myChart.data.labels = [];
+							myChart.data.datasets[0].data = [];
+							myChart.data.datasets[1].data = [];
+							myChart.update();
+							$$$.message('Clear myChart', DEBUG, '$power-btn.click(html)');
+
+							powerFlagTemp = false;
+							$$$.message(`Change powerFlagTemp. value is ${powerFlagTemp}`, DEBUG, 'updateTemperatureGraph');
+						}
+					}
 				}
 			</script>
 		<!-- left angle -->

@@ -398,6 +398,9 @@ function postProcess() {
 		client.printer.setToolTargetTemperatures({'tool0': 0});
 		$('#tool-on-sw-btn').css({color: sunshine});
 		$('#tool-icon').css({color:sunshine});
+		client.printer.setBedTargetTemperature(0);
+		$('#bed-on-sw-btn').css({color:sunshine});
+		$('#bed-icon').css({color:sunshine});
 	}
 }
 /**

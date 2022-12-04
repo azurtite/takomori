@@ -1555,6 +1555,10 @@ $(() => {
 
 	$('#extruder-btn-up').click(() => {
 		$$$.message('Click extruder-btn-up', DEBUG, '$extruder-btn-up.click');
+		if(!canRunExtruder || !powerFlag) {
+			$$$.message('Dispensable temperature not reached', WARN, '$extruder-btn-up.click');
+			return;
+		}
 		if(!waitNextClick) {
 			$('#extruder-btn-up').css({
 				color:				rescueorange,
@@ -1580,6 +1584,10 @@ $(() => {
 
 	$('#extruder-btn-down').click(() => {
 		$$$.message('Click extruder-btn-down', DEBUG, '$extruder-btn-down.click');
+		if(!canRunExtruder || !powerFlag) {
+			$$$.message('Dispensable temperature not reached', WARN, '$extruder-btn-down.click');
+			return;
+		}
 		if(!waitNextClick) {
 			$('#extruder-btn-down').css({
 				color:				rescueorange,

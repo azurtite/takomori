@@ -553,6 +553,8 @@ $(() => {
 						$('.alert-text').text('Error: Failed to login to octoprint server');
 						$('#alert-pnl').css({visibility: 'visible'});
 						$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+						actionPowerBtnClick = false;
+						$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
 					});
 			} else {
 				$$$.message('actionPowerBtnClick is true', WARN, '$power-btn.click')

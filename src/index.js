@@ -530,6 +530,7 @@ $(() => {
 							powerFlag = true;
 							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
 							intervalIDprn = setInterval(getPrinterFullState, 1000);
+							$$$.message(`intervalIDprn is ${intervalIDprn}`, WARN, '$power-btn.click')
 							$('.file-list-icon-open').css({color: sunshine});
 							$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: sunshine});
@@ -1685,7 +1686,7 @@ $(() => {
 								$$$.message('trap message alert no 00026', WARN, 'getPrinterFullState');
 							});
 					}).fail((err) => {
-						$$$.message('trap message alert no 000027', WARN, 'getPrinterFullState');
+						$$$.message('trap message alert no 00027', WARN, 'getPrinterFullState');
 					});
 			}
 		}

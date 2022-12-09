@@ -20,6 +20,13 @@ function createWindow () {
 	return mainWindow
 }
 
+const locked = app.requestSingleInstanceLock();
+if(!locked) {
+	console.log('Application is already running.');
+	console.log('Quit application');
+	app.quit();
+}
+
 app.whenReady().then(() => {
 	ipcMain.on('minimize-window', (_event, value) => {
 		win.minimize();

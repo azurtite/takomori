@@ -31,6 +31,7 @@ let bedMargin			= 10;
 let canRunExtruder		= false;
 let extruderMovingTemp	= 200;
 let extruderPanelShown	= false;
+let actionPowerBtnClick	= false;
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -89,7 +90,9 @@ function getFilelist() {
 				$('.file-list-icon-print').css({color: peleskyblue});
 				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, 'getFilelist');
 			}
-		})
+		}).fail((err) => {
+			$$$.message('trap message alert no 00003', WARN, 'getPrinterFullState');
+		});
 }
 /**
  * File control icons event
@@ -174,7 +177,9 @@ function downloadClick(e) {
 			element.click();
 			URL.revokeObjectURL(element.href);
 			$$$.message('Delete temporary files', DEBUG, 'downloadClick')
-		})
+		}).fail((err) => {
+			$$$.message('trap message alert no 00004', WARN, 'getPrinterFullState');
+		});
 }
 function trashClick(e) {
 	$$$.message(`Call trashClick`, DEBUG, 'trashClick');
@@ -187,7 +192,9 @@ function trashClick(e) {
 				$$$.message(`Delete ${f}`, INFO, 'trashClick');
 				getFilelist();
 			} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'trashClick');
-		});
+		}).fail((err) => {
+			$$$.message('trap message alert no 00005', WARN, 'getPrinterFullState');
+		});;
 }
 function openClick(e) {
 	$$$.message('Call openClick', DEBUG, 'openClick');
@@ -202,7 +209,9 @@ function openClick(e) {
 					client.files.select('local', fileInfoContainar.files[e].path);
 					$$$.message(`Set ${fileInfoContainar.files[e].display} to print`, DEBUG, 'openClick');
 				} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'openClick');
-			});
+			}).fail((err) => {
+				$$$.message('trap message alert no 00006', WARN, 'getPrinterFullState');
+			});;
 	}
 }
 function printClick(e) {
@@ -323,7 +332,9 @@ function getPrinterFullState() {
 					$('#printtime-text').text('0s');
 					$('#printtimeleft-text').text('0s');
 				}
-			})
+			}).fail((err) => {
+				$$$.message('trap message alert no 00007', WARN, 'getPrinterFullState');
+			});
 	}
 	$$$.message(`Call getPrinterFullState`, DEBUG, 'getPrinterFullState', ONCE);
 	if(client == undefined) {
@@ -357,7 +368,20 @@ function getPrinterFullState() {
 			tool0TemperatureCheck(response);
 			bedTempertureCheck(response);
 			jobNameCheck();
-		}).fail((response) => {});
+		}).fail((err) => {
+			$$$.message('Printer is no connected', WARN, 'getPrinterFullState');
+			$('.nav-off').css({color: sunshine});
+			clearInterval(intervalIDprn);
+			resetMonitorText();
+			powerFlag = false;
+			$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
+			$('.file-list-icon-open').css({color: peleskyblue});
+			$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
+			$('.file-list-icon-print').css({color: peleskyblue});
+			$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
+			$('input[name="powerFlag"]').prop('checked', false);
+			$$$.message(`Change powerFlag tag value. value is false`, DEBUG, '$power-btn.click');
+		});
 }
 /**
  * resetMonitorText()
@@ -392,11 +416,16 @@ function postProcess() {
 						$$$.message('Stop fan(speed 0%)', DEBUG, 'postProcess');
 						break;
 				}
-			})
+			}).fail((err) => {
+				$$$.message('trap message alert no 00008', WARN, 'getPrinterFullState');
+			});
 		$$$.message('Execute heart down process', DEBUG, 'postProcess');
 		client.printer.setToolTargetTemperatures({'tool0': 0});
 		$('#tool-on-sw-btn').css({color: sunshine});
 		$('#tool-icon').css({color:sunshine});
+		client.printer.setBedTargetTemperature(0);
+		$('#bed-on-sw-btn').css({color:sunshine});
+		$('#bed-icon').css({color:sunshine});
 	}
 }
 /**
@@ -424,7 +453,9 @@ function postProcess() {
 	}
 	$.ajax(settings).done((response) => {
 		getFilelist();
-	});
+	}).fail((err) => {
+		$$$.message('trap message alert no 00009', WARN, 'getPrinterFullState');
+	});;
 }
 $(() => {
 	if(client == undefined) {
@@ -445,6 +476,37 @@ $(() => {
 	});
 
 	$('#power-btn').click(() => {
+		function logoutProcess() {
+			$$$.message('Call logoutProcess', DEBUG, 'logoutProcess');
+			client.connection.disconnect()
+				.done((response) => {
+					$$$.message('Disconnect success', INFO, '$power-btn.click')
+					client.browser.logout()
+						.done((response) => {
+							$$$.message('Logout success', INFO, '$power-btn.click');
+							$('.file-list-icon-open').css({color: peleskyblue});
+							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
+							$('.file-list-icon-print').css({color: peleskyblue});
+							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+						}).fail((response) => {
+							$$$.message('Logout failure', ERROR, '$power-btn.click');
+							$('.alert-text').text('Error: Failed to logout to printer');
+							$('#alert-pnl').css({visibility: 'visible'});
+							$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+						});
+				}).fail((response) => {
+					$$$.error('Disconnect failure', ERROR , '$power-btn.click');
+					$('.alert-text').text('Error: Failed to disconnect to printer');
+					$('#alert-pnl').css({visibility: 'visible'});
+					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+					actionPowerBtnClick = false;
+					$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				});
+		}
 		$$$.message('Click power-btn', DEBUG, '$power-btn.click');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('power-btn operation prohibited (under toolTempFlag control)', DEBUG, 'power-btn.click');
@@ -452,64 +514,74 @@ $(() => {
 		}
 		if(powerFlag) {
 			$$$.message('Click powerbtn(on>off)', DEBUG, '$power-btn.click');
-			postProcess();
-			client.connection.disconnect()
-				.done((response) => {
-					$$$.message('Disconnect success', INFO, '$power-btn.click')
-					client.browser.logout()
-						.done((response) => {
-							$$$.message('Logout success', INFO, '$power-btn.click');
-							$('.nav-off').css({color: sunshine});
-							clearInterval(intervalIDprn);
-							resetMonitorText();
-							powerFlag = false;
-							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-							$('.file-list-icon-open').css({color: peleskyblue});
-							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
-							$('.file-list-icon-print').css({color: peleskyblue});
-							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
-						}).fail((response) => {
-							$$$.message('Logout failure', ERROR, '$power-btn.click');
-						});
-				}).fail((response) => {
-					$$$.error('Disconnect failure', ERROR , '$power-btn.click');
-					$('.alert-text').text('Error: Failed to disconnect to printer');
-					$('#alert-pnl').css({visibility: 'visible'});
-					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
-				});
+			if(!actionPowerBtnClick) {
+				actionPowerBtnClick = true;
+				$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				powerFlag = false;
+				$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
+				$('input[name="powerFlag"]').prop('checked', false);
+				$$$.message('Change HTML property "powerFlag" is false', DEBUG, '$power-btn.click');
+				$('.nav-off').css({color: sunshine});
+				$$$.message('Change css(color:sunshine) nav-off', DEBUG, '$power-btn.click');
+				postProcess();
+				resetMonitorText();
+				clearInterval(intervalIDprn);
+				$$$.message('Stop temperature monitor timer', DEBUG, '$power-btn.click');
+				setTimeout(() => logoutProcess(), 1200);
+				$$$.message('Logout after 1200ms', WARN, '$power-btn.click');
+			} else {
+				$$$.message('actionPowerBtnClick is true', WARN, '$power-btn.click');
+			}
 		} else {
 			$$$.message('Click powerbtn(off>on)', DEBUG), '$power-btn.click';
-			client.browser.login('mozukuSu', 'ooxot8795SH', true)
-				.done((response) => {
-					$$$.message('Login success', INFO, '$power-btn.click');
-					client.connection.connect({
-						port:			'/dev/ttyACM0',
-						baudrate:		115200,
-						printerProfile:	'_default',
-						save:			true,
-						autoconnect:	false
-					}).done((response) => {
-						$$$.message('Connection success', INFO, '$power-btn.click');
-						$('.nav-off').css({color: rescueorange});
-						powerFlag = true;
-						$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-						intervalIDprn = setInterval(getPrinterFullState, 1000);
-						$('.file-list-icon-open').css({color: sunshine});
-						$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
-						$('.file-list-icon-print').css({color: sunshine});
-						$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
+			if(!actionPowerBtnClick) {
+				actionPowerBtnClick = true;
+				$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				client.browser.login('mozukuSu', 'ooxot8795SH', true)
+					.done((response) => {
+						$$$.message('Login success', INFO, '$power-btn.click');
+						client.connection.connect({
+							port:			'/dev/ttyACM0',
+							baudrate:		115200,
+							printerProfile:	'_default',
+							save:			true,
+							autoconnect:	false
+						}).done((response) => {
+							$$$.message('Connection success', INFO, '$power-btn.click');
+							$('.nav-off').css({color: rescueorange});
+							powerFlag = true;
+							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
+							intervalIDprn = setInterval(getPrinterFullState, 1000);
+							$$$.message(`intervalIDprn is ${intervalIDprn}`, WARN, '$power-btn.click')
+							$('.file-list-icon-open').css({color: sunshine});
+							$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
+							$('.file-list-icon-print').css({color: sunshine});
+							$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+							$('input[name="powerFlag"]').prop('checked', true);
+							$$$.message(`Change powerFlag tag value. value is true`, DEBUG, '$power-btn.click');
+						}).fail((response) => {
+							$$$.message('Connection failure', ERROR, '$power-btn.click');
+							$('.alert-text').text('Error: Failed to connect to printer');
+							$('#alert-pnl').css({visibility: 'visible'});
+							$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+						}).fail((err) => {
+							$$$.message('trap message alert no 00011', WARN, 'getPrinterFullState');
+						});;
 					}).fail((response) => {
-						$$$.message('Connection failure', ERROR, '$power-btn.click');
-						$('.alert-text').text('Error: Failed to connect to printer');
+						$$$.message('Login failure', ERROR, '$power-btn.click');
+						$('.alert-text').text('Error: Failed to login to octoprint server');
 						$('#alert-pnl').css({visibility: 'visible'});
 						$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+						actionPowerBtnClick = false;
+						$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
 					});
-				}).fail((response) => {
-					$$$.message('Login failure', ERROR, '$power-btn.click');
-					$('.alert-text').text('Error: Failed to login to octoprint server');
-					$('#alert-pnl').css({visibility: 'visible'});
-					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
-				});
+			} else {
+				$$$.message('actionPowerBtnClick is true', WARN, '$power-btn.click')
+			}
 		}
 	});
 
@@ -693,7 +765,9 @@ $(() => {
 								break;
 						}
 					}
-				});
+				}).fail((err) => {
+					$$$.message('trap message alert no 00012', WARN, 'getPrinterFullState');
+				});;
 		} else {
 			$$$.message('Printer is not connect', ERROR, '$fan-icon.click');
 			return;
@@ -726,8 +800,7 @@ $(() => {
 					if(data.state.toLowerCase() == 'printing') $$$.message('Now printing. not show slider-panel-tool', WARN, '$tool-icon.click');
 					else if(!powerFlag) $$$.message('Printer is not connected', WARN, '$tool-icon.click');
 				}
-			})
-			.fail(() => {
+			}).fail(() => {
 				$$$.message('Printer not found', ERROR, '$tool-icon.click');
 			})
 	});
@@ -748,8 +821,7 @@ $(() => {
 					toolTempFlag = false;
 					$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, '$tool-on-sw-btn.click');
 				}
-			})
-			.fail(() => {
+			}).fail(() => {
 				$$$.message('Printer not found', ERROR, '$tool-on-sw-btn.click');
 			})
 	});
@@ -804,8 +876,7 @@ $(() => {
 					bedTempFlag = false;
 					$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, '$bed-on-sw-btn.click');
 				}
-			})
-			.fail(function(err){
+			}).fail(function(err){
 				$$$.message('Printer not found', ERROR, '$bed-on-sw-btn.click');
 			})
 	});
@@ -822,8 +893,7 @@ $(() => {
 					else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, '$print-icon.click');
 					return;
 				}
-			})
-			.fail(() => {
+			}).fail(() => {
 				$$$.message('Printer not found', ERROR, '$printClick');
 			});
 	});
@@ -1094,6 +1164,8 @@ $(() => {
 					.done((response) => {
 						extruderPosition[0] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p1.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00013', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p1.click');
 		}
@@ -1146,6 +1218,8 @@ $(() => {
 						extruderPosition[1] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p3.click');
 						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p3.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00014', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-p3.click');
 		}
@@ -1198,6 +1272,8 @@ $(() => {
 						extruderPosition[2] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p5.click');
 						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p5.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00015', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-p5.click');
 		}
@@ -1221,6 +1297,8 @@ $(() => {
 					.done(() => {
 						extruderPosition[1] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-p6.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00016', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-p6.click');
 		}
@@ -1247,6 +1325,8 @@ $(() => {
 						extruderPosition[0] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p7.click');
 						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p7.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00017', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p7.click');
 		}
@@ -1301,6 +1381,8 @@ $(() => {
 						extruderPosition[0] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-p9.click');
 						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-p9.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00018', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('X-axis is not at the origin yet', INFO, '$manu-btn-p9.click');
 		}
@@ -1347,6 +1429,8 @@ $(() => {
 					.done(() => {
 						extruderPosition[2] = 0;
 						$$$.message('g-code success', DEBUG, '$manu-btn-pb.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00019', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Printer is not connect', ERROR, '$manu-btn-pb.click');
 		}
@@ -1400,6 +1484,8 @@ $(() => {
 						extruderPosition[1] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-pd.click');
 						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-pd.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00020', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Y-axis is not at the origin yet', INFO, '$manu-btn-pd.click');
 		}
@@ -1452,6 +1538,8 @@ $(() => {
 						extruderPosition[2] = pos;
 						$$$.message('gCode succcess.', INFO, '$manu-btn-pf.click');
 						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  '$manu-btn-pf.click');
+					}).fail((err) => {
+						$$$.message('trap message alert no 00021', WARN, 'getPrinterFullState');
 					});
 			} else $$$.message('Z-axis is not at the origin yet', INFO, '$manu-btn-pf.click');
 		}
@@ -1488,7 +1576,11 @@ $(() => {
 							client.control.sendGcode('G28 Z0')
 								.done(() => {
 									$$$.message('Finish moving', DEBUG, 'bedLevelingPosition')
+								}).fail((err) => {
+									$$$.message('trap message alert no 00022', WARN, 'getPrinterFullState');
 								});
+						}).fail((err) => {
+							$$$.message('trap message alert no 00023', WARN, 'getPrinterFullState');
 						});
 				});
 		}
@@ -1529,6 +1621,8 @@ $(() => {
 					extruderPosition[1] = y;
 					$$$.message('gCode succcess.', INFO, 'diagonalMove');
 					$$$.message(`Extruder position is x=${x} y=${y} z=${extruderPosition[2]}`, INFO,  'diagonalMove');
+				}).fail((err) => {
+					$$$.message('trap message alert no 00024', WARN, 'getPrinterFullState');
 				});
 		}
 	}
@@ -1555,6 +1649,10 @@ $(() => {
 
 	$('#extruder-btn-up').click(() => {
 		$$$.message('Click extruder-btn-up', DEBUG, '$extruder-btn-up.click');
+		if(!canRunExtruder || !powerFlag) {
+			$$$.message('Dispensable temperature not reached', WARN, '$extruder-btn-up.click');
+			return;
+		}
 		if(!waitNextClick) {
 			$('#extruder-btn-up').css({
 				color:				rescueorange,
@@ -1572,7 +1670,11 @@ $(() => {
 					client.control.sendGcode(`G1 E-${$('#amount-value').val()}MM`)
 						.done(() => {
 							$$$.message(`Retract filament ${$('#amount-value').val()}mm`, DEBUG, '$extruder-btn-up.click');
+						}).fail((err) => {
+							$$$.message('trap message alert no 00025', WARN, 'getPrinterFullState');
 						});
+				}).fail((err) => {
+					$$$.message('trap message alert no 00026', WARN, 'getPrinterFullState');
 				});
 			}
 		}
@@ -1580,6 +1682,10 @@ $(() => {
 
 	$('#extruder-btn-down').click(() => {
 		$$$.message('Click extruder-btn-down', DEBUG, '$extruder-btn-down.click');
+		if(!canRunExtruder || !powerFlag) {
+			$$$.message('Dispensable temperature not reached', WARN, '$extruder-btn-down.click');
+			return;
+		}
 		if(!waitNextClick) {
 			$('#extruder-btn-down').css({
 				color:				rescueorange,
@@ -1598,7 +1704,11 @@ $(() => {
 						client.control.sendGcode(`G1 F500 E${$('#amount-value').val()}MM`)
 							.done(() => {
 								$$$.message(`Extrud filament ${$('#amount-value').val()}mm`, DEBUG, '$extruder-btn-down.click');
+							}).fail((err) => {
+								$$$.message('trap message alert no 00026', WARN, 'getPrinterFullState');
 							});
+					}).fail((err) => {
+						$$$.message('trap message alert no 00027', WARN, 'getPrinterFullState');
 					});
 			}
 		}

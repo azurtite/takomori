@@ -476,6 +476,37 @@ $(() => {
 	});
 
 	$('#power-btn').click(() => {
+		function logoutProcess() {
+			$$$.message('Call logoutProcess', DEBUG, 'logoutProcess');
+			client.connection.disconnect()
+				.done((response) => {
+					$$$.message('Disconnect success', INFO, '$power-btn.click')
+					client.browser.logout()
+						.done((response) => {
+							$$$.message('Logout success', INFO, '$power-btn.click');
+							$('.file-list-icon-open').css({color: peleskyblue});
+							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
+							$('.file-list-icon-print').css({color: peleskyblue});
+							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+						}).fail((response) => {
+							$$$.message('Logout failure', ERROR, '$power-btn.click');
+							$('.alert-text').text('Error: Failed to logout to printer');
+							$('#alert-pnl').css({visibility: 'visible'});
+							$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+							actionPowerBtnClick = false;
+							$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+						});
+				}).fail((response) => {
+					$$$.error('Disconnect failure', ERROR , '$power-btn.click');
+					$('.alert-text').text('Error: Failed to disconnect to printer');
+					$('#alert-pnl').css({visibility: 'visible'});
+					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
+					actionPowerBtnClick = false;
+					$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				});
+		}
 		$$$.message('Click power-btn', DEBUG, '$power-btn.click');
 		if(toolTempFlag || bedTempFlag) {
 			$$$.message('power-btn operation prohibited (under toolTempFlag control)', DEBUG, 'power-btn.click');
@@ -483,33 +514,24 @@ $(() => {
 		}
 		if(powerFlag) {
 			$$$.message('Click powerbtn(on>off)', DEBUG, '$power-btn.click');
-			postProcess();
-			client.connection.disconnect()
-				.done((response) => {
-					$$$.message('Disconnect success', INFO, '$power-btn.click')
-					client.browser.logout()
-						.done((response) => {
-							$$$.message('Logout success', INFO, '$power-btn.click');
-							$('.nav-off').css({color: sunshine});
-							clearInterval(intervalIDprn);
-							resetMonitorText();
-							powerFlag = false;
-							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-							$('.file-list-icon-open').css({color: peleskyblue});
-							$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, '$power-btn.click');
-							$('.file-list-icon-print').css({color: peleskyblue});
-							$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, '$power-btn.click');
-							$('input[name="powerFlag"]').prop('checked', false);
-							$$$.message(`Change powerFlag tag value. value is false`, DEBUG, '$power-btn.click');
-						}).fail((response) => {
-							$$$.message('Logout failure', ERROR, '$power-btn.click');
-						});
-				}).fail((response) => {
-					$$$.error('Disconnect failure', ERROR , '$power-btn.click');
-					$('.alert-text').text('Error: Failed to disconnect to printer');
-					$('#alert-pnl').css({visibility: 'visible'});
-					$$$.message('Change css(visibility:visible) alert-text', DEBUG, '$power-btn.click');
-				});
+			if(!actionPowerBtnClick) {
+				actionPowerBtnClick = true;
+				$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				powerFlag = false;
+				$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
+				$('input[name="powerFlag"]').prop('checked', false);
+				$$$.message('Change HTML property "powerFlag" is false', DEBUG, '$power-btn.click');
+				$('.nav-off').css({color: sunshine});
+				$$$.message('Change css(color:sunshine) nav-off', DEBUG, '$power-btn.click');
+				postProcess();
+				resetMonitorText();
+				clearInterval(intervalIDprn);
+				$$$.message('Stop temperature monitor timer', DEBUG, '$power-btn.click');
+				setTimeout(() => logoutProcess(), 1200);
+				$$$.message('Logout after 1200ms', WARN, '$power-btn.click');
+			} else {
+				$$$.message('actionPowerBtnClick is true', WARN, '$power-btn.click');
+			}
 		} else {
 			$$$.message('Click powerbtn(off>on)', DEBUG), '$power-btn.click';
 			if(!actionPowerBtnClick) {

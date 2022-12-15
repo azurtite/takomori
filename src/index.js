@@ -197,78 +197,69 @@ function backClick(item) {
 	getFilelist(item);
 }
 function folderClick(pos) {
+	$('#information-panel-ctrl').html('');
 	if('files' in fileInfoContainar) getFilelist(fileInfoContainar.files[pos].path);
 	else if('children' in fileInfoContainar) getFilelist(fileInfoContainar.children[pos].path);
 }
 function fileClick(pos) {
-	var temporalyContainar;
-	if('files' in fileInfoContainar) {
-		temporalyContainar = fileInfoContainar.files;
-		console.log(temporalyContainar[pos].path);
-	} else if('children' in fileInfoContainar) {
-		temporalyContainar = fileInfoContainar.children;
-		console.log(temporalyContainar[pos].path);
+	function detectName() {
+		$$$.message(`Call detectName`, DEBUG, `detectName`);
+		var name = '';
+		for(var i=0; i<temporalyContainar[pos].display.split('.').length - 1; i++) {
+			if(i > 0) name += '.';
+			name += temporalyContainar[pos].display.split('.')[i];
+		}
+		$$$.message('Detect display name', DEBUG, 'detectName');
+		return name;
 	}
-}
-/**
- * File control icons event
- */
-function displayClick(e) {
 	function calculateTime(t) {
 		$$$.message(`Call calculateTime`, DEBUG, 'calculateTime');
 		let time, temp;
 		temp = Math.floor(t / 3600);
-		time = temp + 'h';
+		if(temp > 0) time = temp + 'h';
+		else time = '';
 		t = t - (temp * 3600);
 		$$$.message(`Calculation hour. quotient is ${temp}. surplus is ${t}`, DEBUG, 'calculateTime');
 		temp = Math.floor(t / 60);
 		$$$.message(`Calculation minutes. quotient is ${temp}. surplus is ${(t - (temp * 60))}`, DEBUG, 'calculateTime');
-		time = time + temp + 'm' + Math.floor((t - (temp * 60))*100)/100 + 's';
+		time = time + temp + 'm' + Math.round(t - (temp * 60)) + 's';
 		return time;
-	}
-	function detectName() {
-		$$$.message(`Call detectName`, DEBUG, 'detectName');
-		var name = '';
-		for(var i=0;i<fileInfoContainar.files[e].display.split('.').length - 1;i++) {
-			if(i > 0) name += '.';
-			name += fileInfoContainar.files[e].display.split('.')[i];
-		}
-		$$$.message(`Detect display name`, DEBUG, 'displayClick');
-		return name;
 	}
 	function calculateFilament(f) {
 		$$$.message(`Call calculateFilament`, DEBUG, 'calculateFilament');
 		var length,temp;
 		temp = Math.floor(f / 1000);
 		f = f - (temp * 1000);
-		length = temp + 'm';
+		if(temp > 0) length = temp + 'm';
+		else length = '';
 		$$$.message(`Calculation meter. quotient is ${temp}. surplus is ${f}`, DEBUG, 'calculateFilament');
 		temp = Math.floor(f / 10);
 		f = f - (temp * 10);
 		length = length + temp + 'cm';
 		$$$.message(`Calculation centimeter. quotient is ${temp}. surplus is ${f}`, DEBUG, 'calculateFilament');
-		length = length + Math.floor(f * 100) / 100 + 'mm';
+		length = length + Math.round(f) + 'mm';
 		return length;
 	}
-	$$$.message(`Call displayClick`, DEBUG, 'displayClick');
-	$$$.message('Name tag click(' + e + ')', DEBUG, 'displayClick');
+	$$$.message(`Call fileClick`, DEBUG, 'fileClick');
+	$$$.message('Name tag click(' + pos + ')', DEBUG, 'fileClick');
+	var temporalyContainar;
+	if('files' in fileInfoContainar) temporalyContainar = fileInfoContainar.files;
+	else if('children' in fileInfoContainar) temporalyContainar = fileInfoContainar.children;
 	$('#information-panel-ctrl').html(
-		`<div class="title">${detectName()}</h3>`+
-		'<hr>' +
-		'<table class="information-table">' +
-		`<tr><td>Type:</td><td>${fileInfoContainar.files[e].display.split('.')[fileInfoContainar.files[e].display.split('.').length-1]}</td></tr>` +
-		`<tr><td>Time:</td><td>${calculateTime(fileInfoContainar.files[e].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +
-		'<tr><td colspan="2">Filament:</td></tr>' +
-		`<tr><td colspan="2" class="right">${calculateFilament(fileInfoContainar.files[e].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
-		'<th>Size:</th>' +
+		`<div class="title">${detectName()}</div>` +
+		`<hr>`+
+		`<table class="information-table">` +
+		`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split('.')[temporalyContainar[pos].display.split('.').length - 1]}</td></tr>` +
+		`<tr><td>Time:</td><td class="right">${calculateTime(temporalyContainar[pos].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +
+		`<tr><td>Filament:</td><td class="right">${calculateFilament(temporalyContainar[pos].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
+		`<th>Size:</th>` +
 		`<tr><td colspan=2 class="right">
-		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.width*100)/100}x
-		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.depth*100)/100}x
-		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.height*100)/100} mm` +
+		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.width * 100) / 100} x 
+		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.depth * 100) / 100} x 
+		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.height * 100) / 100} mm` +
 		'</td></tr>' +
-		'</table>'
+		`</table>`
 	);
-	$$$.message('Generate innerHTML(information-panel)', DEBUG, 'displayClick');
 }
 function downloadClick(e) {
 	function changeStream(data) {

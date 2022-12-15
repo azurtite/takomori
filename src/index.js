@@ -331,16 +331,19 @@ function openClick(pos) {
 			});;
 	}
 }
-function printClick(e) {
+function printClick(pos) {
 	$$$.message(`Call printClick`, DEBUG, 'printClick');
-	$$$.message(`Click the print icon in listing ${e}`, DEBUG, 'printClick');
+	$$$.message(`Click the print icon in listing ${pos}`, DEBUG, 'printClick');
 	$.get(`${baseURL}api/job?apikey=${apiKey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing' && powerFlag) {
-				client.files.select('local', fileInfoContainar.files[e].path, true);
-				$$$.message(`Start printing ${fileInfoContainar.files[e].display}`, INFO, 'printClick');
+				var path;
+				if('files' in fileInfoContainar) path = fileInfoContainar.files[pos].path;
+				else if('children' in fileInfoContainar) path = fileInfoContainar.children[pos].path;
+				client.files.select('local', path, true);
+				$$$.message(`Start printing ${path}`, INFO, 'printClick');
 			} else {
-				if(!powerFlag) $$$.message(`This button is not active(icon-print-${e})`, DEBUG, 'printClick');
+				if(!powerFlag) $$$.message(`This button is not active(icon-print-${pos})`, DEBUG, 'printClick');
 				else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, 'printClick');
 				return;
 			}

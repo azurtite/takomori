@@ -115,7 +115,6 @@ function getFilelist(path) {
 				else temp = temp + fileName[i];
 			}
 			fileName = temp;
-			console.log(temp);
 		}
 
 		var elem = document.createElement('div');
@@ -140,7 +139,6 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type == 'folder') genFolderPanel(fileInfoContainar.files[i].path, i);
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != 'folder') genFilePanel(fileInfoContainar.files[i].path, i);
-				console.log(data)
 			})
 			.fail((err) => {});
 	else if(typeof(path) == 'string') {

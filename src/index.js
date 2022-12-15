@@ -261,7 +261,7 @@ function fileClick(pos) {
 		`</table>`
 	);
 }
-function downloadClick(e) {
+function downloadClick(pos) {
 	function changeStream(data) {
 		$$$.message('Call changeStream', DEBUG, 'changeStream')
 		$$$.message('Start encording ', DEBUG, 'changeStream')
@@ -273,10 +273,13 @@ function downloadClick(e) {
 		return result;
 	}
 	$$$.message(`Call downloadClick`, DEBUG, 'downloadClick');
-	$$$.message(`Click the download icon in listing ${e}`, DEBUG, 'downloadClick');
-	client.files.download('local', fileInfoContainar.files[e].path)
+	$$$.message(`Click the download icon in listing ${pos}`, DEBUG, 'downloadClick');
+	var path;
+	if('files' in fileInfoContainar) path = fileInfoContainar.files[pos].path;
+	else if('children' in fileInfoContainar) path = fileInfoContainar.children[pos].path;
+	client.files.download('local', path)
 		.done((data) => {
-			$$$.message(`Download ${fileInfoContainar.files[e].display}`, DEBUG, 'downloadClick');
+			$$$.message(`Download ${path}`, DEBUG, 'downloadClick');
 			var stream = new Uint8Array(changeStream(data));
 			var element = document.createElement('a');
 			element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'text/.gcode'}));

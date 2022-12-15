@@ -310,18 +310,21 @@ function trashClick(pos) {
 			$$$.message('trap message alert no 00005', WARN, 'getPrinterFullState');
 		});;
 }
-function openClick(e) {
+function openClick(pos) {
 	$$$.message('Call openClick', DEBUG, 'openClick');
-	$$$.message(`Click the open icon in listing ${e}`, DEBUG, 'openClick');
+	$$$.message(`Click the open icon in listing ${pos}`, DEBUG, 'openClick');
 	if(!powerFlag) {
-		$$$.message(`This button is not active(icon-open-${e})`, DEBUG, 'openClick');
+		$$$.message(`This button is not active(icon-open-${pos})`, DEBUG, 'openClick');
 		return;
 	} else {
 		$.get(`${baseURL}api/job?apikey=${apiKey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing') {
-					client.files.select('local', fileInfoContainar.files[e].path);
-					$$$.message(`Set ${fileInfoContainar.files[e].display} to print`, DEBUG, 'openClick');
+					var path;
+					if('files' in fileInfoContainar) path = fileInfoContainar.files[pos].path;
+					else if('children' in fileInfoContainar) path = fileInfoContainar.children[pos].path;
+					client.files.select('local', path);
+					$$$.message(`Set ${path} to print`, DEBUG, 'openClick');
 				} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'openClick');
 			}).fail((err) => {
 				$$$.message('trap message alert no 00006', WARN, 'getPrinterFullState');
@@ -540,6 +543,7 @@ function postProcess() {
 		client.printer.setBedTargetTemperature(0);
 		$('#bed-on-sw-btn').css({color:sunshine});
 		$('#bed-icon').css({color:sunshine});
+		$("#jobname").text('not printed');
 	}
 }
 /**
@@ -631,13 +635,13 @@ $(() => {
 			if(!actionPowerBtnClick) {
 				actionPowerBtnClick = true;
 				$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				postProcess();
 				powerFlag = false;
 				$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
 				$('input[name="powerFlag"]').prop('checked', false);
 				$$$.message('Change HTML property "powerFlag" is false', DEBUG, '$power-btn.click');
 				$('.nav-off').css({color: sunshine});
 				$$$.message('Change css(color:sunshine) nav-off', DEBUG, '$power-btn.click');
-				postProcess();
 				resetMonitorText();
 				clearInterval(intervalIDprn);
 				$$$.message('Stop temperature monitor timer', DEBUG, '$power-btn.click');

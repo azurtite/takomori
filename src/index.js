@@ -60,10 +60,107 @@ if(windowSize == 1) {
 /**
  * file list process
  */
- let fileInfoContainar;
-function getFilelist() {
-	$$$.message('Call REST api', DEBUG, 'getFilelist');
-	$.get(`${baseURL}api/files?apikey=${apiKey}`)
+let fileInfoContainar;
+function getFilelist(path) {
+	function genBackPanel(item) {
+		var elem = document.createElement('div');
+		elem.innerHTML = 
+			`<div class="item-panel1">` +
+			`<div class="display-name" onclick="backClick('${item}')"><span class="glyphicon glyphicon glyphicon-arrow-left"></span>&nbsp Back</div>` +
+			`<div class="small-font-back">Currently in ${path.split('/')[path.split('/').length - 1]}</div>` +
+			`</div>`;
+		$('#file-list-ctrl').append(elem);
+	}
+	function genFolderPanel(item, pos) {
+		var folding = 1;
+		var temp = '';
+		var fileName = item.split('/')[item.split('/').length - 1];
+		if(fileName.length > 15) {
+			folding = Math.floor(fileName.length / 15) + 1;
+			for(var i=0; i<fileName.length; i++) {
+				if((i % 15) == 0 && i != 0) temp = temp + "<br />" + fileName[i];
+				else temp = temp + fileName[i];
+			}
+			fileName = temp;
+			console.log(temp);
+		}
+
+		var size;
+		if('files' in fileInfoContainar) size = fileInfoContainar.files[pos].size;
+		else if('children' in fileInfoContainar) size = fileInfoContainar.children[pos].size;
+
+		if(size < 1024) size+='B';
+		else if(size < 1048576) size = (Math.floor(size / 1024 * 100) / 100) + 'KB';
+		else if(size < 1073741824) size = (Math.floor(size / 1024 / 1024 * 100) /100) + 'MB';
+
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel${folding}">` +
+			`<div class="display-name" onclick="folderClick('${pos}')"><span class="glyphicon glyphicon glyphicon-folder-close"></span>&nbsp;${item.split('/')[item.split('/').length-1]}</div>` +
+			`<div><div class="small-font">Size: ${size}</div>` +
+			`<div class="left-btn file-list-icon-level-up" onclick=""><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+			`<div class="right-btn file-list-icon-trash" onclick=""><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
+			'</div>';
+		$('#file-list-ctrl').append(elem);
+	}
+	function genFilePanel(item, pos) {
+		var folding = 1;
+		var temp = '';
+		var fileName = item.split('/')[item.split('/').length - 1];
+		if(fileName.length > 15) {
+			folding = Math.floor(fileName.length / 15) + 1;
+			for(var i=0; i<fileName.length; i++) {
+				if((i % 15) == 0 && i != 0) temp = temp + "<br />" + fileName[i];
+				else temp = temp + fileName[i];
+			}
+			fileName = temp;
+			console.log(temp);
+		}
+
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel${folding}">` +
+			`<div class="display-name" onclick="fileClick('${pos}')"><span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;${fileName}</div>` +
+			`<div><div class="small-font-file">&nbsp;</div>` +
+			`<div class="left-btn file-list-icon-download" onclick="downloadClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div></div>` +
+			`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${pos})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+			`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>` +
+			`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
+			`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>`
+		$('#file-list-ctrl').append(elem);
+	}
+
+	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
+	$('#file-list-ctrl').html('');
+	if(path == undefined || path == '')
+		client.files.list()
+			.done((data) => {
+				fileInfoContainar = data;
+				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type == 'folder') genFolderPanel(fileInfoContainar.files[i].path, i);
+				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != 'folder') genFilePanel(fileInfoContainar.files[i].path, i);
+				console.log(data)
+			})
+			.fail((err) => {});
+	else if(typeof(path) == 'string') {
+		var backFolder = path.split('/');
+		if(backFolder.length == 1) genBackPanel('');
+		else {
+			var temp = backFolder[0];
+			for(var i=1; i<backFolder.length - 1; i++) temp = temp + '/' + backFolder[i];
+			genBackPanel(temp);
+		}
+
+		client.files.get('local', path)
+			.done((data) => {
+				fileInfoContainar = data;
+				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == 'folder') genFolderPanel(fileInfoContainar.children[i].path, i);
+				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
+				console.log(data)
+			})
+			.fail((err) => {});
+	}
+/*
+		$.get(`${baseURL}api/files?apikey=${apiKey}`)
 		.done((data) => {
 			fileInfoContainar = data;
 			$('#file-list-ctrl').html('');
@@ -73,6 +170,7 @@ function getFilelist() {
 					`<div class="display-name" onclick="displayClick(${i})">${data.files[i].display}</div>` + 
 					`<div class="left-btn file-list-icon-download" onclick="downloadClick(${i})"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>` +
 					`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${i})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
 					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
 					`<div class="middle-btn file-list-icon-open" onclick="openClick(${i})"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>` +
 					`<div class="right-btn file-list-icon-print" onclick="printClick(${i})"><span class="glyphicon glyphicon glyphicon-print"></span></div>`;
@@ -93,6 +191,24 @@ function getFilelist() {
 		}).fail((err) => {
 			$$$.message('trap message alert no 00003', WARN, 'getPrinterFullState');
 		});
+*/
+}
+function backClick(item) {
+	getFilelist(item);
+}
+function folderClick(pos) {
+	if('files' in fileInfoContainar) getFilelist(fileInfoContainar.files[pos].path);
+	else if('children' in fileInfoContainar) getFilelist(fileInfoContainar.children[pos].path);
+}
+function fileClick(pos) {
+	var temporalyContainar;
+	if('files' in fileInfoContainar) {
+		temporalyContainar = fileInfoContainar.files;
+		console.log(temporalyContainar[pos].path);
+	} else if('children' in fileInfoContainar) {
+		temporalyContainar = fileInfoContainar.children;
+		console.log(temporalyContainar[pos].path);
+	}
 }
 /**
  * File control icons event
@@ -463,7 +579,7 @@ $(() => {
 		$('.alert-panel').css({visibility: 'visible'});
 		$$$.message('Change css(visibility:visible) alert-panel', DEBUG, 'jQuery');
 	}
-	getFilelist();
+	getFilelist(undefined);
 	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
 	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');
 	$('#progressbar-one').addClass('progress-bar-forestleaf');

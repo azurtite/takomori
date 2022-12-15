@@ -32,6 +32,7 @@ let canRunExtruder		= false;
 let extruderMovingTemp	= 200;
 let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
+let locationPath		= '';
 
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
@@ -132,6 +133,7 @@ function getFilelist(path) {
 
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
 	$('#file-list-ctrl').html('');
+	locationPath = path;
 	if(path == undefined || path == '')
 		client.files.list()
 			.done((data) => {
@@ -291,16 +293,18 @@ function downloadClick(pos) {
 			$$$.message('trap message alert no 00004', WARN, 'getPrinterFullState');
 		});
 }
-function trashClick(e) {
+function trashClick(pos) {
 	$$$.message(`Call trashClick`, DEBUG, 'trashClick');
-	$$$.message(`Click the trash icon in listing ${e}`, DEBUG, 'trashClick');
+	$$$.message(`Click the trash icon in listing ${pos}`, DEBUG, 'trashClick');
 	$.get(`${baseURL}api/job?apikey=${apiKey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing') {
-				var f = fileInfoContainar.files[e].path;
+				var f;
+				if('files' in fileInfoContainar) f = fileInfoContainar.files[pos].path;
+				else if('children' in fileInfoContainar) f = fileInfoContainar.children[pos].path;
 				client.files.delete('local', f);
 				$$$.message(`Delete ${f}`, INFO, 'trashClick');
-				getFilelist();
+				getFilelist(locationPath);
 			} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'trashClick');
 		}).fail((err) => {
 			$$$.message('trap message alert no 00005', WARN, 'getPrinterFullState');

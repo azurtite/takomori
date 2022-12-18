@@ -537,16 +537,23 @@ function postProcess() {
 						break;
 				}
 			}).fail((err) => {
-				$$$.message('trap message alert no 00008', WARN, 'getPrinterFullState');
+				$$$.message('trap message alert no 00008', WARN, 'postProcess');
 			});
 		$$$.message('Execute heart down process', DEBUG, 'postProcess');
 		client.printer.setToolTargetTemperatures({'tool0': 0});
+		$$$.message('Heart down tool 0', INFO, 'postProcess');
 		$('#tool-on-sw-btn').css({color: sunshine});
+		$$$.message('Change css(color:sunshine) tool-on-sw-btn', DEBUG, 'postProcess');
 		$('#tool-icon').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) tool-icon', DEBUG, 'postProcess');
 		client.printer.setBedTargetTemperature(0);
+		$$$.message('Heart down bed', INFO, 'postProcess');
 		$('#bed-on-sw-btn').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, 'postProcess');
 		$('#bed-icon').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) bed-icon', DEBUG, 'postProcess');
 		$("#jobname").text('not printed');
+		$$$.message('Initialize jobname text', DEBUG, 'postProcess');
 	}
 }
 /**

@@ -34,6 +34,7 @@ let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
 let locationPath		= '';
 
+let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
 let extruderPosition	= [-99, -99, -99];
@@ -131,6 +132,31 @@ function getFilelist(path) {
 	}
 
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
+
+	$$$.message('Generate folder list', DEBUG, 'getFilelist');
+	folderList = ['/'];
+	client.files.listForLocation('local', true)
+		.done((data) => {
+			function detectFolder(child) {
+				for(var i=0; i<child.children.length; i++) if(child.children[i].type == 'folder') {
+					folderList[folderList.length] = child.children[i].path;
+					detectFolder(child.children[i]);
+				}
+			}
+			for(var i=0; i<data.files.length; i++)
+				if(data.files[i].type == 'folder') {
+					folderList[folderList.length] = data.files[i].path;
+					detectFolder(data.files[i]);
+				}
+			for(var i=0; i<=folderList.length; i++) {
+				var elem = document.createElement('option');
+				elem.value = i;
+				if(folderList[i] != '/') elem.text = `/${folderList[i]}`;
+				else elem.text = `${folderList[i]}`;
+				$('#folder-list-ctrl').append(elem);
+			}
+		}).fail((err) => {});
+
 	$('#file-list-ctrl').html('');
 	locationPath = path;
 	if(path == undefined || path == '')

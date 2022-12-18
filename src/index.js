@@ -138,6 +138,7 @@ function getFilelist(path) {
 	client.files.listForLocation('local', true)
 		.done((data) => {
 			function detectFolder(child) {
+				$$$.message(`Call detectFolder`, DEBUG, `detectFolder`);
 				for(var i=0; i<child.children.length; i++) if(child.children[i].type == 'folder') {
 					folderList[folderList.length] = child.children[i].path;
 					detectFolder(child.children[i]);
@@ -376,10 +377,19 @@ function printClick(pos) {
 			$$$.message('Printer not found', ERROR, '$printClick');
 		});
 }
-function levelupClick(e) {
+function levelupClick(pos) {
 	$$$.message(`Call levelupClick`, DEBUG, 'levelupClick');
-	$$$.message(`Click the level-up icon in listing ${e}`, DEBUG, 'levelupClick');
+	$$$.message(`Click the level-up icon in listing ${pos}`, DEBUG, 'levelupClick');
+	if('files' in fileInfoContainar) {
+		$('#filename-box-ctrl').val(fileInfoContainar.files[pos].display);
+		$('#base-path-ctrl').text(fileInfoContainar.files[pos].path);
+	} else if('children' in fileInfoContainar) {
+		$('#filename-box-ctrl').val(fileInfoContainar.children[pos].display);
+		$('#base-path-ctrl').text(fileInfoContainar.children[pos].path);
+	}
+	$$$.message('Set filename to filename-box-ctrl', DEBUG, 'levelupClick');
 	$('#file-notice-ctrl').css({visibility: 'visible'});
+	$$$.message('Change css(visibility:visible) file-notice-ctrl', DEBUG, 'levelupClick');
 }
 /**
  * getPrinterFullSate()

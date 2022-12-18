@@ -84,7 +84,6 @@ function getFilelist(path) {
 				else temp = temp + fileName[i];
 			}
 			fileName = temp;
-			console.log(temp);
 		}
 
 		var size;
@@ -183,43 +182,9 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == 'folder') genFolderPanel(fileInfoContainar.children[i].path, i);
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
-				console.log(data)
 			})
 			.fail((err) => {});
 	}
-/*
-		$.get(`${baseURL}api/files?apikey=${apiKey}`)
-		.done((data) => {
-			fileInfoContainar = data;
-			$('#file-list-ctrl').html('');
-			for(var i=0; i<data.files.length; i++) {
-				var element = document.createElement('div');
-				element.innerHTML =
-					`<div class="display-name" onclick="displayClick(${i})">${data.files[i].display}</div>` + 
-					`<div class="left-btn file-list-icon-download" onclick="downloadClick(${i})"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>` +
-					`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${i})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
-					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
-					`<div class="middle-btn file-list-icon-open" onclick="openClick(${i})"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>` +
-					`<div class="right-btn file-list-icon-print" onclick="printClick(${i})"><span class="glyphicon glyphicon glyphicon-print"></span></div>`;
-				$('#file-list-ctrl').append(element);
-				$$$.message(`Append file in list. listing no ${i}`, DEBUG, 'getFilelist');
-			}
-			if(powerFlag) {
-				$('.file-list-icon-open').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, 'getFilelist');
-				$('.file-list-icon-print').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, 'getFilelist');
-			} else {
-				$('.file-list-icon-open').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, 'getFilelist');
-				$('.file-list-icon-print').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, 'getFilelist');
-			}
-		}).fail((err) => {
-			$$$.message('trap message alert no 00003', WARN, 'getPrinterFullState');
-		});
-*/
 }
 function backClick(item) {
 	getFilelist(item);
@@ -1266,12 +1231,7 @@ $(() => {
 		$$$.message('Trigger file-open-btn click event', DEBUG, '$upload-btn.click');
 		document.getElementById('file-open.btn').click();
 	});
-/*
-	$('#file-notice-ctrl').click(() => {
-		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
-		$('#file-notice-ctrl').css({visibility: 'hidden'});
-	});
-*/
+
 	$('#move-btn-ctrl').click(() => {
 		$$$.message('Click move-btn-ctrl', DEBUG, '$move-btn-ctrl');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
@@ -1661,7 +1621,6 @@ $(() => {
 			if(powerFlag && extruderPosition[1] >= 0) { 
 				var pos = extruderPosition[1] - seedRate;
 				if(pos < 0) pos = 0;
-				console.log(pos);
 				client.control.sendGcode(`G0 Y${pos}MM F1500`)
 					.done(() => {
 						extruderPosition[1] = pos;
@@ -1880,7 +1839,6 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$extruder-btn-down.click');
 			setTimeout(()=>{restoreButtonCSS('down')}, 500);
 			if(powerFlag && canRunExtruder) {
-				console.log(`G1 E${$('#amount-value').val()}MM`);
 				client.control.sendGcode('G92 E0')
 					.done(() => {
 						$$$.message('Reset extruder extrud position', DEBUG, '$extruder-btn-down.click');

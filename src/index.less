@@ -626,19 +626,75 @@ body {
 	}
 	.file-notice {
 		position:			relative;
-		height:				200px;
+		height:				210px;
 		width:				360px;
 		left:				20px;
 		top:				10px;
 		color:				@sunshine;
 		background-color:	@skyhigh;
 		visibility:			hidden;
-		.file-notice-text {
+		.title {
 			position:		relative;
-			height:			70px;
-			width:			150px;
-			left:			105px;
-			top:			65px;
+			left:			5px;
+			height:			32px;
+			width:			325px;
+			font-size:		15pt;
+			padding-bottom:	5px;
+			border-bottom:	1px solid @sunshine;
+		}
+		.title-folder {
+			position:		relative;
+			top:			15px;
+			left:			15px;
+			font-size:		18px;
+		}
+		.folder-list {
+			position: 		relative;
+			top:			20px;
+			left:			18px;
+			height:			24px;
+			width:			320px;
+			border:			1px;
+			border-radius:	5px;
+		}
+		.title-file {
+			position:		relative;
+			top:			25px;
+			left:			15px;
+			font-size:		18px;
+		}
+		.filename-box {
+			position:		relative;
+			top:			30px;
+			left:			18px;
+			height:			24px;
+			width:			320px;
+			border:			1px;
+			border-radius:	5px;
+		}
+		.cancel-btn {
+			position:			relative;
+			display:			table-cell;
+			top:				40px;
+			left:				210px;
+			height:				32px;
+			width:				60px;
+			border-radius:		5px;
+			text-align:			center;
+			vertical-align:		middle;
+			background-color:	@ceruleanblue;
+		}
+		.move-btn {
+			position:			relative;
+			display:			table-cell;
+			top:				40px;
+			left:				220px;
+			height:				32px;
+			width:				60px;
+			border-radius:		5px;
+			text-align:			center;
+			vertical-align:		middle;
+			background-color:	@ceruleanblue;
 		}
 	}
 	.file-notice::after {

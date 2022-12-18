@@ -1229,12 +1229,24 @@ $(() => {
 		$$$.message('Trigger file-open-btn click event', DEBUG, '$upload-btn.click');
 		document.getElementById('file-open.btn').click();
 	});
-
+/*
 	$('#file-notice-ctrl').click(() => {
 		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
 	});
+*/
+	$('#move-btn-ctrl').click(() => {
+		$$$.message('Click move-btn-ctrl', DEBUG, '$move-btn-ctrl');
+		$('#file-notice-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) move-btn-ctrl', DEBUG, '$move-btn-ctrl');
+	});
 
+	$('#cancel-btn-ctrl').click(() => {
+		$$$.message('Click cancel-btn-ctrl', DEBUG, '$cancel-btn-ctrl');
+		$('#file-notice-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) cancel-btn-ctrl', DEBUG, '$cancel-btn-ctrl');
+	});
+	
 	$('#seed-value-p1').click(() => {
 		$$$.message('Click seed-value-p1', DEBUG, '$seed-value-p1.click');
 		changeSeedRate(1);

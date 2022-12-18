@@ -65,6 +65,7 @@ if(windowSize == 1) {
 let fileInfoContainar;
 function getFilelist(path) {
 	function genBackPanel(item) {
+		$$$.message(`Call genBackPanel`, DEBUG, 'genBackPanel');
 		var elem = document.createElement('div');
 		elem.innerHTML = 
 			`<div class="item-panel1">` +
@@ -72,8 +73,10 @@ function getFilelist(path) {
 			`<div class="small-font-back">Currently in ${path.split('/')[path.split('/').length - 1]}</div>` +
 			`</div>`;
 		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(${item})`, DEBUG, `genBackPanel`);
 	}
 	function genFolderPanel(item, pos) {
+		$$$.message(`Call genFolderPanel`, DEBUG, 'genFolderPanel');
 		var folding = 1;
 		var temp = '';
 		var fileName = item.split('/')[item.split('/').length - 1];
@@ -85,6 +88,7 @@ function getFilelist(path) {
 			}
 			fileName = temp;
 		}
+		$$$.message(`File name newline completed`, DEBUG, 'genFolderPanel');
 
 		var size;
 		if('files' in fileInfoContainar) size = fileInfoContainar.files[pos].size;
@@ -93,6 +97,7 @@ function getFilelist(path) {
 		if(size < 1024) size+='B';
 		else if(size < 1048576) size = (Math.floor(size / 1024 * 100) / 100) + 'KB';
 		else if(size < 1073741824) size = (Math.floor(size / 1024 / 1024 * 100) /100) + 'MB';
+		$$$.message(`File size unit conversion`, DEBUG, 'genFolderPanel');
 
 		var elem = document.createElement('div');
 		elem.innerHTML =
@@ -103,8 +108,10 @@ function getFilelist(path) {
 			`<div class="right-btn file-list-icon-trash" onclick="trashClick('${pos}')"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
 			'</div>';
 		$('#file-list-ctrl').append(elem);
+		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFolderPanel');
 	}
 	function genFilePanel(item, pos) {
+		$$$.message(`Call genFilePanel`, DEBUG, 'genFilePanel');
 		var folding = 1;
 		var temp = '';
 		var fileName = item.split('/')[item.split('/').length - 1];
@@ -116,6 +123,7 @@ function getFilelist(path) {
 			}
 			fileName = temp;
 		}
+		$$$.message(`File name newline completed`, DEBUG, 'genFilePanel');
 
 		var elem = document.createElement('div');
 		elem.innerHTML =
@@ -128,6 +136,7 @@ function getFilelist(path) {
 			`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
 			`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>`
 		$('#file-list-ctrl').append(elem);
+		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFilePanel');
 	}
 
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');

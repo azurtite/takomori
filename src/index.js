@@ -135,6 +135,7 @@ function getFilelist(path) {
 
 	$$$.message('Generate folder list', DEBUG, 'getFilelist');
 	folderList = ['/'];
+	$('#folder-list-ctrl').html(``);
 	client.files.listForLocation('local', true)
 		.done((data) => {
 			function detectFolder(child) {
@@ -1275,6 +1276,21 @@ $(() => {
 		$$$.message('Click move-btn-ctrl', DEBUG, '$move-btn-ctrl');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
 		$$$.message('Change css(visibility:hidden) move-btn-ctrl', DEBUG, '$move-btn-ctrl');
+
+		$$$.message('Move file or folder', DEBUG, '$move-btn-ctrl');
+		var from = `${$('#base-path-ctrl').text()}`;
+		var afor;
+		if($('#folder-list-ctrl').val() == 0) afor = `${$('#filename-box-ctrl').val()}`;
+		else afor = `${folderList[$('#folder-list-ctrl').val()]}/${$('#filename-box-ctrl').val()}`;
+		$$$.message(`From: ${from}`, DEBUG, `$move-btn-ctrl`);
+		$$$.message(`For: ${afor}`, DEBUG, `$move-btn-ctrl`);
+		client.files.move('local', from, afor)
+			.done((response) => {
+				$$$.message(`Move file or folder success`, INFO, '$move-btn-ctrl');
+				getFilelist(locationPath);
+			}).fail((err) => {
+				$$$.message(`Move file or folder failure`, ERROR, '$move-btn-ctrl');
+			});
 	});
 
 	$('#cancel-btn-ctrl').click(() => {

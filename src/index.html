@@ -326,11 +326,15 @@
 			<div class="information-panel" id="information-panel-ctrl"></div>
 			<!-- notice panel -->
 			<div class="file-notice" id="file-notice-ctrl">
-				<div class="file-notice-text">
-					<h4>Notices</h4>
-					This feature will be<br />
-					implemented in Stage 5<br />
-				</div>
+				<div class="title">Move File or Folder</div>
+				<div class="title-folder">Destination folder</div>
+				<select name="folders" class="folder-list" id="folder-list-ctrl">
+				</select>
+				<div class="title-file">Set destination filename</div>
+				<input type="text" name="filename" class="filename-box" id="filename-box-ctrl">
+				<div class="cancel-btn" id="cancel-btn-ctrl">Cancel</div>
+				<div class="move-btn" id="move-btn-ctrl">Move</div>
+				<div class="base-path" id="base-path-ctrl"></div>
 			</div>
 			<!-- file upload form -->
 			<form><input type="file" onchange='upload(this)' id="file-open.btn" style="visibility:hidden"></form>

@@ -99,8 +99,8 @@ function getFilelist(path) {
 			`<div class="item-panel${folding}">` +
 			`<div class="display-name" onclick="folderClick('${pos}')"><span class="glyphicon glyphicon glyphicon-folder-close"></span>&nbsp;${item.split('/')[item.split('/').length-1]}</div>` +
 			`<div><div class="small-font">Size: ${size}</div>` +
-			`<div class="left-btn file-list-icon-level-up" onclick=""><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-			`<div class="right-btn file-list-icon-trash" onclick=""><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
+			`<div class="left-btn file-list-icon-level-up" onclick="levelupClick('${pos}')"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+			`<div class="right-btn file-list-icon-trash" onclick="trashClick('${pos}')"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
 			'</div>';
 		$('#file-list-ctrl').append(elem);
 	}
@@ -138,7 +138,7 @@ function getFilelist(path) {
 	client.files.listForLocation('local', true)
 		.done((data) => {
 			function detectFolder(child) {
-				$$$.message(`Call detectFolder`, DEBUG, `detectFolder`);
+				$$$.message(`Call detectFolder ${child.path}`, DEBUG, `detectFolder`);
 				for(var i=0; i<child.children.length; i++) if(child.children[i].type == 'folder') {
 					folderList[folderList.length] = child.children[i].path;
 					detectFolder(child.children[i]);

@@ -34,6 +34,7 @@ let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
 let locationPath		= '';
 
+let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
 let extruderPosition	= [-99, -99, -99];
@@ -83,7 +84,6 @@ function getFilelist(path) {
 				else temp = temp + fileName[i];
 			}
 			fileName = temp;
-			console.log(temp);
 		}
 
 		var size;
@@ -99,8 +99,8 @@ function getFilelist(path) {
 			`<div class="item-panel${folding}">` +
 			`<div class="display-name" onclick="folderClick('${pos}')"><span class="glyphicon glyphicon glyphicon-folder-close"></span>&nbsp;${item.split('/')[item.split('/').length-1]}</div>` +
 			`<div><div class="small-font">Size: ${size}</div>` +
-			`<div class="left-btn file-list-icon-level-up" onclick=""><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-			`<div class="right-btn file-list-icon-trash" onclick=""><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
+			`<div class="left-btn file-list-icon-level-up" onclick="levelupClick('${pos}')"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+			`<div class="right-btn file-list-icon-trash" onclick="trashClick('${pos}')"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
 			'</div>';
 		$('#file-list-ctrl').append(elem);
 	}
@@ -131,6 +131,33 @@ function getFilelist(path) {
 	}
 
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
+
+	$$$.message('Generate folder list', DEBUG, 'getFilelist');
+	folderList = ['/'];
+	$('#folder-list-ctrl').html(``);
+	client.files.listForLocation('local', true)
+		.done((data) => {
+			function detectFolder(child) {
+				$$$.message(`Call detectFolder ${child.path}`, DEBUG, `detectFolder`);
+				for(var i=0; i<child.children.length; i++) if(child.children[i].type == 'folder') {
+					folderList[folderList.length] = child.children[i].path;
+					detectFolder(child.children[i]);
+				}
+			}
+			for(var i=0; i<data.files.length; i++)
+				if(data.files[i].type == 'folder') {
+					folderList[folderList.length] = data.files[i].path;
+					detectFolder(data.files[i]);
+				}
+			for(var i=0; i<=folderList.length; i++) {
+				var elem = document.createElement('option');
+				elem.value = i;
+				if(folderList[i] != '/') elem.text = `/${folderList[i]}`;
+				else elem.text = `${folderList[i]}`;
+				$('#folder-list-ctrl').append(elem);
+			}
+		}).fail((err) => {});
+
 	$('#file-list-ctrl').html('');
 	locationPath = path;
 	if(path == undefined || path == '')
@@ -155,43 +182,9 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == 'folder') genFolderPanel(fileInfoContainar.children[i].path, i);
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
-				console.log(data)
 			})
 			.fail((err) => {});
 	}
-/*
-		$.get(`${baseURL}api/files?apikey=${apiKey}`)
-		.done((data) => {
-			fileInfoContainar = data;
-			$('#file-list-ctrl').html('');
-			for(var i=0; i<data.files.length; i++) {
-				var element = document.createElement('div');
-				element.innerHTML =
-					`<div class="display-name" onclick="displayClick(${i})">${data.files[i].display}</div>` + 
-					`<div class="left-btn file-list-icon-download" onclick="downloadClick(${i})"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>` +
-					`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${i})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
-					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
-					`<div class="middle-btn file-list-icon-open" onclick="openClick(${i})"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>` +
-					`<div class="right-btn file-list-icon-print" onclick="printClick(${i})"><span class="glyphicon glyphicon glyphicon-print"></span></div>`;
-				$('#file-list-ctrl').append(element);
-				$$$.message(`Append file in list. listing no ${i}`, DEBUG, 'getFilelist');
-			}
-			if(powerFlag) {
-				$('.file-list-icon-open').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, 'getFilelist');
-				$('.file-list-icon-print').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, 'getFilelist');
-			} else {
-				$('.file-list-icon-open').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, 'getFilelist');
-				$('.file-list-icon-print').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, 'getFilelist');
-			}
-		}).fail((err) => {
-			$$$.message('trap message alert no 00003', WARN, 'getPrinterFullState');
-		});
-*/
 }
 function backClick(item) {
 	getFilelist(item);
@@ -350,10 +343,19 @@ function printClick(pos) {
 			$$$.message('Printer not found', ERROR, '$printClick');
 		});
 }
-function levelupClick(e) {
+function levelupClick(pos) {
 	$$$.message(`Call levelupClick`, DEBUG, 'levelupClick');
-	$$$.message(`Click the level-up icon in listing ${e}`, DEBUG, 'levelupClick');
+	$$$.message(`Click the level-up icon in listing ${pos}`, DEBUG, 'levelupClick');
+	if('files' in fileInfoContainar) {
+		$('#filename-box-ctrl').val(fileInfoContainar.files[pos].display);
+		$('#base-path-ctrl').text(fileInfoContainar.files[pos].path);
+	} else if('children' in fileInfoContainar) {
+		$('#filename-box-ctrl').val(fileInfoContainar.children[pos].display);
+		$('#base-path-ctrl').text(fileInfoContainar.children[pos].path);
+	}
+	$$$.message('Set filename to filename-box-ctrl', DEBUG, 'levelupClick');
 	$('#file-notice-ctrl').css({visibility: 'visible'});
+	$$$.message('Change css(visibility:visible) file-notice-ctrl', DEBUG, 'levelupClick');
 }
 /**
  * getPrinterFullSate()
@@ -1230,11 +1232,33 @@ $(() => {
 		document.getElementById('file-open.btn').click();
 	});
 
-	$('#file-notice-ctrl').click(() => {
-		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
+	$('#move-btn-ctrl').click(() => {
+		$$$.message('Click move-btn-ctrl', DEBUG, '$move-btn-ctrl');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) move-btn-ctrl', DEBUG, '$move-btn-ctrl');
+
+		$$$.message('Move file or folder', DEBUG, '$move-btn-ctrl');
+		var from = `${$('#base-path-ctrl').text()}`;
+		var afor;
+		if($('#folder-list-ctrl').val() == 0) afor = `${$('#filename-box-ctrl').val()}`;
+		else afor = `${folderList[$('#folder-list-ctrl').val()]}/${$('#filename-box-ctrl').val()}`;
+		$$$.message(`From: ${from}`, DEBUG, `$move-btn-ctrl`);
+		$$$.message(`For: ${afor}`, DEBUG, `$move-btn-ctrl`);
+		client.files.move('local', from, afor)
+			.done((response) => {
+				$$$.message(`Move file or folder success`, INFO, '$move-btn-ctrl');
+				getFilelist(locationPath);
+			}).fail((err) => {
+				$$$.message(`Move file or folder failure`, ERROR, '$move-btn-ctrl');
+			});
 	});
 
+	$('#cancel-btn-ctrl').click(() => {
+		$$$.message('Click cancel-btn-ctrl', DEBUG, '$cancel-btn-ctrl');
+		$('#file-notice-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) cancel-btn-ctrl', DEBUG, '$cancel-btn-ctrl');
+	});
+	
 	$('#seed-value-p1').click(() => {
 		$$$.message('Click seed-value-p1', DEBUG, '$seed-value-p1.click');
 		changeSeedRate(1);
@@ -1597,7 +1621,6 @@ $(() => {
 			if(powerFlag && extruderPosition[1] >= 0) { 
 				var pos = extruderPosition[1] - seedRate;
 				if(pos < 0) pos = 0;
-				console.log(pos);
 				client.control.sendGcode(`G0 Y${pos}MM F1500`)
 					.done(() => {
 						extruderPosition[1] = pos;
@@ -1816,7 +1839,6 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$extruder-btn-down.click');
 			setTimeout(()=>{restoreButtonCSS('down')}, 500);
 			if(powerFlag && canRunExtruder) {
-				console.log(`G1 E${$('#amount-value').val()}MM`);
 				client.control.sendGcode('G92 E0')
 					.done(() => {
 						$$$.message('Reset extruder extrud position', DEBUG, '$extruder-btn-down.click');

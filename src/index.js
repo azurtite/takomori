@@ -175,7 +175,9 @@ function getFilelist(path) {
 				else elem.text = `${folderList[i]}`;
 				$('#folder-list-ctrl').append(elem);
 			}
-		}).fail((err) => {});
+		}).fail((err) => { 
+			$$$.message('client.files.listForLocation is failure', ERROR, 'getFilelist');
+		});
 
 	$('#file-list-ctrl').html('');
 	locationPath = path;
@@ -187,7 +189,7 @@ function getFilelist(path) {
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != 'folder') genFilePanel(fileInfoContainar.files[i].path, i);
 				if(fileInfoContainar.files.length == 0) genFNFPanel();
 			})
-			.fail((err) => {});
+			.fail((err) => $$$.message('client.files.list is failure', ERROR, 'getFilelist'));
 	else if(typeof(path) == 'string') {
 		var backFolder = path.split('/');
 		if(backFolder.length == 1) genBackPanel('');
@@ -204,7 +206,7 @@ function getFilelist(path) {
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
 				if(fileInfoContainar.children.length == 0) genFNFPanel();
 			})
-			.fail((err) => {});
+			.fail((err) => $$$.message('client.files.get is failure', ERROR, 'getFilelist'));
 	}
 }
 function backClick(item) {

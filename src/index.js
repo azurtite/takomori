@@ -41,10 +41,25 @@ let extruderPosition	= [-99, -99, -99];
 let bedSize				= [230, 220, 200];
 let bedPositionName		= ['rear-left', 'rear-right', 'front-left', 'front-right'];
 
-let client = new OctoPrintClient({
-	baseurl:	baseURL,
-	apikey:		apiKey
-});
+let baseURL;
+let client;
+let serverOrigin			= localStorage.getItem('uri-origin');
+let serverHost				= localStorage.getItem('uri-host');
+let serverApikey			= localStorage.getItem('uri-apikey');
+let serverPort				= localStorage.getItem('uri-port');
+setClientObject();
+function setClientObject() {
+	if(serverOrigin == null) serverOrigin = 'http://';
+	if(serverHost == null) serverHost = 'octopi.local';
+	if(serverPort == null || serverPort == '') baseURL = `${serverOrigin}${serverHost}/`;
+	else baseURL = `${serverOrigin}${serverHost}:${serverPort}/`;
+	console.warn(`Test URI: ${baseURL}api/files?apikey=${serverApikey}`);
+	
+	client = new OctoPrintClient({
+		baseurl:	baseURL,
+		apikey:		serverApikey
+	});
+}
 
 let $$$ = new logMan(true, false);
 
@@ -322,7 +337,7 @@ function downloadClick(pos) {
 function trashClick(pos) {
 	$$$.message(`Call trashClick`, DEBUG, 'trashClick');
 	$$$.message(`Click the trash icon in listing ${pos}`, DEBUG, 'trashClick');
-	$.get(`${baseURL}api/job?apikey=${apiKey}`)
+	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing') {
 				var f;
@@ -343,7 +358,7 @@ function openClick(pos) {
 		$$$.message(`This button is not active(icon-open-${pos})`, DEBUG, 'openClick');
 		return;
 	} else {
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing') {
 					var path;
@@ -360,7 +375,7 @@ function openClick(pos) {
 function printClick(pos) {
 	$$$.message(`Call printClick`, DEBUG, 'printClick');
 	$$$.message(`Click the print icon in listing ${pos}`, DEBUG, 'printClick');
-	$.get(`${baseURL}api/job?apikey=${apiKey}`)
+	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing' && powerFlag) {
 				var path;
@@ -457,7 +472,7 @@ function getPrinterFullState() {
 			$$$.message(`Calculation minute`, LOWDEBUG, 'getTime', ONCE);
 			return result + printTime + 's'
 		}
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.job.file.name != null)
 					if($('#jobname').text() != data.job.file.name) {
@@ -608,7 +623,7 @@ function postProcess() {
 		url:			`${baseURL}api/files/local`,
 		method:			'POST',
 		headers:		{
-			'x-api-key':		apiKey,
+			'x-api-key':		serverApikey,
 			'cache-control':	'no-cache',
 		},
 		processData:	false,
@@ -635,6 +650,10 @@ $(() => {
 	$$$.message('Initialize progress-bar color', DEBUG, 'jQuery');
 	triggerWindowSizeChange();
 
+	$('#uri-host-ctrl').val(serverHost);
+	$('#uri-port-ctrl').val(serverPort);
+	$('#uri-apikey-ctrl').val(serverApikey);
+	
 	$('#reload-btn-ctrl').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
 		location.reload();
@@ -955,7 +974,7 @@ $(() => {
 			$$$.message('Expanding subpanel. not show slider-panel-tool', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show tool0 temperature panel', INFO, '$tool-icon.click');
@@ -974,7 +993,7 @@ $(() => {
 	
 	$('#tool-on-sw-btn').click(() => {
 		$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click tool-on-sw-btn', DEBUG, '$tool-on-sw-btn.click');
@@ -1007,7 +1026,7 @@ $(() => {
 			$$$.message('Expanding subpanel. not show slider-panel-bed', WARN, '$bed-icon.click');
 			return;
 		}
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Show bed temperature panel', INFO, '$bed-icon.click');
@@ -1025,7 +1044,7 @@ $(() => {
 	});
 
 	$('#bed-on-sw-btn').click(() => {
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done(function(data){
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					$$$.message('Click bed-on-sw-btn', DEBUG, '$bed-on-sw-btn.click');
@@ -1050,7 +1069,7 @@ $(() => {
 
 	$('#print-icon').click(() => {
 		$$$.message('Click print-icon', DEBUG, '$print-icon.click');
-		$.get(`${baseURL}api/job?apikey=${apiKey}`)
+		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing' && powerFlag) {
 					client.job.start();
@@ -1935,5 +1954,17 @@ $(() => {
 		$$$.message('Click conf-set-ctrl', DEBUG, 'conf-set-ctrl.click');
 		$('#setting-panel-ctrl').css({visibility: 'hidden'});
 		$$$.message('Change css(visibility:hidden) setting-panel-ctrl', DEBUG, '$conf-set-ctrl.click');
+
+		//localStorage.setItem('uri-origin', $(''));
+		$$$.message('Set server information', INFO, 'conf-set-ctrl.click');
+		serverHost	= $('#uri-host-ctrl').val();
+		serverPort	= $('#uri-port-ctrl').val();
+		serverApikey= $('#uri-apikey-ctrl').val();
+		$$$.message('Store server information', INFO, 'conf-set-ctrl.click');
+		localStorage.setItem('uri-host', serverHost);
+		localStorage.setItem('uri-apikey', serverApikey);
+		localStorage.setItem('uri-port', serverPort);
+		$$$.message('Regenarate octoprint client object', INFO, 'conf-set-ctrl.click');
+		setClientObject();
 	});
 });

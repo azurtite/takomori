@@ -32,7 +32,9 @@ let canRunExtruder		= false;
 let extruderMovingTemp	= 200;
 let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
+let locationPath		= '';
 
+let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
 let seedRates			= [0, 0.1, 1, 10, 100];
 let extruderPosition	= [-99, -99, -99];
@@ -60,101 +62,234 @@ if(windowSize == 1) {
 /**
  * file list process
  */
- let fileInfoContainar;
-function getFilelist() {
-	$$$.message('Call REST api', DEBUG, 'getFilelist');
-	$.get(`${baseURL}api/files?apikey=${apiKey}`)
+let fileInfoContainar;
+function getFilelist(path) {
+	function genBackPanel(item) {
+		$$$.message(`Call genBackPanel`, DEBUG, 'genBackPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML = 
+			`<div class="item-panel1">` +
+			`<div class="display-name" onclick="backClick('${item}')"><span class="glyphicon glyphicon glyphicon-arrow-left"></span>&nbsp Back</div>` +
+			`<div class="small-font-back">Currently in ${path.split('/')[path.split('/').length - 1]}</div>` +
+			`</div>`;
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(${item})`, DEBUG, `genBackPanel`);
+	}
+	function genFolderPanel(item, pos) {
+		$$$.message(`Call genFolderPanel`, DEBUG, 'genFolderPanel');
+		var folding = 1;
+		var temp = '';
+		var fileName = item.split('/')[item.split('/').length - 1];
+		if(fileName.length > 15) {
+			folding = Math.floor(fileName.length / 15) + 1;
+			for(var i=0; i<fileName.length; i++) {
+				if((i % 15) == 0 && i != 0) temp = temp + "<br />" + fileName[i];
+				else temp = temp + fileName[i];
+			}
+			fileName = temp;
+		}
+		$$$.message(`File name newline completed`, DEBUG, 'genFolderPanel');
+
+		var size;
+		if('files' in fileInfoContainar) size = fileInfoContainar.files[pos].size;
+		else if('children' in fileInfoContainar) size = fileInfoContainar.children[pos].size;
+
+		if(size < 1024) size+='B';
+		else if(size < 1048576) size = (Math.floor(size / 1024 * 100) / 100) + 'KB';
+		else if(size < 1073741824) size = (Math.floor(size / 1024 / 1024 * 100) /100) + 'MB';
+		$$$.message(`File size unit conversion`, DEBUG, 'genFolderPanel');
+
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel${folding}">` +
+			`<div class="display-name" onclick="folderClick('${pos}')"><span class="glyphicon glyphicon glyphicon-folder-close"></span>&nbsp;${item.split('/')[item.split('/').length-1]}</div>` +
+			`<div><div class="small-font">Size: ${size}</div>` +
+			`<div class="left-btn file-list-icon-level-up" onclick="levelupClick('${pos}')"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+			`<div class="right-btn file-list-icon-trash" onclick="trashClick('${pos}')"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
+			'</div>';
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFolderPanel');
+	}
+	function genFilePanel(item, pos) {
+		$$$.message(`Call genFilePanel`, DEBUG, 'genFilePanel');
+		var folding = 1;
+		var temp = '';
+		var fileName = item.split('/')[item.split('/').length - 1];
+		if(fileName.length > 15) {
+			folding = Math.floor(fileName.length / 15) + 1;
+			for(var i=0; i<fileName.length; i++) {
+				if((i % 15) == 0 && i != 0) temp = temp + "<br />" + fileName[i];
+				else temp = temp + fileName[i];
+			}
+			fileName = temp;
+		}
+		$$$.message(`File name newline completed`, DEBUG, 'genFilePanel');
+
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel${folding}">` +
+			`<div class="display-name" onclick="fileClick('${pos}')"><span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;${fileName}</div>` +
+			`<div><div class="small-font-file">&nbsp;</div>` +
+			`<div class="left-btn file-list-icon-download" onclick="downloadClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div></div>` +
+			`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${pos})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+			`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>` +
+			`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
+			`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFilePanel');
+	}
+	function genFNFPanel() {
+		$$$.message(`Call genFNFPanel`, DEBUG, 'genFNFPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel1">` +
+			`<div class="display-name"><span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;File not found</div>` +
+			`<div class="small-font-back">Currently in ${baseURL.split('/')[2]}</div>` +
+			`</div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(File not found)`, DEBUG, `genFNFPanel`);
+	}
+	function genPNFPanel() {
+		$$$.message(`Call genPNFPanel`, DEBUG, 'genPNFPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel1">` +
+			`<div class="display-name"><span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;Printer not found</div>` +
+			`<div class="small-font-back">Currently in ${baseURL.split('/')[2]}</div>` +
+			`</div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(Printer not found)`, DEBUG, `genPNFPanel`);
+	}
+	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
+
+	$$$.message('Generate folder list', DEBUG, 'getFilelist');
+	folderList = ['/'];
+	$('#folder-list-ctrl').html(``);
+	client.files.listForLocation('local', true)
 		.done((data) => {
-			fileInfoContainar = data;
-			$('#file-list-ctrl').html('');
-			for(var i=0; i<data.files.length; i++) {
-				var element = document.createElement('div');
-				element.innerHTML =
-					`<div class="display-name" onclick="displayClick(${i})">${data.files[i].display}</div>` + 
-					`<div class="left-btn file-list-icon-download" onclick="downloadClick(${i})"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div>` +
-					`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${i})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-					`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${i})"><span class="glyphicon glyphicon glyphicon-trash"></span></div>` +
-					`<div class="middle-btn file-list-icon-open" onclick="openClick(${i})"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div>` +
-					`<div class="right-btn file-list-icon-print" onclick="printClick(${i})"><span class="glyphicon glyphicon glyphicon-print"></span></div>`;
-				$('#file-list-ctrl').append(element);
-				$$$.message(`Append file in list. listing no ${i}`, DEBUG, 'getFilelist');
+			function detectFolder(child) {
+				$$$.message(`Call detectFolder ${child.path}`, DEBUG, `detectFolder`);
+				for(var i=0; i<child.children.length; i++) if(child.children[i].type == 'folder') {
+					folderList[folderList.length] = child.children[i].path;
+					detectFolder(child.children[i]);
+				}
 			}
-			if(powerFlag) {
-				$('.file-list-icon-open').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, 'getFilelist');
-				$('.file-list-icon-print').css({color: sunshine});
-				$$$.message('Change css(color:sunshine) file-list-icon-print', DEBUG, 'getFilelist');
-			} else {
-				$('.file-list-icon-open').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-open', DEBUG, 'getFilelist');
-				$('.file-list-icon-print').css({color: peleskyblue});
-				$$$.message('Change css(color:peleskyblue) file-list-icon-print', DEBUG, 'getFilelist');
+			for(var i=0; i<data.files.length; i++)
+				if(data.files[i].type == 'folder') {
+					folderList[folderList.length] = data.files[i].path;
+					detectFolder(data.files[i]);
+				}
+			for(var i=0; i<=folderList.length; i++) {
+				var elem = document.createElement('option');
+				elem.value = i;
+				if(folderList[i] != '/') elem.text = `/${folderList[i]}`;
+				else elem.text = `${folderList[i]}`;
+				$('#folder-list-ctrl').append(elem);
 			}
-		}).fail((err) => {
-			$$$.message('trap message alert no 00003', WARN, 'getPrinterFullState');
+		}).fail((err) => { 
+			$$$.message('client.files.listForLocation is failure', ERROR, 'getFilelist');
+			genPNFPanel();
 		});
+
+	$('#file-list-ctrl').html('');
+	locationPath = path;
+	if(path == undefined || path == '')
+		client.files.list()
+			.done((data) => {
+				fileInfoContainar = data;
+				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type == 'folder') genFolderPanel(fileInfoContainar.files[i].path, i);
+				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != 'folder') genFilePanel(fileInfoContainar.files[i].path, i);
+				if(fileInfoContainar.files.length == 0) genFNFPanel();
+			})
+			.fail((err) => $$$.message('client.files.list is failure', ERROR, 'getFilelist'));
+	else if(typeof(path) == 'string') {
+		var backFolder = path.split('/');
+		if(backFolder.length == 1) genBackPanel('');
+		else {
+			var temp = backFolder[0];
+			for(var i=1; i<backFolder.length - 1; i++) temp = temp + '/' + backFolder[i];
+			genBackPanel(temp);
+		}
+
+		client.files.get('local', path)
+			.done((data) => {
+				fileInfoContainar = data;
+				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == 'folder') genFolderPanel(fileInfoContainar.children[i].path, i);
+				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
+				if(fileInfoContainar.children.length == 0) genFNFPanel();
+			})
+			.fail((err) => $$$.message('client.files.get is failure', ERROR, 'getFilelist'));
+	}
 }
-/**
- * File control icons event
- */
-function displayClick(e) {
+function backClick(item) {
+	getFilelist(item);
+}
+function folderClick(pos) {
+	$('#information-panel-ctrl').html('');
+	if('files' in fileInfoContainar) getFilelist(fileInfoContainar.files[pos].path);
+	else if('children' in fileInfoContainar) getFilelist(fileInfoContainar.children[pos].path);
+}
+function fileClick(pos) {
+	function detectName() {
+		$$$.message(`Call detectName`, DEBUG, `detectName`);
+		var name = '';
+		for(var i=0; i<temporalyContainar[pos].display.split('.').length - 1; i++) {
+			if(i > 0) name += '.';
+			name += temporalyContainar[pos].display.split('.')[i];
+		}
+		$$$.message('Detect display name', DEBUG, 'detectName');
+		return name;
+	}
 	function calculateTime(t) {
 		$$$.message(`Call calculateTime`, DEBUG, 'calculateTime');
 		let time, temp;
 		temp = Math.floor(t / 3600);
-		time = temp + 'h';
+		if(temp > 0) time = temp + 'h';
+		else time = '';
 		t = t - (temp * 3600);
 		$$$.message(`Calculation hour. quotient is ${temp}. surplus is ${t}`, DEBUG, 'calculateTime');
 		temp = Math.floor(t / 60);
 		$$$.message(`Calculation minutes. quotient is ${temp}. surplus is ${(t - (temp * 60))}`, DEBUG, 'calculateTime');
-		time = time + temp + 'm' + Math.floor((t - (temp * 60))*100)/100 + 's';
+		time = time + temp + 'm' + Math.round(t - (temp * 60)) + 's';
 		return time;
-	}
-	function detectName() {
-		$$$.message(`Call detectName`, DEBUG, 'detectName');
-		var name = '';
-		for(var i=0;i<fileInfoContainar.files[e].display.split('.').length - 1;i++) {
-			if(i > 0) name += '.';
-			name += fileInfoContainar.files[e].display.split('.')[i];
-		}
-		$$$.message(`Detect display name`, DEBUG, 'displayClick');
-		return name;
 	}
 	function calculateFilament(f) {
 		$$$.message(`Call calculateFilament`, DEBUG, 'calculateFilament');
 		var length,temp;
 		temp = Math.floor(f / 1000);
 		f = f - (temp * 1000);
-		length = temp + 'm';
+		if(temp > 0) length = temp + 'm';
+		else length = '';
 		$$$.message(`Calculation meter. quotient is ${temp}. surplus is ${f}`, DEBUG, 'calculateFilament');
 		temp = Math.floor(f / 10);
 		f = f - (temp * 10);
 		length = length + temp + 'cm';
 		$$$.message(`Calculation centimeter. quotient is ${temp}. surplus is ${f}`, DEBUG, 'calculateFilament');
-		length = length + Math.floor(f * 100) / 100 + 'mm';
+		length = length + Math.round(f) + 'mm';
 		return length;
 	}
-	$$$.message(`Call displayClick`, DEBUG, 'displayClick');
-	$$$.message('Name tag click(' + e + ')', DEBUG, 'displayClick');
+	$$$.message(`Call fileClick`, DEBUG, 'fileClick');
+	$$$.message('Name tag click(' + pos + ')', DEBUG, 'fileClick');
+	var temporalyContainar;
+	if('files' in fileInfoContainar) temporalyContainar = fileInfoContainar.files;
+	else if('children' in fileInfoContainar) temporalyContainar = fileInfoContainar.children;
 	$('#information-panel-ctrl').html(
-		`<div class="title">${detectName()}</h3>`+
-		'<hr>' +
-		'<table class="information-table">' +
-		`<tr><td>Type:</td><td>${fileInfoContainar.files[e].display.split('.')[fileInfoContainar.files[e].display.split('.').length-1]}</td></tr>` +
-		`<tr><td>Time:</td><td>${calculateTime(fileInfoContainar.files[e].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +
-		'<tr><td colspan="2">Filament:</td></tr>' +
-		`<tr><td colspan="2" class="right">${calculateFilament(fileInfoContainar.files[e].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
-		'<th>Size:</th>' +
+		`<div class="title">${detectName()}</div>` +
+		`<hr>`+
+		`<table class="information-table">` +
+		`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split('.')[temporalyContainar[pos].display.split('.').length - 1]}</td></tr>` +
+		`<tr><td>Time:</td><td class="right">${calculateTime(temporalyContainar[pos].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +
+		`<tr><td>Filament:</td><td class="right">${calculateFilament(temporalyContainar[pos].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
+		`<th>Size:</th>` +
 		`<tr><td colspan=2 class="right">
-		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.width*100)/100}x
-		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.depth*100)/100}x
-		${Math.floor(fileInfoContainar.files[e].gcodeAnalysis.dimensions.height*100)/100} mm` +
+		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.width * 100) / 100} x 
+		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.depth * 100) / 100} x 
+		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.height * 100) / 100} mm` +
 		'</td></tr>' +
-		'</table>'
+		`</table>`
 	);
-	$$$.message('Generate innerHTML(information-panel)', DEBUG, 'displayClick');
 }
-function downloadClick(e) {
+function downloadClick(pos) {
 	function changeStream(data) {
 		$$$.message('Call changeStream', DEBUG, 'changeStream')
 		$$$.message('Start encording ', DEBUG, 'changeStream')
@@ -166,10 +301,13 @@ function downloadClick(e) {
 		return result;
 	}
 	$$$.message(`Call downloadClick`, DEBUG, 'downloadClick');
-	$$$.message(`Click the download icon in listing ${e}`, DEBUG, 'downloadClick');
-	client.files.download('local', fileInfoContainar.files[e].path)
+	$$$.message(`Click the download icon in listing ${pos}`, DEBUG, 'downloadClick');
+	var path;
+	if('files' in fileInfoContainar) path = fileInfoContainar.files[pos].path;
+	else if('children' in fileInfoContainar) path = fileInfoContainar.children[pos].path;
+	client.files.download('local', path)
 		.done((data) => {
-			$$$.message(`Download ${fileInfoContainar.files[e].display}`, DEBUG, 'downloadClick');
+			$$$.message(`Download ${path}`, DEBUG, 'downloadClick');
 			var stream = new Uint8Array(changeStream(data));
 			var element = document.createElement('a');
 			element.href = URL.createObjectURL(new Blob([stream.subarray(0, stream.length)], {type: 'text/.gcode'}));
@@ -181,49 +319,57 @@ function downloadClick(e) {
 			$$$.message('trap message alert no 00004', WARN, 'getPrinterFullState');
 		});
 }
-function trashClick(e) {
+function trashClick(pos) {
 	$$$.message(`Call trashClick`, DEBUG, 'trashClick');
-	$$$.message(`Click the trash icon in listing ${e}`, DEBUG, 'trashClick');
+	$$$.message(`Click the trash icon in listing ${pos}`, DEBUG, 'trashClick');
 	$.get(`${baseURL}api/job?apikey=${apiKey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing') {
-				var f = fileInfoContainar.files[e].path;
+				var f;
+				if('files' in fileInfoContainar) f = fileInfoContainar.files[pos].path;
+				else if('children' in fileInfoContainar) f = fileInfoContainar.children[pos].path;
 				client.files.delete('local', f);
 				$$$.message(`Delete ${f}`, INFO, 'trashClick');
-				getFilelist();
+				getFilelist(locationPath);
 			} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'trashClick');
 		}).fail((err) => {
 			$$$.message('trap message alert no 00005', WARN, 'getPrinterFullState');
 		});;
 }
-function openClick(e) {
+function openClick(pos) {
 	$$$.message('Call openClick', DEBUG, 'openClick');
-	$$$.message(`Click the open icon in listing ${e}`, DEBUG, 'openClick');
+	$$$.message(`Click the open icon in listing ${pos}`, DEBUG, 'openClick');
 	if(!powerFlag) {
-		$$$.message(`This button is not active(icon-open-${e})`, DEBUG, 'openClick');
+		$$$.message(`This button is not active(icon-open-${pos})`, DEBUG, 'openClick');
 		return;
 	} else {
 		$.get(`${baseURL}api/job?apikey=${apiKey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != 'printing') {
-					client.files.select('local', fileInfoContainar.files[e].path);
-					$$$.message(`Set ${fileInfoContainar.files[e].display} to print`, DEBUG, 'openClick');
+					var path;
+					if('files' in fileInfoContainar) path = fileInfoContainar.files[pos].path;
+					else if('children' in fileInfoContainar) path = fileInfoContainar.children[pos].path;
+					client.files.select('local', path);
+					$$$.message(`Set ${path} to print`, DEBUG, 'openClick');
 				} else $$$.message('Operation of this icon is prohibited during printing', WARN, 'openClick');
 			}).fail((err) => {
 				$$$.message('trap message alert no 00006', WARN, 'getPrinterFullState');
 			});;
 	}
 }
-function printClick(e) {
+function printClick(pos) {
 	$$$.message(`Call printClick`, DEBUG, 'printClick');
-	$$$.message(`Click the print icon in listing ${e}`, DEBUG, 'printClick');
+	$$$.message(`Click the print icon in listing ${pos}`, DEBUG, 'printClick');
 	$.get(`${baseURL}api/job?apikey=${apiKey}`)
 		.done((data) => {
 			if(data.state.toLowerCase() != 'printing' && powerFlag) {
-				client.files.select('local', fileInfoContainar.files[e].path, true);
-				$$$.message(`Start printing ${fileInfoContainar.files[e].display}`, INFO, 'printClick');
+				var path;
+				if('files' in fileInfoContainar) path = fileInfoContainar.files[pos].path;
+				else if('children' in fileInfoContainar) path = fileInfoContainar.children[pos].path;
+				client.files.select('local', path, true);
+				$$$.message(`Start printing ${path}`, INFO, 'printClick');
 			} else {
-				if(!powerFlag) $$$.message(`This button is not active(icon-print-${e})`, DEBUG, 'printClick');
+				if(!powerFlag) $$$.message(`This button is not active(icon-print-${pos})`, DEBUG, 'printClick');
 				else if(data.state.toLowerCase() == 'printing') $$$.message('Unable to operate buttons because printing is in progress', INFO, 'printClick');
 				return;
 			}
@@ -232,10 +378,19 @@ function printClick(e) {
 			$$$.message('Printer not found', ERROR, '$printClick');
 		});
 }
-function levelupClick(e) {
+function levelupClick(pos) {
 	$$$.message(`Call levelupClick`, DEBUG, 'levelupClick');
-	$$$.message(`Click the level-up icon in listing ${e}`, DEBUG, 'levelupClick');
+	$$$.message(`Click the level-up icon in listing ${pos}`, DEBUG, 'levelupClick');
+	if('files' in fileInfoContainar) {
+		$('#filename-box-ctrl').val(fileInfoContainar.files[pos].display);
+		$('#base-path-ctrl').text(fileInfoContainar.files[pos].path);
+	} else if('children' in fileInfoContainar) {
+		$('#filename-box-ctrl').val(fileInfoContainar.children[pos].display);
+		$('#base-path-ctrl').text(fileInfoContainar.children[pos].path);
+	}
+	$$$.message('Set filename to filename-box-ctrl', DEBUG, 'levelupClick');
 	$('#file-notice-ctrl').css({visibility: 'visible'});
+	$$$.message('Change css(visibility:visible) file-notice-ctrl', DEBUG, 'levelupClick');
 }
 /**
  * getPrinterFullSate()
@@ -372,6 +527,8 @@ function getPrinterFullState() {
 			$$$.message('Printer is no connected', WARN, 'getPrinterFullState');
 			$('.nav-off').css({color: sunshine});
 			clearInterval(intervalIDprn);
+			intervalIDprn = undefined;
+			$$$.message(`Change intervalIDprn. value is ${intervalIDprn}`, DEBUG, `getPrinterFullState`);
 			resetMonitorText();
 			powerFlag = false;
 			$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
@@ -417,15 +574,23 @@ function postProcess() {
 						break;
 				}
 			}).fail((err) => {
-				$$$.message('trap message alert no 00008', WARN, 'getPrinterFullState');
+				$$$.message('trap message alert no 00008', WARN, 'postProcess');
 			});
 		$$$.message('Execute heart down process', DEBUG, 'postProcess');
 		client.printer.setToolTargetTemperatures({'tool0': 0});
+		$$$.message('Heart down tool 0', INFO, 'postProcess');
 		$('#tool-on-sw-btn').css({color: sunshine});
+		$$$.message('Change css(color:sunshine) tool-on-sw-btn', DEBUG, 'postProcess');
 		$('#tool-icon').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) tool-icon', DEBUG, 'postProcess');
 		client.printer.setBedTargetTemperature(0);
+		$$$.message('Heart down bed', INFO, 'postProcess');
 		$('#bed-on-sw-btn').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, 'postProcess');
 		$('#bed-icon').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) bed-icon', DEBUG, 'postProcess');
+		$("#jobname").text('not printed');
+		$$$.message('Initialize jobname text', DEBUG, 'postProcess');
 	}
 }
 /**
@@ -463,7 +628,7 @@ $(() => {
 		$('.alert-panel').css({visibility: 'visible'});
 		$$$.message('Change css(visibility:visible) alert-panel', DEBUG, 'jQuery');
 	}
-	getFilelist();
+	getFilelist(undefined);
 	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
 	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
@@ -517,15 +682,17 @@ $(() => {
 			if(!actionPowerBtnClick) {
 				actionPowerBtnClick = true;
 				$$$.message(`Change actionPowerBtnClick. value is ${actionPowerBtnClick}`, DEBUG, '$power-btn.click');
+				postProcess();
 				powerFlag = false;
 				$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
 				$('input[name="powerFlag"]').prop('checked', false);
 				$$$.message('Change HTML property "powerFlag" is false', DEBUG, '$power-btn.click');
 				$('.nav-off').css({color: sunshine});
 				$$$.message('Change css(color:sunshine) nav-off', DEBUG, '$power-btn.click');
-				postProcess();
 				resetMonitorText();
 				clearInterval(intervalIDprn);
+				intervalIDprn = undefined;
+				$$$.message(`Change intervalIDprn. value is ${intervalIDprn}`, DEBUG, `$power-btn.click`);
 				$$$.message('Stop temperature monitor timer', DEBUG, '$power-btn.click');
 				setTimeout(() => logoutProcess(), 1200);
 				$$$.message('Logout after 1200ms', WARN, '$power-btn.click');
@@ -551,8 +718,8 @@ $(() => {
 							$('.nav-off').css({color: rescueorange});
 							powerFlag = true;
 							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-							intervalIDprn = setInterval(getPrinterFullState, 1000);
-							$$$.message(`intervalIDprn is ${intervalIDprn}`, WARN, '$power-btn.click')
+							if(intervalIDprn == undefined) intervalIDprn = setInterval(getPrinterFullState, 1000);
+							$$$.message(`intervalIDprn is ${intervalIDprn}`, DEBUG, '$power-btn.click')
 							$('.file-list-icon-open').css({color: sunshine});
 							$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: sunshine});
@@ -1111,11 +1278,33 @@ $(() => {
 		document.getElementById('file-open.btn').click();
 	});
 
-	$('#file-notice-ctrl').click(() => {
-		$$$.message('Click file-notice', DEBUG, '$file-notice-ctrl.click');
+	$('#move-btn-ctrl').click(() => {
+		$$$.message('Click move-btn-ctrl', DEBUG, '$move-btn-ctrl');
 		$('#file-notice-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) move-btn-ctrl', DEBUG, '$move-btn-ctrl');
+
+		$$$.message('Move file or folder', DEBUG, '$move-btn-ctrl');
+		var from = `${$('#base-path-ctrl').text()}`;
+		var afor;
+		if($('#folder-list-ctrl').val() == 0) afor = `${$('#filename-box-ctrl').val()}`;
+		else afor = `${folderList[$('#folder-list-ctrl').val()]}/${$('#filename-box-ctrl').val()}`;
+		$$$.message(`From: ${from}`, DEBUG, `$move-btn-ctrl`);
+		$$$.message(`For: ${afor}`, DEBUG, `$move-btn-ctrl`);
+		client.files.move('local', from, afor)
+			.done((response) => {
+				$$$.message(`Move file or folder success`, INFO, '$move-btn-ctrl');
+				getFilelist(locationPath);
+			}).fail((err) => {
+				$$$.message(`Move file or folder failure`, ERROR, '$move-btn-ctrl');
+			});
 	});
 
+	$('#cancel-btn-ctrl').click(() => {
+		$$$.message('Click cancel-btn-ctrl', DEBUG, '$cancel-btn-ctrl');
+		$('#file-notice-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) cancel-btn-ctrl', DEBUG, '$cancel-btn-ctrl');
+	});
+	
 	$('#seed-value-p1').click(() => {
 		$$$.message('Click seed-value-p1', DEBUG, '$seed-value-p1.click');
 		changeSeedRate(1);
@@ -1478,7 +1667,6 @@ $(() => {
 			if(powerFlag && extruderPosition[1] >= 0) { 
 				var pos = extruderPosition[1] - seedRate;
 				if(pos < 0) pos = 0;
-				console.log(pos);
 				client.control.sendGcode(`G0 Y${pos}MM F1500`)
 					.done(() => {
 						extruderPosition[1] = pos;
@@ -1697,7 +1885,6 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$extruder-btn-down.click');
 			setTimeout(()=>{restoreButtonCSS('down')}, 500);
 			if(powerFlag && canRunExtruder) {
-				console.log(`G1 E${$('#amount-value').val()}MM`);
 				client.control.sendGcode('G92 E0')
 					.done(() => {
 						$$$.message('Reset extruder extrud position', DEBUG, '$extruder-btn-down.click');

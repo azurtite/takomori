@@ -25,7 +25,6 @@
 			<script src="../node_modules/round-slider/dist/roundslider.min.js"></script>
 			<script src="../node_modules/chart.js/dist/chart.min.js"></script>
 			<script src="./logMan.js"></script>
-			<script src="./location.js"></script>
 			<script src="./index.js"></script>
 		<!-- install liblary css -->
 			<link rel="stylesheet" href="../node_modules/round-slider/dist/roundslider.min.css">
@@ -319,6 +318,50 @@
 			<div class="setting-panel" id="setting-panel-ctrl">
 				<div class="title">Configration Panel</div>
 				<div class="content-body" id="content-body-ctrl">
+					<div class="uri">
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="Host name or address"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="uri-host-ctrl"
+							/>
+							<label class="label">Host name or address</label>
+							<label class="error"></label>
+						</div>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="Port Address"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="uri-port-ctrl"
+							/>
+							<label class="label">Port Address</label>
+							<label class="error"></label>
+						</div>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="api-key"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="uri-apikey-ctrl"
+							/>
+							<label class="label">api-key</label>
+							<label class="error"></label>
+						</div>
+						<div class="select">
+							<select class="origin">
+								<option value="0">http://</option>
+								<option value="1">https://</option>
+							</select>
+						</div>
+					</div>
 				</div>
 				<div class="conf-set" id="conf-set-ctrl">
 					<span class="text">Set</span>
@@ -706,7 +749,7 @@
 				</div>
 			</div>
 			<div class="nav-cog">
-				<div class="nav-cog-icon">
+				<div class="nav-cog-icon" id="nav-cog-icon-ctrl">
 					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
 				</div>
 				<div class="nav-cog-title">

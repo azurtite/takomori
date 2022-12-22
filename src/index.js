@@ -138,7 +138,17 @@ function getFilelist(path) {
 		$('#file-list-ctrl').append(elem);
 		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFilePanel');
 	}
-
+	function genFNFPanel() {
+		$$$.message(`Call genFNFPanel`, DEBUG, 'genFNFPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel1">` +
+			`<div class="display-name"><span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;File not found</div>` +
+			`<div class="small-font-back">Currently in ${baseURL.split('/')[2]}</div>` +
+			`</div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(File not found)`, DEBUG, `genFNFPanel`);
+	}
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
 
 	$$$.message('Generate folder list', DEBUG, 'getFilelist');
@@ -175,6 +185,7 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type == 'folder') genFolderPanel(fileInfoContainar.files[i].path, i);
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != 'folder') genFilePanel(fileInfoContainar.files[i].path, i);
+				if(fileInfoContainar.files.length == 0) genFNFPanel();
 			})
 			.fail((err) => {});
 	else if(typeof(path) == 'string') {
@@ -191,6 +202,7 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == 'folder') genFolderPanel(fileInfoContainar.children[i].path, i);
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
+				if(fileInfoContainar.children.length == 0) genFNFPanel();
 			})
 			.fail((err) => {});
 	}

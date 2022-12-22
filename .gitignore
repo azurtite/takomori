@@ -7,8 +7,7 @@ Desktop.ini
 node_modules/
 src/client.js
 src/testUnit/
-src/roundslider.min.css
-src/roundslider.min.js
+src/location.js
 src/samplecode.js
 src/octoprint.client.*.js
 src/location.bak

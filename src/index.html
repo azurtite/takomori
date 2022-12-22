@@ -25,7 +25,6 @@
 			<script src="../node_modules/round-slider/dist/roundslider.min.js"></script>
 			<script src="../node_modules/chart.js/dist/chart.min.js"></script>
 			<script src="./logMan.js"></script>
-			<script src="./location.js"></script>
 			<script src="./index.js"></script>
 		<!-- install liblary css -->
 			<link rel="stylesheet" href="../node_modules/round-slider/dist/roundslider.min.css">
@@ -327,6 +326,7 @@
 								placeholder="Host name or address"
 								onkeyup="this.setAttribute('value', this.value);"
 								value=""
+								id="uri-host-ctrl"
 							/>
 							<label class="label">Host name or address</label>
 							<label class="error"></label>
@@ -338,6 +338,7 @@
 								placeholder="Port Address"
 								onkeyup="this.setAttribute('value', this.value);"
 								value=""
+								id="uri-port-ctrl"
 							/>
 							<label class="label">Port Address</label>
 							<label class="error"></label>
@@ -349,6 +350,7 @@
 								placeholder="api-key"
 								onkeyup="this.setAttribute('value', this.value);"
 								value=""
+								id="uri-apikey-ctrl"
 							/>
 							<label class="label">api-key</label>
 							<label class="error"></label>

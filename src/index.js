@@ -1919,4 +1919,21 @@ $(() => {
 			$$$.message(`Change extruderPanelShown. value is ${extruderPanelShown}`, DEBUG, '$extruder-tag.click');
 		}
 	});
+
+	$('#nav-cog-icon-ctrl').click(() => {
+		$$$.message('Click nav-cog-icon-ctrl', DEBUG, '$nav-cog-icon-ctrl.click');
+		$('#setting-panel-ctrl').css({visibility: 'visible'});
+		$$$.message('Change css(visibility:visible) setting-panel-ctrl', DEBUG, '$nav-cog-icon-ctrl.click');
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-285px'});
+		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-cog-icon-ctrl.click');
+		submenuToggle = false;
+	});
+
+	$('#conf-set-ctrl').click(() => {
+		$$$.message('Click conf-set-ctrl', DEBUG, 'conf-set-ctrl.click');
+		$('#setting-panel-ctrl').css({visibility: 'hidden'});
+		$$$.message('Change css(visibility:hidden) setting-panel-ctrl', DEBUG, '$conf-set-ctrl.click');
+	});
 });

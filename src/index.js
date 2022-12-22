@@ -149,6 +149,17 @@ function getFilelist(path) {
 		$('#file-list-ctrl').append(elem);
 		$$$.message(`Apeend element(File not found)`, DEBUG, `genFNFPanel`);
 	}
+	function genPNFPanel() {
+		$$$.message(`Call genPNFPanel`, DEBUG, 'genPNFPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel1">` +
+			`<div class="display-name"><span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;Printer not found</div>` +
+			`<div class="small-font-back">Currently in ${baseURL.split('/')[2]}</div>` +
+			`</div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(Printer not found)`, DEBUG, `genPNFPanel`);
+	}
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
 
 	$$$.message('Generate folder list', DEBUG, 'getFilelist');
@@ -177,6 +188,7 @@ function getFilelist(path) {
 			}
 		}).fail((err) => { 
 			$$$.message('client.files.listForLocation is failure', ERROR, 'getFilelist');
+			genPNFPanel();
 		});
 
 	$('#file-list-ctrl').html('');

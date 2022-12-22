@@ -1,4 +1,28 @@
-## 0.1.0 00001
+# Index
+- [Index](#index)
+- [0.1.0 00001](#010-00001)
+- [0.1.1](#011)
+	- [0.1.1(English)](#011english)
+		- [Function addition](#function-addition)
+	- [0.1.1(Japanese)](#011japanese)
+		- [機能追加](#機能追加)
+	- [0.1.1 00003(English)](#011-00003english)
+		- [Bugfix #00017](#bugfix-00017)
+		- [Improved functionality](#improved-functionality)
+	- [0.1.1 00003(Japanese)](#011-00003japanese)
+		- [バグ修正 #00017](#バグ修正-00017)
+		- [機能改善](#機能改善)
+- [0.1.2](#012)
+	- [0.1.2 00001(English)](#012-00001english)
+		- [New function](#new-function)
+		- [Bug fixes #0017](#bug-fixes-0017)
+		- [Improved functionality](#improved-functionality-1)
+	- [0.1.2 00001(Japanese)](#012-00001japanese)
+		- [新機能](#新機能)
+		- [バグ修正 #0017](#バグ修正-0017)
+		- [機能改善](#機能改善-1)
+
+# 0.1.0 00001
 以下の機能を実装
 - プリンターの状態表示機能
 - octoprintへのログイン、プリンター接続
@@ -6,6 +30,7 @@
 - Bedの温度表示機能
 - サブパネル（外観のみ）
 
+# 0.1.1
 ## 0.1.1(English)
 ### Function addition
 - Implement file list panel.
@@ -39,3 +64,32 @@
 ### 機能改善
 - パワーオフプロセス時に不必要なアラームが出ないようになるようにシーケンスを改善
 - 2重起動防止
+
+# 0.1.2
+## 0.1.2 00001(English)
+### New function
+- Implement file move logic
+### Bug fixes \#0017
+- Fixed actionPowerBtnClick to be false when login failed
+- Fixed the problem that the set job file name remains displayed when the power is turned off while job.select is selected.
+- Fixed so that window size cannot be changed
+### Improved functionality
+- Added debug messages to postProcess
+- Added debug message to getFilelist
+- Prevention of double activation of intervalIDprn
+- Changed to display printer unconnected in the file list.
+- Changed to show that there are no files on the server## 0.1.2 00001(Japanese)
+
+## 0.1.2 00001(Japanese)
+### 新機能
+- ファイル移動ロジックを実装
+### バグ修正 \#0017
+- ログイン失敗時にactionPowerBtnClickをfalseにするように修正
+- job.selectしたまま、パワーオフすると設定したjobファイル名表示が残る問題を修正
+- ウィンドウサイズを変更できなくなるように修正
+### 機能改善
+- postProcessにデバックメッセージを追加
+- getFilelistにデバックメッセージを追加
+- intervalIDprnの2重起動防止
+- プリンター未接続をファイルリストに表示するように変更
+- サーバー上のファイルがないことを表示するように変更

@@ -9,6 +9,7 @@
 
 body {
 	overflow:					hidden;
+	font-family:				'Roboto', sans-serif;
 }
 .content-counter {
 	position:					fixed;
@@ -253,6 +254,62 @@ body {
 			text-align:		center;
 			color:			@sunshine;
 		}
+	}
+	.setting-panel {
+		position:			relative;
+		display:			table;
+		top:				24px;
+		left:				24px;
+		height:				192px;
+		width:				352px;
+		background-color:	@skyhigh;
+		z-index:			90;
+		visibility:			visible;
+		.title {
+			position:		relative;
+			left:			16px;
+			height:			28px;
+			width:			310px;
+			border-bottom:	1px solid @sunshine;
+			font-size:		20px;
+		}
+		.content-body {
+			position:				relative;
+			left:					16px;
+			top:					2px;
+			height:					150px;
+			width:					320px;
+			overflow-y:				scroll;
+			-webkit-app-region:		no-drag;
+		}
+		.conf-set {
+			position:			absolute;
+			top:				150px;
+			left:				260px;
+			height:				32px;
+			width:				60px;
+			border-radius:		5px;
+			z-index:			91;
+			background-color:	@ceruleanblue;
+			.text {
+				cursor:			pointer;
+				position:		relative;
+				left:			16px;
+				top:			5px;
+				font-size:		16px;
+			}
+		}
+	}
+	.setting-panel::after {
+		content:			'';
+		position:			absolute;
+		top:				0;
+		right:				0;
+		width:				0;
+		height:				0;
+		border-style:		solid;
+		border-color:		transparent @ceruleanblue @peleskyblue transparent;
+		border-width:		0 25px 25px 0;
 	}
 }
 .progress-bar-forestleaf {

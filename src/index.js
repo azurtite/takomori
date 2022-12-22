@@ -65,6 +65,7 @@ if(windowSize == 1) {
 let fileInfoContainar;
 function getFilelist(path) {
 	function genBackPanel(item) {
+		$$$.message(`Call genBackPanel`, DEBUG, 'genBackPanel');
 		var elem = document.createElement('div');
 		elem.innerHTML = 
 			`<div class="item-panel1">` +
@@ -72,8 +73,10 @@ function getFilelist(path) {
 			`<div class="small-font-back">Currently in ${path.split('/')[path.split('/').length - 1]}</div>` +
 			`</div>`;
 		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(${item})`, DEBUG, `genBackPanel`);
 	}
 	function genFolderPanel(item, pos) {
+		$$$.message(`Call genFolderPanel`, DEBUG, 'genFolderPanel');
 		var folding = 1;
 		var temp = '';
 		var fileName = item.split('/')[item.split('/').length - 1];
@@ -85,6 +88,7 @@ function getFilelist(path) {
 			}
 			fileName = temp;
 		}
+		$$$.message(`File name newline completed`, DEBUG, 'genFolderPanel');
 
 		var size;
 		if('files' in fileInfoContainar) size = fileInfoContainar.files[pos].size;
@@ -93,6 +97,7 @@ function getFilelist(path) {
 		if(size < 1024) size+='B';
 		else if(size < 1048576) size = (Math.floor(size / 1024 * 100) / 100) + 'KB';
 		else if(size < 1073741824) size = (Math.floor(size / 1024 / 1024 * 100) /100) + 'MB';
+		$$$.message(`File size unit conversion`, DEBUG, 'genFolderPanel');
 
 		var elem = document.createElement('div');
 		elem.innerHTML =
@@ -103,8 +108,10 @@ function getFilelist(path) {
 			`<div class="right-btn file-list-icon-trash" onclick="trashClick('${pos}')"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>`;
 			'</div>';
 		$('#file-list-ctrl').append(elem);
+		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFolderPanel');
 	}
 	function genFilePanel(item, pos) {
+		$$$.message(`Call genFilePanel`, DEBUG, 'genFilePanel');
 		var folding = 1;
 		var temp = '';
 		var fileName = item.split('/')[item.split('/').length - 1];
@@ -116,6 +123,7 @@ function getFilelist(path) {
 			}
 			fileName = temp;
 		}
+		$$$.message(`File name newline completed`, DEBUG, 'genFilePanel');
 
 		var elem = document.createElement('div');
 		elem.innerHTML =
@@ -128,8 +136,30 @@ function getFilelist(path) {
 			`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
 			`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>`
 		$('#file-list-ctrl').append(elem);
+		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFilePanel');
 	}
-
+	function genFNFPanel() {
+		$$$.message(`Call genFNFPanel`, DEBUG, 'genFNFPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel1">` +
+			`<div class="display-name"><span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;File not found</div>` +
+			`<div class="small-font-back">Currently in ${baseURL.split('/')[2]}</div>` +
+			`</div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(File not found)`, DEBUG, `genFNFPanel`);
+	}
+	function genPNFPanel() {
+		$$$.message(`Call genPNFPanel`, DEBUG, 'genPNFPanel');
+		var elem = document.createElement('div');
+		elem.innerHTML =
+			`<div class="item-panel1">` +
+			`<div class="display-name"><span class="glyphicon glyphicon glyphicon-remove"></span>&nbsp;Printer not found</div>` +
+			`<div class="small-font-back">Currently in ${baseURL.split('/')[2]}</div>` +
+			`</div>`
+		$('#file-list-ctrl').append(elem);
+		$$$.message(`Apeend element(Printer not found)`, DEBUG, `genPNFPanel`);
+	}
 	$$$.message('Call getFilelist', DEBUG, 'getFilelist');
 
 	$$$.message('Generate folder list', DEBUG, 'getFilelist');
@@ -156,7 +186,10 @@ function getFilelist(path) {
 				else elem.text = `${folderList[i]}`;
 				$('#folder-list-ctrl').append(elem);
 			}
-		}).fail((err) => {});
+		}).fail((err) => { 
+			$$$.message('client.files.listForLocation is failure', ERROR, 'getFilelist');
+			genPNFPanel();
+		});
 
 	$('#file-list-ctrl').html('');
 	locationPath = path;
@@ -166,8 +199,9 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type == 'folder') genFolderPanel(fileInfoContainar.files[i].path, i);
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != 'folder') genFilePanel(fileInfoContainar.files[i].path, i);
+				if(fileInfoContainar.files.length == 0) genFNFPanel();
 			})
-			.fail((err) => {});
+			.fail((err) => $$$.message('client.files.list is failure', ERROR, 'getFilelist'));
 	else if(typeof(path) == 'string') {
 		var backFolder = path.split('/');
 		if(backFolder.length == 1) genBackPanel('');
@@ -182,8 +216,9 @@ function getFilelist(path) {
 				fileInfoContainar = data;
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == 'folder') genFolderPanel(fileInfoContainar.children[i].path, i);
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != 'folder') genFilePanel(fileInfoContainar.children[i].path, i);
+				if(fileInfoContainar.children.length == 0) genFNFPanel();
 			})
-			.fail((err) => {});
+			.fail((err) => $$$.message('client.files.get is failure', ERROR, 'getFilelist'));
 	}
 }
 function backClick(item) {
@@ -492,6 +527,8 @@ function getPrinterFullState() {
 			$$$.message('Printer is no connected', WARN, 'getPrinterFullState');
 			$('.nav-off').css({color: sunshine});
 			clearInterval(intervalIDprn);
+			intervalIDprn = undefined;
+			$$$.message(`Change intervalIDprn. value is ${intervalIDprn}`, DEBUG, `getPrinterFullState`);
 			resetMonitorText();
 			powerFlag = false;
 			$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
@@ -537,16 +574,23 @@ function postProcess() {
 						break;
 				}
 			}).fail((err) => {
-				$$$.message('trap message alert no 00008', WARN, 'getPrinterFullState');
+				$$$.message('trap message alert no 00008', WARN, 'postProcess');
 			});
 		$$$.message('Execute heart down process', DEBUG, 'postProcess');
 		client.printer.setToolTargetTemperatures({'tool0': 0});
+		$$$.message('Heart down tool 0', INFO, 'postProcess');
 		$('#tool-on-sw-btn').css({color: sunshine});
+		$$$.message('Change css(color:sunshine) tool-on-sw-btn', DEBUG, 'postProcess');
 		$('#tool-icon').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) tool-icon', DEBUG, 'postProcess');
 		client.printer.setBedTargetTemperature(0);
+		$$$.message('Heart down bed', INFO, 'postProcess');
 		$('#bed-on-sw-btn').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) bed-on-sw-btn', DEBUG, 'postProcess');
 		$('#bed-icon').css({color:sunshine});
+		$$$.message('Change css(color:sunshine) bed-icon', DEBUG, 'postProcess');
 		$("#jobname").text('not printed');
+		$$$.message('Initialize jobname text', DEBUG, 'postProcess');
 	}
 }
 /**
@@ -647,6 +691,8 @@ $(() => {
 				$$$.message('Change css(color:sunshine) nav-off', DEBUG, '$power-btn.click');
 				resetMonitorText();
 				clearInterval(intervalIDprn);
+				intervalIDprn = undefined;
+				$$$.message(`Change intervalIDprn. value is ${intervalIDprn}`, DEBUG, `$power-btn.click`);
 				$$$.message('Stop temperature monitor timer', DEBUG, '$power-btn.click');
 				setTimeout(() => logoutProcess(), 1200);
 				$$$.message('Logout after 1200ms', WARN, '$power-btn.click');
@@ -672,8 +718,8 @@ $(() => {
 							$('.nav-off').css({color: rescueorange});
 							powerFlag = true;
 							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-							intervalIDprn = setInterval(getPrinterFullState, 1000);
-							$$$.message(`intervalIDprn is ${intervalIDprn}`, WARN, '$power-btn.click')
+							if(intervalIDprn == undefined) intervalIDprn = setInterval(getPrinterFullState, 1000);
+							$$$.message(`intervalIDprn is ${intervalIDprn}`, DEBUG, '$power-btn.click')
 							$('.file-list-icon-open').css({color: sunshine});
 							$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: sunshine});

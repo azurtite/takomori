@@ -501,6 +501,8 @@ function getPrinterFullState() {
 			$$$.message('Printer is no connected', WARN, 'getPrinterFullState');
 			$('.nav-off').css({color: sunshine});
 			clearInterval(intervalIDprn);
+			intervalIDprn = undefined;
+			$$$.message(`Change intervalIDprn. value is ${intervalIDprn}`, DEBUG, `getPrinterFullState`);
 			resetMonitorText();
 			powerFlag = false;
 			$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
@@ -663,6 +665,8 @@ $(() => {
 				$$$.message('Change css(color:sunshine) nav-off', DEBUG, '$power-btn.click');
 				resetMonitorText();
 				clearInterval(intervalIDprn);
+				intervalIDprn = undefined;
+				$$$.message(`Change intervalIDprn. value is ${intervalIDprn}`, DEBUG, `$power-btn.click`);
 				$$$.message('Stop temperature monitor timer', DEBUG, '$power-btn.click');
 				setTimeout(() => logoutProcess(), 1200);
 				$$$.message('Logout after 1200ms', WARN, '$power-btn.click');
@@ -688,8 +692,8 @@ $(() => {
 							$('.nav-off').css({color: rescueorange});
 							powerFlag = true;
 							$$$.message(`Change powerFlag. value is ${powerFlag}`, DEBUG, '$power-btn.click');
-							intervalIDprn = setInterval(getPrinterFullState, 1000);
-							$$$.message(`intervalIDprn is ${intervalIDprn}`, WARN, '$power-btn.click')
+							if(intervalIDprn == undefined) intervalIDprn = setInterval(getPrinterFullState, 1000);
+							$$$.message(`intervalIDprn is ${intervalIDprn}`, DEBUG, '$power-btn.click')
 							$('.file-list-icon-open').css({color: sunshine});
 							$$$.message('Change css(color:sunshine) file-list-icon-open', DEBUG, '$power-btn.click');
 							$('.file-list-icon-print').css({color: sunshine});

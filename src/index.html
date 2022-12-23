@@ -332,6 +332,9 @@
 								<label class="label">Host name or address</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#uri-host-ctrl').val() != '') $('#uri-host-ctrl').attr('value', 'not-null');});
+							</script>
 							<div class="textbox">
 								<input
 									class="text"
@@ -344,6 +347,9 @@
 								<label class="label">Port Address</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#uri-port-ctrl').val() != '') $('#uri-port-ctrl').attr('value', 'not-null');});
+							</script>
 							<div class="textbox">
 								<input
 									class="text"
@@ -356,11 +362,16 @@
 								<label class="label">api-key</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#uri-apikey-ctrl').val() != '') $('#uri-apikey-ctrl').attr('value', 'not-null');});
+							</script>
 							<div class="select">
 								<select class="origin">
 									<option value="0">http://</option>
 									<option value="1">https://</option>
 								</select>
+								<label class="label">Select origin</label>
+								<label class="error"></label>
 							</div>
 						</div>
 					</div>
@@ -378,6 +389,9 @@
 								<label class="label">P1 movement amount</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#movement-p1').val() != '') $('#movement-p1').attr('value', 'not-null');});
+							</script>
 							<div class="textbox">
 								<input
 									class="text"
@@ -390,6 +404,9 @@
 								<label class="label">P2 movement amount</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#movement-p2').val() != '') $('#movement-p2').attr('value', 'not-null');});
+							</script>
 							<div class="textbox">
 								<input
 									class="text"
@@ -402,6 +419,9 @@
 								<label class="label">P3 movement amount</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#movement-p3').val() != '') $('#movement-p3').attr('value', 'not-null');});
+							</script>
 							<div class="textbox">
 								<input
 									class="text"
@@ -414,6 +434,9 @@
 								<label class="label">P4 movement amount</label>
 								<label class="error"></label>
 							</div>
+							<script>
+								$(() => {if($('#movement-p4').val() != '') $('#movement-p4').attr('value', 'not-null');});
+							</script>
 						</div>
 					</div>
 					<div class="leftmark" id="leftmark-ctrl">

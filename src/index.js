@@ -23,7 +23,6 @@ let intervalIDprn		= undefined;
 let fileIntervalID		= undefined;
 let toolTempValue		= 0;
 let bedTempValue		= 0;
-let seedRate			= 10;
 let buttonPosition		= 1;
 let maxButtonPosition	= 3;
 let waitNextClick		= false;
@@ -61,14 +60,17 @@ function setClientObject() {
 	});
 }
 
-feedAmount[1] = localStorage.getItem('movement-p1');
-feedAmount[2] = localStorage.getItem('movement-p2');
-feedAmount[3] = localStorage.getItem('movement-p3');
-feedAmount[4] = localStorage.getItem('movement-p4');
+feedAmount[1] = Number(localStorage.getItem('movement-p1'));
+feedAmount[2] = Number(localStorage.getItem('movement-p2'));
+feedAmount[3] = Number(localStorage.getItem('movement-p3'));
+feedAmount[4] = Number(localStorage.getItem('movement-p4'));
 if(feedAmount[1] == null || feedAmount[1] == '') feedAmount[1] = 0.1;
 if(feedAmount[2] == null || feedAmount[2] == '') feedAmount[2] = 1;
 if(feedAmount[3] == null || feedAmount[3] == '') feedAmount[3] = 10;
 if(feedAmount[4] == null || feedAmount[4] == '') feedAmount[4] = 100;
+let feedValue = Number(localStorage.getItem('feedValue'));
+if(feedValue == null || feedValue == '') feedValue = feedAmount[3];
+console.log(feedValue);
 
 let $$$ = new logMan(true, false);
 
@@ -653,8 +655,9 @@ $(() => {
 		$$$.message('Change css(visibility:visible) alert-panel', DEBUG, 'jQuery');
 	}
 	getFilelist(undefined);
-	$('#seed-value-p' + feedAmount.indexOf(seedRate)).css({'background-color': lapislazuli});
-	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');
+	console.log(feedAmount.indexOf(feedValue));
+	$('#seed-value-p' + feedAmount.indexOf(feedValue)).css({'background-color': lapislazuli});
+	$$$.message('Initialize feedValue display', DEBUG, 'jQuery');
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	$$$.message('Initialize progress-bar color', DEBUG, 'jQuery');
 	triggerWindowSizeChange();
@@ -1363,13 +1366,13 @@ $(() => {
 	});
 	function changeSeedRate(p) {
 		$$$.message('Call changeSeedRate', DEBUG, 'changeSeedRate');
-		$(`#seed-value-p${feedAmount.indexOf(seedRate)}`).css({'background-color': ceruleanblue});
-		$$$.message(`Change css(background-color:ceruleanblue) #seed-value-p${feedAmount.indexOf(seedRate)}`, DEBUG, 'changeSeedRate');
-		seedRate = Number($(`#seed-value-p${p}`).text().split('mm')[0]);
-		if(seedRate == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
+		$(`#seed-value-p${feedAmount.indexOf(feedValue)}`).css({'background-color': ceruleanblue});
+		$$$.message(`Change css(background-color:ceruleanblue) #seed-value-p${feedAmount.indexOf(feedValue)}`, DEBUG, 'changeSeedRate');
+		feedValue = Number($(`#seed-value-p${p}`).text().split('mm')[0]);
+		if(feedValue == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
 		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
 		$$$.message('Change css(background-color:lapislazuli) seed-value-p', DEBUG, 'changeSeedRate');
-		$$$.message(`Seed rate is ${seedRate}`, INFO, 'changeSeedRate');
+		$$$.message(`Seed rate is ${feedValue}`, INFO, 'changeSeedRate');
 	}
 
 	$('#manu-btn-p1').click(() => {
@@ -1436,7 +1439,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, '$manu-btn-p3.click');
 			setTimeout(()=>{restoreButtonCSS('p3')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p3.click');
-			var pos = extruderPosition[1] + seedRate;
+			var pos = extruderPosition[1] + feedValue;
 			if(pos > bedSize[1]) pos = bedSize[1];
 			if(powerFlag && extruderPosition[1] >= 0) {
 				client.control.sendGcode(`G0 Y${pos}MM F1500`)
@@ -1491,7 +1494,7 @@ $(() => {
 			setTimeout(()=>{restoreButtonCSS('p5')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p5.click');
 			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] + seedRate;
+				var pos = extruderPosition[2] + feedValue;
 				if(pos > bedSize[2]) pos = bedSize[2];
 				client.control.sendGcode(`G0 Z${pos}MM F1500`)
 					.done(() => {
@@ -1544,7 +1547,7 @@ $(() => {
 			setTimeout(()=>{restoreButtonCSS('p7')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p7.click');
 			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] - seedRate;
+				var pos = extruderPosition[0] - feedValue;
 				if(pos < 0) pos = 0;
 				client.control.sendGcode(`G0 X${pos}MM F1500`)
 					.done(() => {
@@ -1600,7 +1603,7 @@ $(() => {
 			setTimeout(()=>{restoreButtonCSS('p9')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-p9.click');
 			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] + seedRate;
+				var pos = extruderPosition[0] + feedValue;
 				if(pos > bedSize[0]) pos = bedSize[0];
 				client.control.sendGcode(`G0 X${pos}MM F1500`)
 					.done(() => {
@@ -1702,7 +1705,7 @@ $(() => {
 			setTimeout(()=>{restoreButtonCSS('pd')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pd.click');
 			if(powerFlag && extruderPosition[1] >= 0) { 
-				var pos = extruderPosition[1] - seedRate;
+				var pos = extruderPosition[1] - feedValue;
 				if(pos < 0) pos = 0;
 				client.control.sendGcode(`G0 Y${pos}MM F1500`)
 					.done(() => {
@@ -1756,7 +1759,7 @@ $(() => {
 			setTimeout(()=>{restoreButtonCSS('pf')}, 500);
 			$$$.message('Execute button click process', DEBUG, '$manu-btn-pf.click');
 			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] - seedRate;
+				var pos = extruderPosition[2] - feedValue;
 				if(pos < 0) pos = 0;
 				client.control.sendGcode(`G0 Z${pos}MM F1500`)
 					.done(() => {
@@ -1816,26 +1819,26 @@ $(() => {
 		if(powerFlag && extruderPosition[0] >= 0 && extruderPosition[1] >= 0) {
 			switch(p) {
 				case 1:
-					x = extruderPosition[0] - seedRate;
-					y = extruderPosition[1] + seedRate;
+					x = extruderPosition[0] - feedValue;
+					y = extruderPosition[1] + feedValue;
 					if(x < 0) x = 0;
 					if(y > bedSize[1]) y = bedSize[1];
 					break;
 				case 2:
-					x = extruderPosition[0] + seedRate;
-					y = extruderPosition[1] + seedRate;
+					x = extruderPosition[0] + feedValue;
+					y = extruderPosition[1] + feedValue;
 					if(x > bedSize[0]) x = bedSize[0];
 					if(y > bedSize[1]) y = bedSize[1];
 					break;
 				case 3:
-					x = extruderPosition[0] - seedRate;
-					y = extruderPosition[1] - seedRate;
+					x = extruderPosition[0] - feedValue;
+					y = extruderPosition[1] - feedValue;
 					if(x < 0) x = 0;
 					if(y < 0) y = 0;
 					break;
 				case 4:
-					x = extruderPosition[0] + seedRate;
-					y = extruderPosition[1] - seedRate;
+					x = extruderPosition[0] + feedValue;
+					y = extruderPosition[1] - feedValue;
 					if(x > bedSize[0]) x = bedSize[0];
 					if(y < 0) y = 0;
 					break;
@@ -1985,10 +1988,10 @@ $(() => {
 		$$$.message('Regenarate octoprint client object', INFO, 'conf-set-ctrl.click');
 		setClientObject();
 		
-		feedAmount[1] = $('#movement-p1').val();
-		feedAmount[2] = $('#movement-p2').val();
-		feedAmount[3] = $('#movement-p3').val();
-		feedAmount[4] = $('#movement-p4').val();
+		feedAmount[1] = Number($('#movement-p1').val());
+		feedAmount[2] = Number($('#movement-p2').val());
+		feedAmount[3] = Number($('#movement-p3').val());
+		feedAmount[4] = Number($('#movement-p4').val());
 		$$$.message('Store movement amount information', INFO, 'conf-set-ctrl.click');
 		localStorage.setItem('movement-p1', feedAmount[1]);
 		localStorage.setItem('movement-p2', feedAmount[2]);

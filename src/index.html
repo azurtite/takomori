@@ -318,53 +318,110 @@
 			<div class="setting-panel" id="setting-panel-ctrl">
 				<div class="title">Configration Panel</div>
 				<div class="content-body" id="content-body-ctrl">
-					<div class="uri">
-						<div class="textbox">
-							<input
-								class="text"
-								type="textbox"
-								placeholder="Host name or address"
-								onkeyup="this.setAttribute('value', this.value);"
-								value=""
-								id="uri-host-ctrl"
-							/>
-							<label class="label">Host name or address</label>
-							<label class="error"></label>
-						</div>
-						<div class="textbox">
-							<input
-								class="text"
-								type="textbox"
-								placeholder="Port Address"
-								onkeyup="this.setAttribute('value', this.value);"
-								value=""
-								id="uri-port-ctrl"
-							/>
-							<label class="label">Port Address</label>
-							<label class="error"></label>
-						</div>
-						<div class="textbox">
-							<input
-								class="text"
-								type="textbox"
-								placeholder="api-key"
-								onkeyup="this.setAttribute('value', this.value);"
-								value=""
-								id="uri-apikey-ctrl"
-							/>
-							<label class="label">api-key</label>
-							<label class="error"></label>
-						</div>
-						<div class="select">
-							<select class="origin">
-								<option value="0">http://</option>
-								<option value="1">https://</option>
-							</select>
+					<div class="content-body-uri" id="content-body-uri-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="Host name or address"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="uri-host-ctrl"
+								/>
+								<label class="label">Host name or address</label>
+								<label class="error"></label>
+							</div>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="Port Address"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="uri-port-ctrl"
+								/>
+								<label class="label">Port Address</label>
+								<label class="error"></label>
+							</div>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="api-key"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="uri-apikey-ctrl"
+								/>
+								<label class="label">api-key</label>
+								<label class="error"></label>
+							</div>
+							<div class="select">
+								<select class="origin">
+									<option value="0">http://</option>
+									<option value="1">https://</option>
+								</select>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="conf-set" id="conf-set-ctrl">
-					<span class="text">Set</span>
+					<div class="content-body-movement" id="content-body-movement-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P1 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p1"
+								/>
+								<label class="label">P1 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P2 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p2"
+								/>
+								<label class="label">P2 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P3 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p3"
+								/>
+								<label class="label">P3 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P4 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p4"
+								/>
+								<label class="label">P4 movement amount</label>
+								<label class="error"></label>
+							</div>
+						</div>
+					</div>
+					<div class="leftmark" id="leftmark-ctrl">
+						<span class="glyphicon glyphicon glyphicon-triangle-right"></span>
+					</div>
+					<div class="conf-set" id="conf-set-ctrl">
+						<span class="text">Set</span>
+					</div>
 				</div>
 			</div>
 		</div>

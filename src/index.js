@@ -36,7 +36,7 @@ let locationPath		= '';
 
 let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
-let seedRates			= [0, 0.1, 1, 10, 100];
+let feedAmount			= [0];
 let extruderPosition	= [-99, -99, -99];
 let bedSize				= [230, 220, 200];
 let bedPositionName		= ['rear-left', 'rear-right', 'front-left', 'front-right'];
@@ -60,6 +60,15 @@ function setClientObject() {
 		apikey:		serverApikey
 	});
 }
+
+feedAmount[1] = localStorage.getItem('movement-p1');
+feedAmount[2] = localStorage.getItem('movement-p2');
+feedAmount[3] = localStorage.getItem('movement-p3');
+feedAmount[4] = localStorage.getItem('movement-p4');
+if(feedAmount[1] == null || feedAmount[1] == '') feedAmount[1] = 0.1;
+if(feedAmount[2] == null || feedAmount[2] == '') feedAmount[2] = 1;
+if(feedAmount[3] == null || feedAmount[3] == '') feedAmount[3] = 10;
+if(feedAmount[4] == null || feedAmount[4] == '') feedAmount[4] = 100;
 
 let $$$ = new logMan(true, false);
 
@@ -644,7 +653,7 @@ $(() => {
 		$$$.message('Change css(visibility:visible) alert-panel', DEBUG, 'jQuery');
 	}
 	getFilelist(undefined);
-	$('#seed-value-p' + seedRates.indexOf(seedRate)).css({'background-color': lapislazuli});
+	$('#seed-value-p' + feedAmount.indexOf(seedRate)).css({'background-color': lapislazuli});
 	$$$.message('Initialize seedRate display', DEBUG, 'jQuery');
 	$('#progressbar-one').addClass('progress-bar-forestleaf');
 	$$$.message('Initialize progress-bar color', DEBUG, 'jQuery');
@@ -654,6 +663,15 @@ $(() => {
 	$('#uri-port-ctrl').val(serverPort);
 	$('#uri-apikey-ctrl').val(serverApikey);
 	
+	$('#seed-value-p1').text(`${feedAmount[1]}mm`);
+	$('#seed-value-p2').text(`${feedAmount[2]}mm`);
+	$('#seed-value-p3').text(`${feedAmount[3]}mm`);
+	$('#seed-value-p4').text(`${feedAmount[4]}mm`);
+	$('#movement-p1').val(feedAmount[1]);
+	$('#movement-p2').val(feedAmount[2]);
+	$('#movement-p3').val(feedAmount[3]);
+	$('#movement-p4').val(feedAmount[4]);
+
 	$('#reload-btn-ctrl').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
 		location.reload();
@@ -1345,8 +1363,8 @@ $(() => {
 	});
 	function changeSeedRate(p) {
 		$$$.message('Call changeSeedRate', DEBUG, 'changeSeedRate');
-		$(`#seed-value-p${seedRates.indexOf(seedRate)}`).css({'background-color': ceruleanblue});
-		$$$.message(`Change css(background-color:ceruleanblue) #seed-value-p${seedRates.indexOf(seedRate)}`, DEBUG, 'changeSeedRate');
+		$(`#seed-value-p${feedAmount.indexOf(seedRate)}`).css({'background-color': ceruleanblue});
+		$$$.message(`Change css(background-color:ceruleanblue) #seed-value-p${feedAmount.indexOf(seedRate)}`, DEBUG, 'changeSeedRate');
 		seedRate = Number($(`#seed-value-p${p}`).text().split('mm')[0]);
 		if(seedRate == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
 		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
@@ -1966,6 +1984,22 @@ $(() => {
 		localStorage.setItem('uri-port', serverPort);
 		$$$.message('Regenarate octoprint client object', INFO, 'conf-set-ctrl.click');
 		setClientObject();
+		
+		feedAmount[1] = $('#movement-p1').val();
+		feedAmount[2] = $('#movement-p2').val();
+		feedAmount[3] = $('#movement-p3').val();
+		feedAmount[4] = $('#movement-p4').val();
+		$$$.message('Store movement amount information', INFO, 'conf-set-ctrl.click');
+		localStorage.setItem('movement-p1', feedAmount[1]);
+		localStorage.setItem('movement-p2', feedAmount[2]);
+		localStorage.setItem('movement-p3', feedAmount[3]);
+		localStorage.setItem('movement-p4', feedAmount[4]);
+
+		$$$.message('Change seed range view', INFO, 'conf-set-ctrl.click');
+		$('#seed-value-p1').text(`${feedAmount[1]}mm`);
+		$('#seed-value-p2').text(`${feedAmount[2]}mm`);
+		$('#seed-value-p3').text(`${feedAmount[3]}mm`);
+		$('#seed-value-p4').text(`${feedAmount[4]}mm`);
 	});
 
 	$('#leftmark-ctrl').click(() => {

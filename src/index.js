@@ -1967,4 +1967,18 @@ $(() => {
 		$$$.message('Regenarate octoprint client object', INFO, 'conf-set-ctrl.click');
 		setClientObject();
 	});
+
+	$('#leftmark-ctrl').click(() => {
+		if($('#content-body-uri-ctrl').css('z-index') == 1) {
+			$('#content-body-uri-ctrl').css({'z-index': -1});
+			$$$.message('Change css(z-index:-1) content-body-uri-ctrl', DEBUG, '$leftmark-ctrl.click');
+			$('#content-body-movement-ctrl').css({'z-index': 1});
+			$$$.message('Change css(z-index:1) content-body-movement-ctrl', DEBUG, '$leftmark-ctrl.click');
+		} else {
+			$('#content-body-uri-ctrl').css({'z-index': 1});
+			$$$.message('Change css(z-index:1) content-body-uri-ctrl', DEBUG, '$leftmark-ctrl.click');
+			$('#content-body-movement-ctrl').css({'z-index': -1});
+			$$$.message('Change css(z-index:-1) content-body-movement-ctrl', DEBUG, '$leftmark-ctrl.click');
+		}
+	});
 });

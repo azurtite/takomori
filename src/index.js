@@ -68,9 +68,9 @@ if(feedAmount[1] == null || feedAmount[1] == '') feedAmount[1] = 0.1;
 if(feedAmount[2] == null || feedAmount[2] == '') feedAmount[2] = 1;
 if(feedAmount[3] == null || feedAmount[3] == '') feedAmount[3] = 10;
 if(feedAmount[4] == null || feedAmount[4] == '') feedAmount[4] = 100;
-let feedValue = Number(localStorage.getItem('feedValue'));
-if(feedValue == null || feedValue == '') feedValue = feedAmount[3];
-console.log(feedValue);
+let feedPosition = Number(localStorage.getItem('feedPosition'));
+if(feedPosition == null || feedPosition == '') feedPosition = 3;
+feedValue = feedAmount[feedPosition];
 
 let $$$ = new logMan(true, false);
 
@@ -1366,13 +1366,16 @@ $(() => {
 	});
 	function changeSeedRate(p) {
 		$$$.message('Call changeSeedRate', DEBUG, 'changeSeedRate');
+
+		feedPosition = p;
+		localStorage.setItem('feedPosition', feedPosition);
 		$(`#seed-value-p${feedAmount.indexOf(feedValue)}`).css({'background-color': ceruleanblue});
 		$$$.message(`Change css(background-color:ceruleanblue) #seed-value-p${feedAmount.indexOf(feedValue)}`, DEBUG, 'changeSeedRate');
-		feedValue = Number($(`#seed-value-p${p}`).text().split('mm')[0]);
+		feedValue = Number($(`#seed-value-p${feedPosition}`).text().split('mm')[0]);
 		if(feedValue == NaN) $$$.message('parseInt error', ERROR, 'changeSeedRate');
-		$('#seed-value-p' + p).css(({'background-color': lapislazuli}));
+		$('#seed-value-p' + feedPosition).css(({'background-color': lapislazuli}));
 		$$$.message('Change css(background-color:lapislazuli) seed-value-p', DEBUG, 'changeSeedRate');
-		$$$.message(`Seed rate is ${feedValue}`, INFO, 'changeSeedRate');
+		$$$.message(`feed amount is ${feedValue}`, INFO, 'changeSeedRate');
 	}
 
 	$('#manu-btn-p1').click(() => {
@@ -2003,6 +2006,9 @@ $(() => {
 		$('#seed-value-p2').text(`${feedAmount[2]}mm`);
 		$('#seed-value-p3').text(`${feedAmount[3]}mm`);
 		$('#seed-value-p4').text(`${feedAmount[4]}mm`);
+
+		feedValue = feedAmount[feedPosition];
+		$$$.message(`feed amount is ${feedValue}`, INFO, 'conf-set-ctrl.click');
 	});
 
 	$('#leftmark-ctrl').click(() => {

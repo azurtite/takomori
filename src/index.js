@@ -74,6 +74,9 @@ let feedPosition = Number(localStorage.getItem('feedPosition'));
 if(feedPosition == null || feedPosition == '') feedPosition = 3;
 feedValue = feedAmount[feedPosition];
 
+$('#win-pos-x').val(localStorage.getItem('win-pos-x'));
+$('#win-pos-y').val(localStorage.getItem('win-pos-y'));
+
 let $$$ = new logMan(true, false);
 
 if(windowSize == 1) {
@@ -2011,6 +2014,9 @@ $(() => {
 
 		feedValue = feedAmount[feedPosition];
 		$$$.message(`feed amount is ${feedValue}`, INFO, 'conf-set-ctrl.click');
+
+		localStorage.setItem('win-pos-x', $('win-pos-x').val());
+		localStorage.setItem('win-pos-y', $('win-pos-y').val());
 	});
 
 	$('#leftmark-ctrl').click(() => {

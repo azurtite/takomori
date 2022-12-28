@@ -439,6 +439,47 @@
 							</script>
 						</div>
 					</div>
+					<div class="content-body-win-control" id="content-body-win-control-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="number"
+									placeholder="Window position for X"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="win-pos-x"
+								/>
+								<label class="label">Window position for X</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#win-pos-x').val() != '') $('#win-pos-x').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="number"
+									placeholder="Window position for Y"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="win-pos-y"
+								/>
+								<label class="label">Window position for Y</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#win-pos-y').val() != '') $('#win-pos-y').attr('value', 'not-null');});
+							</script>
+							<input
+								type="checkbox"
+								class="checkbox"
+								id="show-debug-content-ctrl"
+							/>
+							Show debug contents<br />
+						</div>
+					</div>
+				</div>
 					<div class="leftmark" id="leftmark-ctrl">
 						<span class="glyphicon glyphicon glyphicon-triangle-right"></span>
 					</div>

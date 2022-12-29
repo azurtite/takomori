@@ -74,9 +74,6 @@ let feedPosition = Number(localStorage.getItem('feedPosition'));
 if(feedPosition == null || feedPosition == '') feedPosition = 3;
 feedValue = feedAmount[feedPosition];
 
-$('#win-pos-x').val(localStorage.getItem('win-pos-x'));
-$('#win-pos-y').val(localStorage.getItem('win-pos-y'));
-
 let $$$ = new logMan(true, false);
 
 if(windowSize == 1) {
@@ -680,6 +677,9 @@ $(() => {
 	$('#movement-p3').val(feedAmount[3]);
 	$('#movement-p4').val(feedAmount[4]);
 
+	$('#win-pos-x').val(localStorage.getItem('win-pos-x'));
+	$('#win-pos-y').val(localStorage.getItem('win-pos-y'));
+	
 	$('#reload-btn-ctrl').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
 		location.reload();
@@ -2015,8 +2015,8 @@ $(() => {
 		feedValue = feedAmount[feedPosition];
 		$$$.message(`feed amount is ${feedValue}`, INFO, 'conf-set-ctrl.click');
 
-		localStorage.setItem('win-pos-x', $('win-pos-x').val());
-		localStorage.setItem('win-pos-y', $('win-pos-y').val());
+		localStorage.setItem('win-pos-x', $('#win-pos-x').val());
+		localStorage.setItem('win-pos-y', $('#win-pos-y').val());
 	});
 
 	$('#leftmark-ctrl').click(() => {

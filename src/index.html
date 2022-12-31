@@ -25,7 +25,6 @@
 			<script src="../node_modules/round-slider/dist/roundslider.min.js"></script>
 			<script src="../node_modules/chart.js/dist/chart.min.js"></script>
 			<script src="./logMan.js"></script>
-			<script src="./location.js"></script>
 			<script src="./index.js"></script>
 		<!-- install liblary css -->
 			<link rel="stylesheet" href="../node_modules/round-slider/dist/roundslider.min.css">
@@ -313,6 +312,175 @@
 			<div class="main-triangle-down">
 				<div class="main-triangle-down-mark">
 					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-main"></span>
+				</div>
+			</div>
+			<!-- setting panel -->
+			<div class="setting-panel" id="setting-panel-ctrl">
+				<div class="title">Configration Panel</div>
+				<div class="content-base" id="content-base-ctrl">
+					<div class="content-body-uri" id="content-body-uri-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="Host name or address"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="uri-host-ctrl"
+								/>
+								<label class="label">Host name or address</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#uri-host-ctrl').val() != '') $('#uri-host-ctrl').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="Port Address"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="uri-port-ctrl"
+								/>
+								<label class="label">Port Address</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#uri-port-ctrl').val() != '') $('#uri-port-ctrl').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="api-key"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="uri-apikey-ctrl"
+								/>
+								<label class="label">api-key</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#uri-apikey-ctrl').val() != '') $('#uri-apikey-ctrl').attr('value', 'not-null');});
+							</script>
+							<div class="select">
+								<select class="origin">
+									<option value="0">http://</option>
+									<option value="1">https://</option>
+								</select>
+								<label class="label">Select origin</label>
+								<label class="error"></label>
+							</div>
+						</div>
+					</div>
+					<div class="content-body-movement" id="content-body-movement-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P1 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p1"
+								/>
+								<label class="label">P1 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#movement-p1').val() != '') $('#movement-p1').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P2 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p2"
+								/>
+								<label class="label">P2 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#movement-p2').val() != '') $('#movement-p2').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P3 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p3"
+								/>
+								<label class="label">P3 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#movement-p3').val() != '') $('#movement-p3').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="textbox"
+									placeholder="P4 movement amount"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="movement-p4"
+								/>
+								<label class="label">P4 movement amount</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#movement-p4').val() != '') $('#movement-p4').attr('value', 'not-null');});
+							</script>
+						</div>
+					</div>
+					<div class="content-body-win-control" id="content-body-win-control-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="number"
+									placeholder="Window position for X"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="win-pos-x"
+								/>
+								<label class="label">Window position for X</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#win-pos-x').val() != '') $('#win-pos-x').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="number"
+									placeholder="Window position for Y"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="win-pos-y"
+								/>
+								<label class="label">Window position for Y</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#win-pos-y').val() != '') $('#win-pos-y').attr('value', 'not-null');});
+							</script>
+							<div class="checkbox-pos"><input type="checkbox" class="checkbox" id="debug-mode-ctrl"></div>
+							<div class="text-pos">Show debug mode contents</div>
+						</div>
+					</div>
+					<div class="leftmark" id="leftmark-ctrl">
+						<span class="glyphicon glyphicon glyphicon-triangle-right"></span>
+					</div>
+					<div class="conf-set" id="conf-set-ctrl">
+						<span class="text">Set</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -697,7 +865,7 @@
 				</div>
 			</div>
 			<div class="nav-cog">
-				<div class="nav-cog-icon">
+				<div class="nav-cog-icon" id="nav-cog-icon-ctrl">
 					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
 				</div>
 				<div class="nav-cog-title">

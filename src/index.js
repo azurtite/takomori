@@ -32,6 +32,8 @@ let extruderMovingTemp	= 200;
 let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
 let locationPath		= '';
+let contentPosition		= 2;
+let maxContentPosition	= 2;
 
 let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
@@ -53,7 +55,7 @@ function setClientObject() {
 	if(serverPort == null || serverPort == '') baseURL = `${serverOrigin}${serverHost}/`;
 	else baseURL = `${serverOrigin}${serverHost}:${serverPort}/`;
 	console.warn(`Test URI: ${baseURL}api/files?apikey=${serverApikey}`);
-	
+
 	client = new OctoPrintClient({
 		baseurl:	baseURL,
 		apikey:		serverApikey
@@ -674,6 +676,19 @@ $(() => {
 	$('#movement-p2').val(feedAmount[2]);
 	$('#movement-p3').val(feedAmount[3]);
 	$('#movement-p4').val(feedAmount[4]);
+
+	$('#win-pos-x').val(localStorage.getItem('win-pos-x'));
+	$('#win-pos-y').val(localStorage.getItem('win-pos-y'));
+	
+	if(localStorage.getItem('debug-mode') == `true`) {
+		$('#reload-btn-ctrl').css({visibility: 'visible'});
+		$('#ID-powerFlag').css({visibility: 'visible'});
+		$('#debug-mode-ctrl').prop('checked', true);
+	} else {
+		$('#reload-btn-ctrl').css({visibility: 'hidden'});
+		$('#ID-powerFlag').css({visibility: 'hidden'});
+		$('#debug-mode-ctrl').prop('checked', false);
+	}
 
 	$('#reload-btn-ctrl').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
@@ -2009,19 +2024,40 @@ $(() => {
 
 		feedValue = feedAmount[feedPosition];
 		$$$.message(`feed amount is ${feedValue}`, INFO, 'conf-set-ctrl.click');
+
+		localStorage.setItem('win-pos-x', $('#win-pos-x').val());
+		localStorage.setItem('win-pos-y', $('#win-pos-y').val());
+
+		if($('#debug-mode-ctrl').prop('checked') == true) {
+			$('#reload-btn-ctrl').css({visibility: 'visible'});
+			$('#ID-powerFlag').css({visibility: 'visible'});
+			localStorage.setItem('debug-mode', true);
+		} else {
+			$('#reload-btn-ctrl').css({visibility: 'hidden'});
+			$('#ID-powerFlag').css({visibility: 'hidden'});
+			localStorage.setItem('debug-mode', false);
+		}
 	});
 
 	$('#leftmark-ctrl').click(() => {
-		if($('#content-body-uri-ctrl').css('z-index') == 1) {
-			$('#content-body-uri-ctrl').css({'z-index': -1});
-			$$$.message('Change css(z-index:-1) content-body-uri-ctrl', DEBUG, '$leftmark-ctrl.click');
-			$('#content-body-movement-ctrl').css({'z-index': 1});
-			$$$.message('Change css(z-index:1) content-body-movement-ctrl', DEBUG, '$leftmark-ctrl.click');
-		} else {
-			$('#content-body-uri-ctrl').css({'z-index': 1});
-			$$$.message('Change css(z-index:1) content-body-uri-ctrl', DEBUG, '$leftmark-ctrl.click');
-			$('#content-body-movement-ctrl').css({'z-index': -1});
-			$$$.message('Change css(z-index:-1) content-body-movement-ctrl', DEBUG, '$leftmark-ctrl.click');
+		$$$.message('Call leftmark-ctrl', DEBUG, 'leftmark-ctrl.click');
+		contentPosition++;
+		if(contentPosition > maxContentPosition) contentPosition = 0;
+		$('[id^=content-body-]').css({'z-index': -1});
+		$$$.message('Change css(z-index:-1) content-body-*-ctrl', DEBUG, '$leftmark-ctrl.click');
+		switch(contentPosition) {
+			case 0:
+				$('#content-body-uri-ctrl').css({'z-index': 1});
+				$$$.message('Change css(z-index:1) content-body-uri-ctrl', DEBUG, '$leftmark-ctrl.click');
+				break;
+			case 1:
+				$('#content-body-movement-ctrl').css({'z-index': 1});
+				$$$.message('Change css(z-index:1) content-body-movement-ctrl', DEBUG, '$leftmark-ctrl.click');
+				break;
+			case 2:
+				$('#content-body-win-control-ctrl').css({'z-index': 1});
+				$$$.message('Change css(z-index:1) content-body-win-control-ctrl', DEBUG, '$leftmark-ctrl.click');
+				break;
 		}
 	});
 });

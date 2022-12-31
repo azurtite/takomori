@@ -264,7 +264,7 @@ body {
 		width:				352px;
 		background-color:	@skyhigh;
 		z-index:			90;
-		visibility:			visible;
+		visibility:			hidden;
 		.title {
 			position:		relative;
 			left:			16px;
@@ -285,8 +285,8 @@ body {
 		}
 		.conf-set {
 			position:			absolute;
-			top:				125px;
-			left:				260px;
+			top:				120px;
+			left:				255px;
 			height:				32px;
 			width:				60px;
 			border-radius:		5px;
@@ -300,7 +300,7 @@ body {
 				font-size:		16px;
 			}
 		}
-		.content-body {
+		.content-base {
 			position:					relative;
 			left:						0px;
 			top:						2px;
@@ -313,7 +313,7 @@ body {
 				overflow-y:				scroll;
 				-webkit-app-region:		no-drag;
 				background-color:		@skyhigh;
-				z-index:				-1;
+				z-index:				1;
 				.input-width {
 					width:				25vw;
 				}
@@ -515,7 +515,7 @@ body {
 				overflow-y:				scroll;
 				-webkit-app-region:		no-drag;
 				background-color:		@skyhigh;
-				z-index:				1;
+				z-index:				-1;
 				.input-width {
 					width:				26vw;
 				}
@@ -585,6 +585,17 @@ body {
 					font-size:			16px;
 					font-weight:		200;
 					font-family:		'Roboto', sans-serif;
+				}
+				.checkbox-pos {
+					position:			absolute;
+					left:				0px;
+					top:				140px;
+					height:				40px;
+				}
+				.text-pos {
+					position:			absolute;
+					left:				20px;
+					top:				140px;
 				}
 			}
 		}

@@ -317,7 +317,7 @@
 			<!-- setting panel -->
 			<div class="setting-panel" id="setting-panel-ctrl">
 				<div class="title">Configration Panel</div>
-				<div class="content-body" id="content-body-ctrl">
+				<div class="content-base" id="content-base-ctrl">
 					<div class="content-body-uri" id="content-body-uri-ctrl">
 						<div class="input-width">
 							<div class="textbox">
@@ -471,15 +471,10 @@
 							<script>
 								$(() => {if($('#win-pos-y').val() != '') $('#win-pos-y').attr('value', 'not-null');});
 							</script>
-							<input
-								type="checkbox"
-								class="checkbox"
-								id="show-debug-content-ctrl"
-							/>
-							Show debug contents<br />
+							<div class="checkbox-pos"><input type="checkbox" class="checkbox" id="debug-mode-ctrl"></div>
+							<div class="text-pos">Show debug mode contents</div>
 						</div>
 					</div>
-				</div>
 					<div class="leftmark" id="leftmark-ctrl">
 						<span class="glyphicon glyphicon glyphicon-triangle-right"></span>
 					</div>

@@ -23,7 +23,6 @@ body {
 	width:						400px;
 	color:						@sunshine;
 	background-color:			@ceruleanblue;
-	-webkit-app-region:			drag;
 	z-index:					80;
 	cursor:						default;
 	.basebody {
@@ -32,8 +31,8 @@ body {
 		left:					0px;
 		height:					240px;
 		width:					400px;
-		z-index:				0;
-		background-color:			@ceruleanblue;
+		z-index:				1;
+		background-color:		@ceruleanblue;
 	}
 	.nav-fire-space {
 		position:				absolute;
@@ -1455,4 +1454,106 @@ div::-webkit-scrollbar-thumb {
 	border-style:		solid;
 	border-color:		transparent @ceruleanblue @peleskyblue transparent;
 	border-width:		0 25px 25px 0;
+}
+.gCode-panel {
+	position:				absolute;
+	display:				table;
+	left:					8px;
+	top:					8px;
+	height:					224px;
+	width:					384px;
+	z-index:				90;
+	color:					@sunshine;
+	background-color:		@skyhigh;
+	-webkit-app-region:		no-darg;
+	.title {
+		position:			relative;
+		left:				16px;
+		height:				28px;
+		width:				330px;
+		border-bottom:		1px solid @sunshine;
+		font-size:			20px;
+	}
+	.title-x4 {
+		width:				740px;
+	}
+	.gCode-close-btn {
+		cursor:				pointer;
+		position:			absolute;
+		right:				10px;
+		bottom:				10px;
+		height:				32px;
+		width:				60px;
+		border-radius:		5px;
+		background-color:	@ceruleanblue;
+		.text {
+			position:		relative;
+			left:			10px;
+			top:			5px;
+			font-size:		16px;
+		}
+	}
+	.gCode-close-btn-x4 {
+		right:				20px;
+	}
+	.gCode-monitor {
+		position:			relative;
+		left:				16px;
+		top:				4px;
+		border:				1px solid @sunshine;
+		background-color:	@skyhigh;
+	}
+	.gCode-monitor-x4 {
+		height:			380px;
+		width:			752px;
+	}
+	.gCode-line {
+		position:			absolute;
+		left:				16px;
+		bottom:				10px;
+		height:				32px;
+		width:				230px;
+		border:				1px solid @sunshine;
+		border-radius:		5px 0px 0px 5px;
+		border-right:		0px;
+		background-color:	@skyhigh;
+	}
+	.gCode-line-x4 {
+		width:				620px;
+	}
+	.gCode-send-btn {
+		cursor:				pointer;
+		position:			absolute;
+		right:				77px;
+		bottom:				10px;
+		height:				32px;
+		width:				60px;
+		border:				1px solid @sunshine;
+		border-radius:		0px 5px 5px 0px;
+		background-color:	@ceruleanblue;
+		.text {
+			position:		relative;
+			left:			8px;
+			top:			5px;
+			font-size:		16px;
+		}
+	}
+	.gCode-send-btn-x4 {
+		right:			87px;
+	}
+}
+.gCode-panel-x4 {
+	height:					464px;
+	width:					784px;
+}
+.gCode-panel::after {
+	content:				'';
+	position:				absolute;
+	top:					0;
+	right:					0;
+	width:					0;
+	height:					0;
+	border-style:			solid;
+	border-color:			transparent @ceruleanblue @peleskyblue transparent;
+	border-width:			0 25px 25px 0;
 }

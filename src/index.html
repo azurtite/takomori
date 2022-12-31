@@ -687,7 +687,7 @@
 					glaph
 				</div>
 			</div>
-			<div class="nav-console">
+			<div class="nav-console" id="nav-console-ctrl">
 				<div class="nav-console-icon">
 					<span class="glyphicon glyphicon glyphicon-console"></span><br />
 				</div>
@@ -903,16 +903,17 @@
 			</div>
 		</div>
 	<!-- gcode panel -->
-		<div class="gCode-panel" id="gCode-panel-ctrl">
-			<div class="title">
+		<div class="gCode-panel gCode-panel-x4" id="gCode-panel-ctrl">
+			<div class="title title-x4" id="gCode-title-ctrl">
 				Terminal
 			</div>
-			<textarea name="name-gCode-monitor" class="gCode-monitor" id="gCode-monitor-ctrl" cols="48" rows="7"></textarea>
-			<input type="text" name="name-gCode-line" class="gCode-line" id="gCode-line-ctrl">
-			<div class="gCode-send-btn" id="gCode-send-btn-ctrl">
+			<textarea name="name-gCode-monitor" class="gCode-monitor gCode-monitor-x4" id="gCode-monitor-ctrl" cols="43" rows="5"></textarea>
+			<input type="text" name="name-gCode-line" class="gCode-line gCode-line-x4" id="gCode-line-ctrl">
+			<button class="gCode-send-btn gCode-send-btn-x4" id="gCode-send-btn-ctrl">Send</button>
+			<div class="gCode-send-btn gCode-send-btn-x4" id="gCode-send-btn-ctrl">
 				<span class="text">Send</span>
 			</div>
-			<div class="gCode-close-btn" id="gCode-close-btn">
+			<div class="gCode-close-btn gCode-close-btn-x4" id="gCode-close-btn-ctrl">
 				<span class="text">Close</span>
 			</div>
 		</div>

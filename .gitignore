@@ -11,3 +11,4 @@ src/location.js
 src/samplecode.js
 src/octoprint.client.*.js
 src/location.bak
+src/setting.json

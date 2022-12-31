@@ -317,7 +317,7 @@
 			<!-- setting panel -->
 			<div class="setting-panel" id="setting-panel-ctrl">
 				<div class="title">Configration Panel</div>
-				<div class="content-body" id="content-body-ctrl">
+				<div class="content-base" id="content-base-ctrl">
 					<div class="content-body-uri" id="content-body-uri-ctrl">
 						<div class="input-width">
 							<div class="textbox">
@@ -437,6 +437,42 @@
 							<script>
 								$(() => {if($('#movement-p4').val() != '') $('#movement-p4').attr('value', 'not-null');});
 							</script>
+						</div>
+					</div>
+					<div class="content-body-win-control" id="content-body-win-control-ctrl">
+						<div class="input-width">
+							<div class="textbox">
+								<input
+									class="text"
+									type="number"
+									placeholder="Window position for X"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="win-pos-x"
+								/>
+								<label class="label">Window position for X</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#win-pos-x').val() != '') $('#win-pos-x').attr('value', 'not-null');});
+							</script>
+							<div class="textbox">
+								<input
+									class="text"
+									type="number"
+									placeholder="Window position for Y"
+									onkeyup="this.setAttribute('value', this.value);"
+									value=""
+									id="win-pos-y"
+								/>
+								<label class="label">Window position for Y</label>
+								<label class="error"></label>
+							</div>
+							<script>
+								$(() => {if($('#win-pos-y').val() != '') $('#win-pos-y').attr('value', 'not-null');});
+							</script>
+							<div class="checkbox-pos"><input type="checkbox" class="checkbox" id="debug-mode-ctrl"></div>
+							<div class="text-pos">Show debug mode contents</div>
 						</div>
 					</div>
 					<div class="leftmark" id="leftmark-ctrl">

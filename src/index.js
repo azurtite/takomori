@@ -680,6 +680,16 @@ $(() => {
 	$('#win-pos-x').val(localStorage.getItem('win-pos-x'));
 	$('#win-pos-y').val(localStorage.getItem('win-pos-y'));
 	
+	if(localStorage.getItem('debug-mode') == `true`) {
+		$('#reload-btn-ctrl').css({visibility: 'visible'});
+		$('#ID-powerFlag').css({visibility: 'visible'});
+		$('#debug-mode-ctrl').prop('checked', true);
+	} else {
+		$('#reload-btn-ctrl').css({visibility: 'hidden'});
+		$('#ID-powerFlag').css({visibility: 'hidden'});
+		$('#debug-mode-ctrl').prop('checked', false);
+	}
+
 	$('#reload-btn-ctrl').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn-ctrl.click');
 		location.reload();
@@ -2017,6 +2027,16 @@ $(() => {
 
 		localStorage.setItem('win-pos-x', $('#win-pos-x').val());
 		localStorage.setItem('win-pos-y', $('#win-pos-y').val());
+
+		if($('#debug-mode-ctrl').prop('checked') == true) {
+			$('#reload-btn-ctrl').css({visibility: 'visible'});
+			$('#ID-powerFlag').css({visibility: 'visible'});
+			localStorage.setItem('debug-mode', true);
+		} else {
+			$('#reload-btn-ctrl').css({visibility: 'hidden'});
+			$('#ID-powerFlag').css({visibility: 'hidden'});
+			localStorage.setItem('debug-mode', false);
+		}
 	});
 
 	$('#leftmark-ctrl').click(() => {

@@ -34,6 +34,7 @@ let actionPowerBtnClick	= false;
 let locationPath		= '';
 let contentPosition		= 2;
 let maxContentPosition	= 2;
+let gCodeSize			= 2;
 
 let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
@@ -2064,5 +2065,67 @@ $(() => {
 	$('#gCode-close-btn-ctrl').click(() => {
 		$$$.message('Click gCode-close-btn-ctrl', DEBUG, 'gCode-close-btn-ctrl.click');
 		$('#gCode-panel-ctrl').css({visibility: 'hidden'});
+	});
+	$('#nav-console-ctrl').click(() => {
+		$$$.message(`Click nav-console-ctrl`, DEBUG, `nav-console-ctrl.click`);
+		if(windowSize != 3) {
+			if($('#gCode-panel-ctrl').css('visibility') == 'hidden') {
+				$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+				$$$.message('Set the screen when windowSize=1 or 2', DEBUG, 'nav-console-ctrl.click');
+				$('#gCode-panel-ctrl').removeClass('gCode-panel-x4');
+				$('#gCode-title-ctrl').removeClass('title-x4');
+				$('#gCode-monitor-ctrl').removeClass('gCode-monitor-x4');
+				$('#gCode-line-ctrl').removeClass('gCode-line-x4');
+				$('#gCode-send-btn-ctrl').removeClass('gCode-send-btn-x4');
+				$('#gCode-close-btn-ctrl').removeClass('gCode-close-btn-x4');
+				$('#gCode-panel-ctrl').css({visibility: 'visible'});
+			}
+		} else {
+			console.log('fuga')
+			if($('#gCode-panel-ctrl').css('visibility') != 'hidden') {
+				console.log('hoge');
+				gCodeSize++;
+				if(gCodeSize > 2) gCodeSize = 1;
+				switch(gCodeSize) {
+					case 1:
+						$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+						$$$.message('Set the screen when windowSize=1 or 2', DEBUG, 'nav-console-ctrl.click');
+						$('#gCode-panel-ctrl').removeClass('gCode-panel-x4');
+						$('#gCode-title-ctrl').removeClass('title-x4');
+						$('#gCode-monitor-ctrl').removeClass('gCode-monitor-x4');
+						$('#gCode-line-ctrl').removeClass('gCode-line-x4');
+						$('#gCode-send-btn-ctrl').removeClass('gCode-send-btn-x4');
+						$('#gCode-close-btn-ctrl').removeClass('gCode-close-btn-x4');
+						$('#gCode-panel-ctrl').css({visibility: 'visible'});
+						break;
+					case 2:
+						$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+						$$$.message('Set the screen when windowSize=3', DEBUG, 'nav-console-ctrl.click');
+						$('#gCode-panel-ctrl').addClass('gCode-panel-x4');
+						$('#gCode-title-ctrl').addClass('title-x4');
+						$('#gCode-monitor-ctrl').addClass('gCode-monitor-x4');
+						$('#gCode-line-ctrl').addClass('gCode-line-x4');
+						$('#gCode-send-btn-ctrl').addClass('gCode-send-btn-x4');
+						$('#gCode-close-btn-ctrl').addClass('gCode-close-btn-x4');
+						$('#gCode-panel-ctrl').css({visibility: 'visible'});
+						break;
+				}
+			} else {
+				$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+				$$$.message('Set the screen when windowSize=1 or 2', DEBUG, 'nav-console-ctrl.click');
+				$('#gCode-panel-ctrl').addClass('gCode-panel-x4');
+				$('#gCode-title-ctrl').addClass('title-x4');
+				$('#gCode-monitor-ctrl').addClass('gCode-monitor-x4');
+				$('#gCode-line-ctrl').addClass('gCode-line-x4');
+				$('#gCode-send-btn-ctrl').addClass('gCode-send-btn-x4');
+				$('#gCode-close-btn-ctrl').addClass('gCode-close-btn-x4');
+				$('#gCode-panel-ctrl').css({visibility: 'visible'});
+			}
+		}
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-285px'});
+		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-console-ctrl.click');
+		submenuToggle = false;
 	});
 });

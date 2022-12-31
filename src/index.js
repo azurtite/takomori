@@ -2060,4 +2060,9 @@ $(() => {
 				break;
 		}
 	});
+
+	$('#gCode-close-btn-ctrl').click(() => {
+		$$$.message('Click gCode-close-btn-ctrl', DEBUG, 'gCode-close-btn-ctrl.click');
+		$('#gCode-panel-ctrl').css({visibility: 'hidden'});
+	});
 });

@@ -2159,4 +2159,19 @@ $(() => {
 		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-stats-ctrl.click');
 		submenuToggle = false;
 	});
+
+	$('#log-close-btn-ctrl').click(() => {
+		$$$.message(`click log-close-btn-ctrl`, DEBUG, `$log-close-btn-ctrl.click`);
+		$('#log-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-log-ctrl').click(() => {
+		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-log-ctrl.click`);
+		$('#log-panel-ctrl').css({visibility: 'visible'});
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-285px'});
+		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-log-ctrl.click');
+		submenuToggle = false;
+	});
 });

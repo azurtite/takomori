@@ -1627,3 +1627,66 @@ div::-webkit-scrollbar-thumb {
 	border-color:			transparent @ceruleanblue @peleskyblue transparent;
 	border-width:			0 25px 25px 0;
 }
+
+.big-graph-panel {
+	position:					absolute;
+	display:					table;
+	left:						24px;
+	top:						24px;
+	height:						432px;
+	width:						752px;
+	z-index:					90;
+	color:						@sunshine;
+	background-color:			@skyhigh;
+	visibility:					hidden;
+	.title {
+		position:				relative;
+		left:					16px;
+		height:					28px;
+		width:					710px;
+		border-bottom:			1px solid @sunshine;
+		font-size:				20px;
+	}
+	.content {
+		position:				absolute;
+		display:				table-cell;
+		left:					16px;
+		top:					30px;
+		height:					360px;
+		width:					712px;
+		text-align:				center;
+		.text {
+			position:			relative;
+			top:				180px;
+		}
+	}
+	.big-graph-close-btn {
+		cursor:					pointer;
+		position:				absolute;
+		right:					10px;
+		bottom:					10px;
+		height:					32px;
+		width:					60px;
+		border-radius:			5px;
+		background-color:		@ceruleanblue;
+		-webkit-app-region:		no-drag;
+		.text {
+			position:			relative;
+			left:				10px;
+			top:				5px;
+			font-size:			16px;
+			-webkit-app-region: no-drag;
+		}
+	}
+}
+.big-graph-panel::after {
+	content:				'';
+	position:				absolute;
+	top:					0;
+	right:					0;
+	width:					0;
+	height:					0;
+	border-style:			solid;
+	border-color:			transparent @ceruleanblue @peleskyblue transparent;
+	border-width:			0 25px 25px 0;
+}

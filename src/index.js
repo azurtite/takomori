@@ -2066,7 +2066,7 @@ $(() => {
 		$$$.message('Click gCode-close-btn-ctrl', DEBUG, 'gCode-close-btn-ctrl.click');
 		$('#gCode-panel-ctrl').css({visibility: 'hidden'});
 	});
-	
+
 	$('#nav-console-ctrl').click(() => {
 		$$$.message(`Click nav-console-ctrl`, DEBUG, `nav-console-ctrl.click`);
 		if(windowSize != 3) {
@@ -2127,6 +2127,21 @@ $(() => {
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
 		$('.nav-submenu').css({right: '-285px'});
 		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-console-ctrl.click');
+		submenuToggle = false;
+	});
+
+	$('#big-manual-close-btn-ctrl').click(() => {
+		$$$.message(`click big-manual-close-btn-ctrl`, DEBUG, `$big-manual-close-btn-ctrl.click`);
+		$('#big-manual-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-move-ctrl').click(() => {
+		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-move-ctrl.click`);
+		$('#big-manual-panel-ctrl').css({visibility: 'visible'});
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-285px'});
+		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-move-ctrl.click');
 		submenuToggle = false;
 	});
 });

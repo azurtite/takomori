@@ -817,8 +817,8 @@ $(() => {
 		$$$.message('Click submen ctrl btn', DEBUG, '$submenu-btn');
 		if(submenuToggle) {
 			$$$.message('Hide submenu', INFO, '$submenu-btn');
-			$('.nav-submenu').css({right: '-285px'});
-			$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$submenu-btn');
+			$('.nav-submenu').css({right: '-288px'});
+			$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$submenu-btn');
 			submenuToggle = false;
 		} else {
 			$$$.message('Show submenu', INFO, '$submenu-btn');
@@ -1985,8 +1985,8 @@ $(() => {
 		$$$.message('Change css(visibility:visible) setting-panel-ctrl', DEBUG, '$nav-cog-icon-ctrl.click');
 
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
-		$('.nav-submenu').css({right: '-285px'});
-		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-cog-icon-ctrl.click');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-cog-icon-ctrl.click');
 		submenuToggle = false;
 	});
 
@@ -2125,8 +2125,8 @@ $(() => {
 		}
 
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
-		$('.nav-submenu').css({right: '-285px'});
-		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-console-ctrl.click');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-console-ctrl.click');
 		submenuToggle = false;
 	});
 
@@ -2140,8 +2140,8 @@ $(() => {
 		$('#big-manual-panel-ctrl').css({visibility: 'visible'});
 
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
-		$('.nav-submenu').css({right: '-285px'});
-		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-move-ctrl.click');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-move-ctrl.click');
 		submenuToggle = false;
 	});
 
@@ -2155,8 +2155,8 @@ $(() => {
 		$('#big-graph-panel-ctrl').css({visibility: 'visible'});
 
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
-		$('.nav-submenu').css({right: '-285px'});
-		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-stats-ctrl.click');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-stats-ctrl.click');
 		submenuToggle = false;
 	});
 
@@ -2170,8 +2170,8 @@ $(() => {
 		$('#log-panel-ctrl').css({visibility: 'visible'});
 
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
-		$('.nav-submenu').css({right: '-285px'});
-		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-log-ctrl.click');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-log-ctrl.click');
 		submenuToggle = false;
 	});
 });

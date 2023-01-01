@@ -37,6 +37,7 @@ body {
 	.nav-fire-space {
 		position:				absolute;
 		width:					40px;
+		z-index:				10;
 		.nav-fire-title {
 			height:				24px;
 			text-align:			center;
@@ -64,37 +65,42 @@ body {
 	.pos-fire-tool {
 		left:					110px;
 		top:					40px;
+		z-index:				10;
 	}
 	.pos-fire-bed {
 		left:					168px;
 		top:					40px;
+		z-index:				10;
 	}
 	.pos-fan-speed {
 		left:					226px;
 		top:					40px;
+		z-index:				10;
 	}
 	.pos-printer {
 		left:					52px;
 		top:					40px;
+		z-index:				10;
 	}
 	.progress {
 		position:				absolute;
 		left:					32px;
 		top:					150px;
 		width:					250px;
-		z-index:				70;
+		z-index:				10;
 	}
 	.complete {
 		position:				absolute;
 		top:					150px;
 		left:					292px;
-		z-index:				70;
+		z-index:				10;
 	}
 	.printtime {
 		position: 				absolute;
 		top:					175px;
 		left:					130px;
 		font-weight:			bold;
+		z-index:				10;
 		.printtime-value {
 			width:				80px;
 			text-align:			right;
@@ -107,6 +113,7 @@ body {
 		display:				table;
 		font-size:				16pt;
 		height:					32px;
+		z-index:				10;
 		.nav-jobname {
 			display:			table-cell;
 			vertical-align:		middle;
@@ -125,6 +132,7 @@ body {
 		width:				24px;
 		top:				0px;
 		left:				0px;
+		z-index:			90;
 		-webkit-app-region:	no-drag;
 		cursor:				default;
 		.main-triangle-left-mark {
@@ -133,7 +141,6 @@ body {
 			vertical-align:	middle;
 			font-size:		16pt;
 			color:			@sunshine;
-			z-index:		90;
 		}
 	}
 	.main-triangle-right {
@@ -145,13 +152,13 @@ body {
 		left:				376px;
 		-webkit-app-region:	no-drag;
 		cursor:				default;
+		z-index:			90;
 		.main-triangle-right-mark {
 			display:		table-cell;
 			text-align:		center;
 			vertical-align:	middle;
 			font-size:		16pt;
 			color:			@sunshine;
-			z-index:		90;
 		}
 	}
 	.main-triangle-down {
@@ -162,6 +169,7 @@ body {
 		bottom:				0px;
 		left:				0px;
 		-webkit-app-region:	no-drag;
+		z-index:			90;
 		cursor:				default;
 		.main-triangle-down-mark {
 			display:		table-cell;
@@ -169,7 +177,6 @@ body {
 			vertical-align:	middle;
 			font-size:		16pt;
 			color:			@sunshine;
-			z-index:		90;
 		}
 	}
 	.slider-panel-tool {

@@ -2144,4 +2144,19 @@ $(() => {
 		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-move-ctrl.click');
 		submenuToggle = false;
 	});
+
+	$('#big-graph-close-btn-ctrl').click(() => {
+		$$$.message(`click big-graph-close-btn-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
+		$('#big-graph-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-stats-ctrl').click(() => {
+		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-stats-ctrl.click`);
+		$('#big-graph-panel-ctrl').css({visibility: 'visible'});
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-285px'});
+		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-stats-ctrl.click');
+		submenuToggle = false;
+	});
 });

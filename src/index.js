@@ -2066,6 +2066,7 @@ $(() => {
 		$$$.message('Click gCode-close-btn-ctrl', DEBUG, 'gCode-close-btn-ctrl.click');
 		$('#gCode-panel-ctrl').css({visibility: 'hidden'});
 	});
+	
 	$('#nav-console-ctrl').click(() => {
 		$$$.message(`Click nav-console-ctrl`, DEBUG, `nav-console-ctrl.click`);
 		if(windowSize != 3) {

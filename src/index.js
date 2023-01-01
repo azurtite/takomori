@@ -34,6 +34,7 @@ let actionPowerBtnClick	= false;
 let locationPath		= '';
 let contentPosition		= 2;
 let maxContentPosition	= 2;
+let gCodeSize			= 2;
 
 let folderList			= ['/'];
 let windowList			= [null, 'main-window-ctrl', 'file-window-ctrl', 'manu-window-ctrl', 'temp-window-ctrl'];
@@ -816,8 +817,8 @@ $(() => {
 		$$$.message('Click submen ctrl btn', DEBUG, '$submenu-btn');
 		if(submenuToggle) {
 			$$$.message('Hide submenu', INFO, '$submenu-btn');
-			$('.nav-submenu').css({right: '-285px'});
-			$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$submenu-btn');
+			$('.nav-submenu').css({right: '-288px'});
+			$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$submenu-btn');
 			submenuToggle = false;
 		} else {
 			$$$.message('Show submenu', INFO, '$submenu-btn');
@@ -1984,8 +1985,8 @@ $(() => {
 		$$$.message('Change css(visibility:visible) setting-panel-ctrl', DEBUG, '$nav-cog-icon-ctrl.click');
 
 		$$$.message('Hide submenu', INFO, '$submenu-btn');
-		$('.nav-submenu').css({right: '-285px'});
-		$$$.message('Change css(right:-285px) nav-submenu', DEBUG, '$nav-cog-icon-ctrl.click');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-cog-icon-ctrl.click');
 		submenuToggle = false;
 	});
 
@@ -2059,5 +2060,118 @@ $(() => {
 				$$$.message('Change css(z-index:1) content-body-win-control-ctrl', DEBUG, '$leftmark-ctrl.click');
 				break;
 		}
+	});
+
+	$('#gCode-close-btn-ctrl').click(() => {
+		$$$.message('Click gCode-close-btn-ctrl', DEBUG, 'gCode-close-btn-ctrl.click');
+		$('#gCode-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-console-ctrl').click(() => {
+		$$$.message(`Click nav-console-ctrl`, DEBUG, `nav-console-ctrl.click`);
+		if(windowSize != 3) {
+			if($('#gCode-panel-ctrl').css('visibility') == 'hidden') {
+				$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+				$$$.message('Set the screen when windowSize=1 or 2', DEBUG, 'nav-console-ctrl.click');
+				$('#gCode-panel-ctrl').removeClass('gCode-panel-x4');
+				$('#gCode-title-ctrl').removeClass('title-x4');
+				$('#gCode-monitor-ctrl').removeClass('gCode-monitor-x4');
+				$('#gCode-line-ctrl').removeClass('gCode-line-x4');
+				$('#gCode-send-btn-ctrl').removeClass('gCode-send-btn-x4');
+				$('#gCode-close-btn-ctrl').removeClass('gCode-close-btn-x4');
+				$('#gCode-panel-ctrl').css({visibility: 'visible'});
+			}
+		} else {
+			console.log('fuga')
+			if($('#gCode-panel-ctrl').css('visibility') != 'hidden') {
+				console.log('hoge');
+				gCodeSize++;
+				if(gCodeSize > 2) gCodeSize = 1;
+				switch(gCodeSize) {
+					case 1:
+						$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+						$$$.message('Set the screen when windowSize=1 or 2', DEBUG, 'nav-console-ctrl.click');
+						$('#gCode-panel-ctrl').removeClass('gCode-panel-x4');
+						$('#gCode-title-ctrl').removeClass('title-x4');
+						$('#gCode-monitor-ctrl').removeClass('gCode-monitor-x4');
+						$('#gCode-line-ctrl').removeClass('gCode-line-x4');
+						$('#gCode-send-btn-ctrl').removeClass('gCode-send-btn-x4');
+						$('#gCode-close-btn-ctrl').removeClass('gCode-close-btn-x4');
+						$('#gCode-panel-ctrl').css({visibility: 'visible'});
+						break;
+					case 2:
+						$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+						$$$.message('Set the screen when windowSize=3', DEBUG, 'nav-console-ctrl.click');
+						$('#gCode-panel-ctrl').addClass('gCode-panel-x4');
+						$('#gCode-title-ctrl').addClass('title-x4');
+						$('#gCode-monitor-ctrl').addClass('gCode-monitor-x4');
+						$('#gCode-line-ctrl').addClass('gCode-line-x4');
+						$('#gCode-send-btn-ctrl').addClass('gCode-send-btn-x4');
+						$('#gCode-close-btn-ctrl').addClass('gCode-close-btn-x4');
+						$('#gCode-panel-ctrl').css({visibility: 'visible'});
+						break;
+				}
+			} else {
+				$$$.message('Show gCode console', INFO, 'nav-console-ctrl.click');
+				$$$.message('Set the screen when windowSize=1 or 2', DEBUG, 'nav-console-ctrl.click');
+				$('#gCode-panel-ctrl').addClass('gCode-panel-x4');
+				$('#gCode-title-ctrl').addClass('title-x4');
+				$('#gCode-monitor-ctrl').addClass('gCode-monitor-x4');
+				$('#gCode-line-ctrl').addClass('gCode-line-x4');
+				$('#gCode-send-btn-ctrl').addClass('gCode-send-btn-x4');
+				$('#gCode-close-btn-ctrl').addClass('gCode-close-btn-x4');
+				$('#gCode-panel-ctrl').css({visibility: 'visible'});
+			}
+		}
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-console-ctrl.click');
+		submenuToggle = false;
+	});
+
+	$('#big-manual-close-btn-ctrl').click(() => {
+		$$$.message(`click big-manual-close-btn-ctrl`, DEBUG, `$big-manual-close-btn-ctrl.click`);
+		$('#big-manual-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-move-ctrl').click(() => {
+		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-move-ctrl.click`);
+		$('#big-manual-panel-ctrl').css({visibility: 'visible'});
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-move-ctrl.click');
+		submenuToggle = false;
+	});
+
+	$('#big-graph-close-btn-ctrl').click(() => {
+		$$$.message(`click big-graph-close-btn-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
+		$('#big-graph-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-stats-ctrl').click(() => {
+		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-stats-ctrl.click`);
+		$('#big-graph-panel-ctrl').css({visibility: 'visible'});
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-stats-ctrl.click');
+		submenuToggle = false;
+	});
+
+	$('#log-close-btn-ctrl').click(() => {
+		$$$.message(`click log-close-btn-ctrl`, DEBUG, `$log-close-btn-ctrl.click`);
+		$('#log-panel-ctrl').css({visibility: 'hidden'});
+	});
+
+	$('#nav-log-ctrl').click(() => {
+		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-log-ctrl.click`);
+		$('#log-panel-ctrl').css({visibility: 'visible'});
+
+		$$$.message('Hide submenu', INFO, '$submenu-btn');
+		$('.nav-submenu').css({right: '-288px'});
+		$$$.message('Change css(right:-288px) nav-submenu', DEBUG, '$nav-log-ctrl.click');
+		submenuToggle = false;
 	});
 });

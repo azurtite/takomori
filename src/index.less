@@ -23,7 +23,6 @@ body {
 	width:						400px;
 	color:						@sunshine;
 	background-color:			@ceruleanblue;
-	-webkit-app-region:			drag;
 	z-index:					80;
 	cursor:						default;
 	.basebody {
@@ -32,12 +31,13 @@ body {
 		left:					0px;
 		height:					240px;
 		width:					400px;
-		z-index:				0;
-		background-color:			@ceruleanblue;
+		z-index:				1;
+		background-color:		@ceruleanblue;
 	}
 	.nav-fire-space {
 		position:				absolute;
 		width:					40px;
+		z-index:				10;
 		.nav-fire-title {
 			height:				24px;
 			text-align:			center;
@@ -65,37 +65,42 @@ body {
 	.pos-fire-tool {
 		left:					110px;
 		top:					40px;
+		z-index:				10;
 	}
 	.pos-fire-bed {
 		left:					168px;
 		top:					40px;
+		z-index:				10;
 	}
 	.pos-fan-speed {
 		left:					226px;
 		top:					40px;
+		z-index:				10;
 	}
 	.pos-printer {
 		left:					52px;
 		top:					40px;
+		z-index:				10;
 	}
 	.progress {
 		position:				absolute;
 		left:					32px;
 		top:					150px;
 		width:					250px;
-		z-index:				70;
+		z-index:				10;
 	}
 	.complete {
 		position:				absolute;
 		top:					150px;
 		left:					292px;
-		z-index:				70;
+		z-index:				10;
 	}
 	.printtime {
 		position: 				absolute;
 		top:					175px;
 		left:					130px;
 		font-weight:			bold;
+		z-index:				10;
 		.printtime-value {
 			width:				80px;
 			text-align:			right;
@@ -108,6 +113,7 @@ body {
 		display:				table;
 		font-size:				16pt;
 		height:					32px;
+		z-index:				10;
 		.nav-jobname {
 			display:			table-cell;
 			vertical-align:		middle;
@@ -126,6 +132,7 @@ body {
 		width:				24px;
 		top:				0px;
 		left:				0px;
+		z-index:			90;
 		-webkit-app-region:	no-drag;
 		cursor:				default;
 		.main-triangle-left-mark {
@@ -134,7 +141,6 @@ body {
 			vertical-align:	middle;
 			font-size:		16pt;
 			color:			@sunshine;
-			z-index:		90;
 		}
 	}
 	.main-triangle-right {
@@ -146,13 +152,13 @@ body {
 		left:				376px;
 		-webkit-app-region:	no-drag;
 		cursor:				default;
+		z-index:			90;
 		.main-triangle-right-mark {
 			display:		table-cell;
 			text-align:		center;
 			vertical-align:	middle;
 			font-size:		16pt;
 			color:			@sunshine;
-			z-index:		90;
 		}
 	}
 	.main-triangle-down {
@@ -163,6 +169,7 @@ body {
 		bottom:				0px;
 		left:				0px;
 		-webkit-app-region:	no-drag;
+		z-index:			90;
 		cursor:				default;
 		.main-triangle-down-mark {
 			display:		table-cell;
@@ -170,7 +177,6 @@ body {
 			vertical-align:	middle;
 			font-size:		16pt;
 			color:			@sunshine;
-			z-index:		90;
 		}
 	}
 	.slider-panel-tool {
@@ -297,173 +303,208 @@ body {
 	}
 }
 
+@subMenuSwitchHeight:			52px;
+@subMenuSwitchWidth:			20px;
+@subMenuBoxHeight:				52px;
+@subMenuBoxWidth:				48px;
+@subMenuIconHeight:				32px;
+@subMenuIconWidth:				48px;
+@subMenuTextHeight:				20px;
+@subMenuTextWidth:				48px;
+@subMenuIconSize:				22pt;
+@subMenuTextSize:				10pt;
 .nav-submenu {
 	position:					absolute;
 	display:					table;
-	right:						-285px;
+	right:						-(@subMenuBoxWidth * 6);
 	bottom:						15px;
 	height:						52px;
-	width:						304px;
+	width:						@subMenuSwitchWidth + (@subMenuBoxWidth * 6);
 	border-top-left-radius:		12px;
 	border-bottom-left-radius:	12px;
-	color:					@sunshine;
+	color:						@sunshine;
 	background-color:			@lapislazuli;
 	z-index:					95;
 	.nav-triangle-sub {
 		display:				table-cell;
-		width:					20px;
+		height:					@subMenuSwitchHeight;
+		width:					@subMenuSwitchWidth;
 		text-align:				center;
 		vertical-align:			middle;
 		-webkit-app-region:		no-drag;
 	}
 	.nav-move {
+		position:				absolute;
 		display:				table;
-		width:					48px;
+		left:					@subMenuSwitchWidth;
+		top:					0px;
+		height:					@subMenuBoxHeight;
+		width:					@subMenuBoxWidth;
 		vertical-align:			bottom;
 		.nav-move-icon {
 			position:			absolute;
-			left:				13px;
+			left:				0px;
 			top:				0px;
-			height:				32px;
-			width:				48px;
-			font-size:			22pt;
+			height:				@subMenuIconHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuIconSize;
 			text-align:			center;
 		}
 		.nav-move-title {
 			position:			absolute;
 			display:			table-cell;
-			left:				13px;
-			top:				33px;
-			height:				20px;
-			width:				48px;
-			font-size:			10pt;
+			left:				0px;
+			top:				@subMenuIconHeight;
+			height:				@subMenuTextHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuTextSize;
 			text-align:			center;
 			vertical-align:		top;
 		}
 	}
 	.nav-stats {
+		position:				absolute;
 		display:				table;
-		width:					48px;
+		left:					@subMenuSwitchWidth + @subMenuBoxWidth;
+		top:					0px;
+		height:					@subMenuBoxHeight;
+		width:					@subMenuBoxWidth;
 		vertical-align:			bottom;
 		.nav-stats-icon {
 			position:			absolute;
-			left:				61px;
+			left:				0px;
 			top:				0px;
-			height:				32px;
-			width:				48px;
-			font-size:			22pt;
+			height:				@subMenuIconHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuIconSize;
 			text-align:			center;
 		}
 		.nav-stats-title {
-			position:				absolute;
-			display:				table-cell;
-			left:					61px;
-			top:					33px;
-			height:					20px;
-			width:					48px;
-			font-size:				10pt;
-			text-align:				center;
-			vertical-align:			top;
+			position:			absolute;
+			display:			table-cell;
+			left:				0px;
+			top:				@subMenuIconHeight;
+			height:				@subMenuTextHeight;
+			width:				@subMenuTextWidth;
+			font-size:			@subMenuTextSize;
+			text-align:			center;
+			vertical-align:		top;
 		}
 	}
 	.nav-console {
+		position:				absolute;
 		display:				table;
-		width:					48px;
+		left:					@subMenuSwitchWidth + (@subMenuBoxWidth * 2);
+		top:					0px;
+		height:					@subMenuBoxHeight;
+		width:					@subMenuBoxWidth;
 		vertical-align:			bottom;
 		.nav-console-icon {
 			position:			absolute;
-			left:				109px;
+			left:				0px;
 			top:				0px;
-			height:				32px;
-			width:				48px;
-			font-size:			22pt;
+			height:				@subMenuIconHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuIconSize;
 			text-align:			center;
 		}
 		.nav-console-title {
 			position:			absolute;
 			display:			table-cell;
-			left:				109px;
-			top:				33px;
-			height:				20px;
-			width:				48px;
-			font-size:			10pt;
+			left:				0px;
+			top:				@subMenuIconHeight;
+			height:				@subMenuTextHeight;
+			width:				@subMenuTextWidth;
+			font-size:			@subMenuTextSize;
 			text-align:			center;
 			vertical-align:		top;
 		}
 	}
 	.nav-cog {
+		position:				absolute;
 		display:				table;
-		width:					48px;
+		left:					@subMenuSwitchWidth + (@subMenuBoxWidth * 3);
+		top:					0px;
+		height:					@subMenuBoxHeight;
+		width:					@subMenuBoxWidth;
 		vertical-align:			bottom;
 		.nav-cog-icon {
 			position:			absolute;
-			left:				157px;
+			left:				0px;
 			top:				0px;
-			height:				32px;
-			width:				48px;
-			font-size:			22pt;
+			height:				@subMenuIconHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuIconSize;
 			text-align:			center;
 		}
 		.nav-cog-title {
 			position:			absolute;
 			display:			table-cell;
-			left:				157px;
-			top:				33px;
-			height:				20px;
-			width:				48px;
-			font-size:			10pt;
+			left:				0px;
+			top:				@subMenuIconHeight;
+			height:				@subMenuTextHeight;
+			width:				@subMenuTextWidth;
+			font-size:			@subMenuTextSize;
 			text-align:			center;
 			vertical-align:		top;
 		}
 	}
 	.nav-log {
+		position:				absolute;
 		display:				table;
-		width:					48px;
+		left:					@subMenuSwitchWidth + (@subMenuBoxWidth * 4);
+		top:					0px;
+		height:					@subMenuBoxHeight;
+		width:					@subMenuBoxWidth;
 		vertical-align:			bottom;
 		.nav-log-icon {
 			position:			absolute;
-			left:				205px;
+			left:				0px;
 			top:				0px;
-			height:				32px;
-			width:				48px;
-			font-size:			22pt;
+			height:				@subMenuIconHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuIconSize;
 			text-align:			center;
 		}
 		.nav-log-title {
 			position:			absolute;
 			display:			table-cell;
-			left:				205px;
-			top:				33px;
-			height:				20px;
-			width:				48px;
-			font-size:			10pt;
+			left:				0px;
+			top:				@subMenuIconHeight;
+			height:				@subMenuTextHeight;
+			width:				@subMenuTextWidth;
+			font-size:			@subMenuTextSize;
 			text-align:			center;
 			vertical-align:		top;
 		}
 	}
 	.nav-suspend {
+		position:				absolute;
 		display:				table;
-		width:					48px;
+		left:					@subMenuSwitchWidth + (@subMenuBoxWidth * 5);
+		top:					0px;
+		height:					@subMenuBoxHeight;
+		width:					@subMenuBoxWidth;
 		vertical-align:			bottom;
 		-webkit-app-region:		no-drag;
 		.nav-suspend-icon {
 			position:			absolute;
-			left:				253px;
+			left:				0px;
 			top:				0px;
-			height:				32px;
-			width:				48px;
-			font-size:			22pt;
+			height:				@subMenuIconHeight;
+			width:				@subMenuIconWidth;
+			font-size:			@subMenuIconSize;
 			text-align:			center;
 			-webkit-app-region:	no-drag;
 		}
 		.nav-suspend-title {
 			position:			absolute;
 			display:			table-cell;
-			left:				253px;
-			top:				33px;
-			height:				20px;
-			width:				48px;
-			font-size:			10pt;
+			left:				0px;
+			top:				@subMenuIconHeight;
+			height:				@subMenuTextHeight;
+			width:				@subMenuTextWidth;
+			font-size:			@subMenuTextSize;
 			text-align:			center;
 			vertical-align:		top;
 			-webkit-app-region:	no-drag;
@@ -1455,4 +1496,302 @@ div::-webkit-scrollbar-thumb {
 	border-style:		solid;
 	border-color:		transparent @ceruleanblue @peleskyblue transparent;
 	border-width:		0 25px 25px 0;
+}
+.gCode-panel {
+	position:				absolute;
+	display:				table;
+	left:					24px;
+	top:					24px;
+	height:					192px;
+	width:					352px;
+	z-index:				90;
+	color:					@sunshine;
+	background-color:		@skyhigh;
+	visibility:				hidden;
+	.title {
+		position:			relative;
+		left:				16px;
+		height:				28px;
+		width:				310px;
+		border-bottom:		1px solid @sunshine;
+		font-size:			20px;
+		-webkit-app-region:	no-darg;
+	}
+	.title-x4 {
+		width:				710px;
+	}
+	.gCode-close-btn {
+		cursor:				pointer;
+		position:			absolute;
+		right:				10px;
+		bottom:				10px;
+		height:				32px;
+		width:				60px;
+		border-radius:		5px;
+		background-color:	@ceruleanblue;
+		-webkit-app-region:	no-darg;
+		.text {
+			position:		relative;
+			left:			10px;
+			top:			5px;
+			font-size:		16px;
+			-webkit-app-region:	no-darg;
+		}
+	}
+	.gCode-close-btn-x4 {
+		right:				20px;
+	}
+	.gCode-monitor {
+		position:			relative;
+		left:				16px;
+		top:				4px;
+		border:				1px solid @sunshine;
+		background-color:	@skyhigh;
+		-webkit-app-region:	no-darg;
+	}
+	.gCode-monitor-x4 {
+		height:			352px;
+		width:			720px;
+	}
+	.gCode-line {
+		position:			absolute;
+		left:				16px;
+		bottom:				10px;
+		height:				32px;
+		width:				188px;
+		border:				1px solid @sunshine;
+		border-radius:		5px 0px 0px 5px;
+		border-right:		0px;
+		background-color:	@skyhigh;
+		-webkit-app-region:	no-darg;
+	}
+	.gCode-line-x4 {
+		width:				588px;
+	}
+	.gCode-send-btn {
+		cursor:				pointer;
+		position:			absolute;
+		right:				87px;
+		bottom:				10px;
+		height:				32px;
+		width:				60px;
+		border:				1px solid @sunshine;
+		border-radius:		0px 5px 5px 0px;
+		background-color:	@ceruleanblue;
+		-webkit-app-region:	no-darg;
+		.text {
+			position:		relative;
+			left:			8px;
+			top:			5px;
+			font-size:		16px;
+			-webkit-app-region:	no-darg;
+		}
+	}
+	.gCode-send-btn-x4 {
+		right:			87px;
+	}
+}
+.gCode-panel-x4 {
+	height:					432px;
+	width:					752px;
+}
+.gCode-panel::after {
+	content:				'';
+	position:				absolute;
+	top:					0;
+	right:					0;
+	width:					0;
+	height:					0;
+	border-style:			solid;
+	border-color:			transparent @ceruleanblue @peleskyblue transparent;
+	border-width:			0 25px 25px 0;
+}
+
+.big-manual-panel {
+	position:					absolute;
+	display:					table;
+	left:						24px;
+	top:						24px;
+	height:						432px;
+	width:						752px;
+	z-index:					90;
+	color:						@sunshine;
+	background-color:			@skyhigh;
+	visibility:					hidden;
+	.title {
+		position:				relative;
+		left:					16px;
+		height:					28px;
+		width:					710px;
+		border-bottom:			1px solid @sunshine;
+		font-size:				20px;
+	}
+	.content {
+		position:				absolute;
+		display:				table-cell;
+		left:					16px;
+		top:					30px;
+		height:					360px;
+		width:					712px;
+		text-align:				center;
+		.text {
+			position:			relative;
+			top:				180px;
+		}
+	}
+	.big-manual-close-btn {
+		cursor:					pointer;
+		position:				absolute;
+		right:					10px;
+		bottom:					10px;
+		height:					32px;
+		width:					60px;
+		border-radius:			5px;
+		background-color:		@ceruleanblue;
+		-webkit-app-region:		no-drag;
+		.text {
+			position:			relative;
+			left:				10px;
+			top:				5px;
+			font-size:			16px;
+			-webkit-app-region: no-drag;
+		}
+	}
+}
+.big-manual-panel::after {
+	content:				'';
+	position:				absolute;
+	top:					0;
+	right:					0;
+	width:					0;
+	height:					0;
+	border-style:			solid;
+	border-color:			transparent @ceruleanblue @peleskyblue transparent;
+	border-width:			0 25px 25px 0;
+}
+
+.big-graph-panel {
+	position:					absolute;
+	display:					table;
+	left:						24px;
+	top:						24px;
+	height:						432px;
+	width:						752px;
+	z-index:					90;
+	color:						@sunshine;
+	background-color:			@skyhigh;
+	visibility:					hidden;
+	.title {
+		position:				relative;
+		left:					16px;
+		height:					28px;
+		width:					710px;
+		border-bottom:			1px solid @sunshine;
+		font-size:				20px;
+	}
+	.content {
+		position:				absolute;
+		display:				table-cell;
+		left:					16px;
+		top:					30px;
+		height:					360px;
+		width:					712px;
+		text-align:				center;
+		.text {
+			position:			relative;
+			top:				180px;
+		}
+	}
+	.big-graph-close-btn {
+		cursor:					pointer;
+		position:				absolute;
+		right:					10px;
+		bottom:					10px;
+		height:					32px;
+		width:					60px;
+		border-radius:			5px;
+		background-color:		@ceruleanblue;
+		-webkit-app-region:		no-drag;
+		.text {
+			position:			relative;
+			left:				10px;
+			top:				5px;
+			font-size:			16px;
+			-webkit-app-region: no-drag;
+		}
+	}
+}
+.big-graph-panel::after {
+	content:				'';
+	position:				absolute;
+	top:					0;
+	right:					0;
+	width:					0;
+	height:					0;
+	border-style:			solid;
+	border-color:			transparent @ceruleanblue @peleskyblue transparent;
+	border-width:			0 25px 25px 0;
+}
+
+.log-panel {
+	position:					absolute;
+	display:					table;
+	left:						24px;
+	top:						24px;
+	height:						432px;
+	width:						752px;
+	z-index:					90;
+	color:						@sunshine;
+	background-color:			@skyhigh;
+	visibility:					hidden;
+	.title {
+		position:				relative;
+		left:					16px;
+		height:					28px;
+		width:					710px;
+		border-bottom:			1px solid @sunshine;
+		font-size:				20px;
+	}
+	.content {
+		position:				absolute;
+		display:				table-cell;
+		left:					16px;
+		top:					30px;
+		height:					360px;
+		width:					712px;
+		text-align:				center;
+		.text {
+			position:			relative;
+			top:				180px;
+		}
+	}
+	.log-close-btn {
+		cursor:					pointer;
+		position:				absolute;
+		right:					10px;
+		bottom:					10px;
+		height:					32px;
+		width:					60px;
+		border-radius:			5px;
+		background-color:		@ceruleanblue;
+		-webkit-app-region:		no-drag;
+		.text {
+			position:			relative;
+			left:				10px;
+			top:				5px;
+			font-size:			16px;
+			-webkit-app-region: no-drag;
+		}
+	}
+}
+.log-panel::after {
+	content:				'';
+	position:				absolute;
+	top:					0;
+	right:					0;
+	width:					0;
+	height:					0;
+	border-style:			solid;
+	border-color:			transparent @ceruleanblue @peleskyblue transparent;
+	border-width:			0 25px 25px 0;
 }

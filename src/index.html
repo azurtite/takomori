@@ -299,7 +299,7 @@
 			<!-- left angle -->
 			<div class="main-triangle-left">
 				<div class="main-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-main"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-main"></span>
 				</div>
 			</div>
 			<!-- right angle -->
@@ -671,7 +671,7 @@
 			<div class="nav-triangle-sub" id="submenu-btn">
 				&nbsp;
 			</div>
-			<div class="nav-move">
+			<div class="nav-move" id="nav-move-ctrl">
 				<div class="nav-move-icon">
 					<span class="glyphicon glyphicon glyphicon-move"></span><br />
 				</div>
@@ -679,7 +679,7 @@
 					move
 				</div>
 			</div>
-			<div class="nav-stats">
+			<div class="nav-stats" id="nav-stats-ctrl">
 				<div class="nav-stats-icon">
 					<span class="glyphicon glyphicon glyphicon-stats"></span><br />
 				</div>
@@ -687,7 +687,7 @@
 					glaph
 				</div>
 			</div>
-			<div class="nav-console">
+			<div class="nav-console" id="nav-console-ctrl">
 				<div class="nav-console-icon">
 					<span class="glyphicon glyphicon glyphicon-console"></span><br />
 				</div>
@@ -695,15 +695,15 @@
 					gCode
 				</div>
 			</div>
-			<div class="nav-cog">
-				<div class="nav-cog-icon" id="nav-cog-icon-ctrl">
+			<div class="nav-cog" id="nav-cog-icon-ctrl">
+				<div class="nav-cog-icon">
 					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
 				</div>
 				<div class="nav-cog-title">
 					config
 				</div>
 			</div>
-			<div class="nav-log">
+			<div class="nav-log" id="nav-log-ctrl">
 				<div class="nav-log-icon">
 					<span class="glyphicon glyphicon glyphicon-file"></span><br />
 				</div>
@@ -900,6 +900,51 @@
 				<div class="conf-set" id="conf-set-ctrl">
 					<span class="text">Set</span>
 				</div>
+			</div>
+		</div>
+	<!-- gcode panel -->
+		<div class="gCode-panel gCode-panel-x4" id="gCode-panel-ctrl">
+			<div class="title title-x4" id="gCode-title-ctrl">
+				Terminal
+			</div>
+			<textarea name="name-gCode-monitor" class="gCode-monitor gCode-monitor-x4" id="gCode-monitor-ctrl" cols="43" rows="5"></textarea>
+			<input type="text" name="name-gCode-line" class="gCode-line gCode-line-x4" id="gCode-line-ctrl">
+			<button class="gCode-send-btn gCode-send-btn-x4" id="gCode-send-btn-ctrl">Send</button>
+			<div class="gCode-send-btn gCode-send-btn-x4" id="gCode-send-btn-ctrl">
+				<span class="text">Send</span>
+			</div>
+			<div class="gCode-close-btn gCode-close-btn-x4" id="gCode-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+		</div>
+	<!-- big manual panel -->
+		<div class="big-manual-panel" id="big-manual-panel-ctrl">
+			<div class="title">
+				Manual operation panel
+			</div>
+			<div class="content"><span class="text">This panel is scheduled to implement functionality in a future update.</span></div>
+			<div class="big-manual-close-btn" id="big-manual-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+		</div>
+	<!-- big graph panel -->
+		<div class="big-graph-panel" id="big-graph-panel-ctrl">
+			<div class="title">
+				Graph panel
+			</div>
+			<div class="content"><span class="text">This panel is scheduled to implement functionality in a future update.</span></div>
+			<div class="big-graph-close-btn" id="big-graph-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+		</div>
+	<!-- log panel -->
+		<div class="log-panel" id="log-panel-ctrl">
+			<div class="title">
+				Log viewer
+			</div>
+			<div class="content"><span class="text">This panel is scheduled to implement functionality in a future update.</span></div>
+			<div class="log-close-btn" id="log-close-btn-ctrl">
+				<span class="text">Close</span>
 			</div>
 		</div>
 

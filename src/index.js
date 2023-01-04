@@ -109,15 +109,27 @@ function getFilelist(path) {
 		var folding = 1;
 		var temp = '';
 		var fileName = item.split('/')[item.split('/').length - 1];
-		if(fileName.length > 15) {
-			folding = Math.floor(fileName.length / 15) + 1;
-			for(var i=0; i<fileName.length; i++) {
-				if((i % 15) == 0 && i != 0) temp = temp + "<br />" + fileName[i];
-				else temp = temp + fileName[i];
+		$('#textMeasure').html(fileName);
+		if($(`#textMeasure`).width() > 128) {
+			var ext = `.${fileName.split('.')[fileName.split('.').length - 1]}`;
+			var name = fileName.split(`.${fileName.split('.')[fileName.split('.').length - 1]}`)[0];
+			fileName = `${name}<br>${ext}`;
+			$(`#textMeasure`).html(fileName);
+			if($(`#textMeasure`).width() > 128) {
+				$(`#textMeasure`).html(``);
+				for(var i=0;i<name.length;i++) {
+					$(`#textMeasure`).html(`${$(`#textMeasure`).html()}${name[i]}`);
+					if($(`#textMeasure`).width() > 128) $(`#textMeasure`).html(`${$(`#textMeasure`).html().substr(0, $(`#textMeasure`).html().length - 1)}<br>${$(`#textMeasure`).html().substr($(`#textMeasure`).html().length - 1)}`);
+					$$$.message(`Analyse filename::${$(`#textMeasure`).html()} / ${$(`#textMeasure`).width()}`, LOWDEBUG, 'genFilePanel');
+				}
+				if($(`#textMeasure`).html(`${$(`#textMeasure`).html()}${ext}`).width() > 128)
+					fileName = `${$(`#textMeasure`).html().substr(0, $(`#textMeasure`).html().length - ext.length)}<br>${ext}`;
+				else
+					fileName = `${$(`#textMeasure`).html().substr(0, $(`#textMeasure`).html().length - ext.length)}${ext}`;
 			}
-			fileName = temp;
+			folding = fileName.split('<br>').length;
 		}
-		$$$.message(`File name newline completed`, DEBUG, 'genFolderPanel');
+		$$$.message(`Completion of folder name analysis`, DEBUG, 'genFilePanel');
 
 		var size;
 		if('files' in fileInfoContainar) size = fileInfoContainar.files[pos].size;
@@ -144,26 +156,41 @@ function getFilelist(path) {
 		var folding = 1;
 		var temp = '';
 		var fileName = item.split('/')[item.split('/').length - 1];
-		if(fileName.length > 15) {
-			folding = Math.floor(fileName.length / 15) + 1;
-			for(var i=0; i<fileName.length; i++) {
-				if((i % 15) == 0 && i != 0) temp = temp + "<br />" + fileName[i];
-				else temp = temp + fileName[i];
+		$('#textMeasure').html(fileName);
+		if($(`#textMeasure`).width() > 128) {
+			var ext = `.${fileName.split('.')[fileName.split('.').length - 1]}`;
+			var name = fileName.split(`.${fileName.split('.')[fileName.split('.').length - 1]}`)[0];
+			fileName = `${name}<br>${ext}`;
+			$(`#textMeasure`).html(fileName);
+			if($(`#textMeasure`).width() > 128) {
+				$(`#textMeasure`).html(``);
+				for(var i=0;i<name.length;i++) {
+					$(`#textMeasure`).html(`${$(`#textMeasure`).html()}${name[i]}`);
+					if($(`#textMeasure`).width() > 128) $(`#textMeasure`).html(`${$(`#textMeasure`).html().substr(0, $(`#textMeasure`).html().length - 1)}<br>${$(`#textMeasure`).html().substr($(`#textMeasure`).html().length - 1)}`);
+					$$$.message(`Analyse filename::${$(`#textMeasure`).html()} / ${$(`#textMeasure`).width()}`, LOWDEBUG, 'genFilePanel');
+				}
+				if($(`#textMeasure`).html(`${$(`#textMeasure`).html()}${ext}`).width() > 128)
+					fileName = `${$(`#textMeasure`).html().substr(0, $(`#textMeasure`).html().length - ext.length)}<br>${ext}`;
+				else
+					fileName = `${$(`#textMeasure`).html().substr(0, $(`#textMeasure`).html().length - ext.length)}${ext}`;
 			}
-			fileName = temp;
+			folding = fileName.split('<br>').length;
 		}
-		$$$.message(`File name newline completed`, DEBUG, 'genFilePanel');
+		$$$.message(`Completion of filename analysis`, DEBUG, 'genFilePanel');
 
 		var elem = document.createElement('div');
 		elem.innerHTML =
-			`<div class="item-panel${folding}">` +
-			`<div class="display-name" onclick="fileClick('${pos}')"><span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;${fileName}</div>` +
-			`<div><div class="small-font-file">&nbsp;</div>` +
-			`<div class="left-btn file-list-icon-download" onclick="downloadClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div></div>` +
-			`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${pos})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-			`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>` +
-			`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
-			`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>`
+		`<div class="item-panel${folding}">` +
+		`<div class="name-space">${fileName}</div>` +
+		`<span class="file-icon glyphicon glyphicon-list-alt"></span>` +
+		`<div class="menu-icon">` +
+		`<div class="left-btn file-list-icon-download" onclick="downloadClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div></div>` +
+		`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${pos})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
+		`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>` +
+		`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
+		`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>` +
+		`</div>` +
+		`</div>`;
 		$('#file-list-ctrl').append(elem);
 		$$$.message(`Append element(${item}[${pos}])`, DEBUG, 'genFilePanel');
 	}

@@ -181,14 +181,14 @@ function getFilelist(path) {
 		var elem = document.createElement(`div`);
 		elem.innerHTML =
 		`<div class="item-panel${folding}">` +
-		`<div class="name-space">${fileName}</div>` +
+		`<div class="name-space" onclick="fileClick(${pos})">${fileName}</div>` +
 		`<span class="file-icon glyphicon glyphicon-list-alt"></span>` +
 		`<div class="menu-icon">` +
-		`<div class="left-btn file-list-icon-download" onclick="downloadClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-download-alt"></span></div></div>` +
-		`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${pos})"><span class="glyphicon glyphicon glyphicon-level-up"></span></div>` +
-		`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-trash"></span></div></div>` +
-		`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-folder-open"></span></div></div>` +
-		`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon glyphicon-print"></span></div></div>` +
+		`<div class="left-btn file-list-icon-download" onclick="downloadClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon-download-alt"></span></div></div>` +
+		`<div class="middle-btn file-list-icon-level-up" onclick="levelupClick(${pos})"><span class="glyphicon glyphicon-level-up"></span></div>` +
+		`<div class="middle-btn file-list-icon-trash" onclick="trashClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon-trash"></span></div></div>` +
+		`<div class="middle-btn file-list-icon-open" onclick="openClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon-folder-open"></span></div></div>` +
+		`<div class="right-btn file-list-icon-print" onclick="printClick(${pos})"><div class="in-folder"><span class="glyphicon glyphicon-print"></span></div></div>` +
 		`</div>` +
 		`</div>`;
 		$(`#file-list-ctrl`).append(elem);
@@ -256,6 +256,10 @@ function getFilelist(path) {
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type == `folder`) genFolderPanel(fileInfoContainar.files[i].path, i);
 				for(var i=0; i<fileInfoContainar.files.length; i++) if(fileInfoContainar.files[i].type != `folder`) genFilePanel(fileInfoContainar.files[i].path, i);
 				if(fileInfoContainar.files.length == 0) genFNFPanel();
+				if(!powerFlag) {
+					$(`.file-list-icon-open`).css({color: peleskyblue});
+					$(`.file-list-icon-print`).css({color: peleskyblue});
+				}
 			})
 			.fail((err) => $$$.message(`client.files.list is failure`, ERROR, `getFilelist`));
 	else if(typeof(path) == `string`) {
@@ -273,6 +277,10 @@ function getFilelist(path) {
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type == `folder`) genFolderPanel(fileInfoContainar.children[i].path, i);
 				for(var i=0; i<fileInfoContainar.children.length; i++) if(fileInfoContainar.children[i].type != `folder`) genFilePanel(fileInfoContainar.children[i].path, i);
 				if(fileInfoContainar.children.length == 0) genFNFPanel();
+				if(!powerFlag) {
+					$(`.file-list-icon-open`).css({color: peleskyblue});
+					$(`.file-list-icon-print`).css({color: peleskyblue});
+				}
 			})
 			.fail((err) => $$$.message(`client.files.get is failure`, ERROR, `getFilelist`));
 	}
@@ -331,7 +339,6 @@ function fileClick(pos) {
 	else if(`children` in fileInfoContainar) temporalyContainar = fileInfoContainar.children;
 	$(`#information-panel-ctrl`).html(
 		`<div class="title">${detectName()}</div>` +
-		`<hr>`+
 		`<table class="information-table">` +
 		`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split(`.`)[temporalyContainar[pos].display.split(`.`).length - 1]}</td></tr>` +
 		`<tr><td>Time:</td><td class="right">${calculateTime(temporalyContainar[pos].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +

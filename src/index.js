@@ -1352,7 +1352,7 @@ $(() => {
 
 	$('#reload-btn').click(() => {
 		$$$.message('Click reload-btn', DEBUG, '$reload-btn.click');
-		getFilelist();
+		getFilelist(locationPath);
 	});
 
 	$('#upload-btn').click(() => {

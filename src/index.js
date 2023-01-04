@@ -656,6 +656,7 @@ function postProcess() {
 	$$$.message(`Call upload`, DEBUG, `upload`);
 	var form = new FormData();
 	form.append(`file`, elem.files[0]);
+	form.append('path', locationPath);
 	form.append(`select`, false);
 	form.append(`print`, false);
 
@@ -673,7 +674,7 @@ function postProcess() {
 		data:			form
 	}
 	$.ajax(settings).done((response) => {
-		getFilelist();
+		getFilelist(locationPath);
 	}).fail((err) => {
 		$$$.message(`trap message alert no 00009`, WARN, `getPrinterFullState`);
 	});;

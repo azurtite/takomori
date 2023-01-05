@@ -2015,14 +2015,14 @@ $(() => {
 		}
 	});
 
-	$(`#nav-cog-icon-ctrl`).click(() => {
-		$$$.message(`Click nav-cog-icon-ctrl`, DEBUG, `$nav-cog-icon-ctrl.click`);
+	$(`#nav-cog-ctrl`).click(() => {
+		$$$.message(`Click nav-cog-ctrl`, DEBUG, `$nav-cog-ctrl.click`);
 
 		if(subMenuPanelOpen) {
 			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-console-ctrl.click')
 			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 			$(`.nav-submenu`).css({right: `-288px`});
-			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-cog-icon-ctrl.click`);
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-cog-ctrl.click`);
 			submenuToggle = false;
 			return;
 		}
@@ -2030,14 +2030,14 @@ $(() => {
 		subMenuPanelName = 'configure';
 
 		$(`#barrierLayer-ctrl`).css({visibility: 'visible'});
-		$$$.message(`Change css(visibility:visible) barrierLayer`, DEBUG, `$nav-cog-icon-ctrl.click`);
+		$$$.message(`Change css(visibility:visible) barrierLayer`, DEBUG, `$nav-cog-ctrl.click`);
 
 		$(`#setting-panel-ctrl`).css({visibility: `visible`});
-		$$$.message(`Change css(visibility:visible) setting-panel-ctrl`, DEBUG, `$nav-cog-icon-ctrl.click`);
+		$$$.message(`Change css(visibility:visible) setting-panel-ctrl`, DEBUG, `$nav-cog-ctrl.click`);
 
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 		$(`.nav-submenu`).css({right: `-288px`});
-		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-cog-icon-ctrl.click`);
+		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-cog-ctrl.click`);
 		submenuToggle = false;
 	});
 

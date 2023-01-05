@@ -35,6 +35,8 @@ let locationPath		= ``;
 let contentPosition		= 2;
 let maxContentPosition	= 2;
 let gCodeSize			= 2;
+let subMenuPanelOpen	= false;
+let subMenuPanelName	= '';
 
 let folderList			= [`/`];
 let windowList			= [null, `main-window-ctrl`, `file-window-ctrl`, `manu-window-ctrl`, `temp-window-ctrl`];
@@ -2015,6 +2017,21 @@ $(() => {
 
 	$(`#nav-cog-icon-ctrl`).click(() => {
 		$$$.message(`Click nav-cog-icon-ctrl`, DEBUG, `$nav-cog-icon-ctrl.click`);
+
+		if(subMenuPanelOpen) {
+			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-console-ctrl.click')
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-cog-icon-ctrl.click`);
+			submenuToggle = false;
+			return;
+		}
+		subMenuPanelOpen = true;
+		subMenuPanelName = 'configure';
+
+		$(`#barrierLayer-ctrl`).css({visibility: 'visible'});
+		$$$.message(`Change css(visibility:visible) barrierLayer`, DEBUG, `$nav-cog-icon-ctrl.click`);
+
 		$(`#setting-panel-ctrl`).css({visibility: `visible`});
 		$$$.message(`Change css(visibility:visible) setting-panel-ctrl`, DEBUG, `$nav-cog-icon-ctrl.click`);
 
@@ -2030,35 +2047,35 @@ $(() => {
 		$$$.message(`Change css(visibility:hidden) setting-panel-ctrl`, DEBUG, `$conf-set-ctrl.click`);
 
 		//localStorage.setItem(`uri-origin`, $(``));
-		$$$.message(`Set server information`, INFO, `conf-set-ctrl.click`);
+		$$$.message(`Set server information`, INFO, `$onf-set-ctrl.click`);
 		serverHost	= $(`#uri-host-ctrl`).val();
 		serverPort	= $(`#uri-port-ctrl`).val();
 		serverApikey= $(`#uri-apikey-ctrl`).val();
-		$$$.message(`Store server information`, INFO, `conf-set-ctrl.click`);
+		$$$.message(`Store server information`, INFO, `$onf-set-ctrl.click`);
 		localStorage.setItem(`uri-host`, serverHost);
 		localStorage.setItem(`uri-apikey`, serverApikey);
 		localStorage.setItem(`uri-port`, serverPort);
-		$$$.message(`Regenarate octoprint client object`, INFO, `conf-set-ctrl.click`);
+		$$$.message(`Regenarate octoprint client object`, INFO, `$conf-set-ctrl.click`);
 		setClientObject();
 		
 		feedAmount[1] = Number($(`#movement-p1`).val());
 		feedAmount[2] = Number($(`#movement-p2`).val());
 		feedAmount[3] = Number($(`#movement-p3`).val());
 		feedAmount[4] = Number($(`#movement-p4`).val());
-		$$$.message(`Store movement amount information`, INFO, `conf-set-ctrl.click`);
+		$$$.message(`Store movement amount information`, INFO, `$conf-set-ctrl.click`);
 		localStorage.setItem(`movement-p1`, feedAmount[1]);
 		localStorage.setItem(`movement-p2`, feedAmount[2]);
 		localStorage.setItem(`movement-p3`, feedAmount[3]);
 		localStorage.setItem(`movement-p4`, feedAmount[4]);
 
-		$$$.message(`Change seed range view`, INFO, `conf-set-ctrl.click`);
+		$$$.message(`Change seed range view`, INFO, `$conf-set-ctrl.click`);
 		$(`#seed-value-p1`).text(`${feedAmount[1]}mm`);
 		$(`#seed-value-p2`).text(`${feedAmount[2]}mm`);
 		$(`#seed-value-p3`).text(`${feedAmount[3]}mm`);
 		$(`#seed-value-p4`).text(`${feedAmount[4]}mm`);
 
 		feedValue = feedAmount[feedPosition];
-		$$$.message(`feed amount is ${feedValue}`, INFO, `conf-set-ctrl.click`);
+		$$$.message(`feed amount is ${feedValue}`, INFO, `$conf-set-ctrl.click`);
 
 		localStorage.setItem(`win-pos-x`, $(`#win-pos-x`).val());
 		localStorage.setItem(`win-pos-y`, $(`#win-pos-y`).val());
@@ -2072,6 +2089,12 @@ $(() => {
 			$(`#ID-powerFlag`).css({visibility: `hidden`});
 			localStorage.setItem(`debug-mode`, false);
 		}
+
+		subMenuPanelOpen = false;
+		subMenuPanelName = '';
+
+		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
+		$$$.message(`Change css(visibility:hidden) barrierLayer`, DEBUG, `$conf-set-ctrl.click`);
 	});
 
 	$(`#leftmark-ctrl`).click(() => {
@@ -2099,14 +2122,29 @@ $(() => {
 	$(`#gCode-close-btn-ctrl`).click(() => {
 		$$$.message(`Click gCode-close-btn-ctrl`, DEBUG, `gCode-close-btn-ctrl.click`);
 		$(`#gCode-panel-ctrl`).css({visibility: `hidden`});
+
+		subMenuPanelOpen = false;
+		subMenuPanelName = '';
 	});
 
 	$(`#nav-console-ctrl`).click(() => {
-		$$$.message(`Click nav-console-ctrl`, DEBUG, `nav-console-ctrl.click`);
+		$$$.message(`Click nav-console-ctrl`, DEBUG, `$nav-console-ctrl.click`);
+
+		if(subMenuPanelOpen) {
+			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-console-ctrl.click')
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-console-ctrl.click`);
+			submenuToggle = false;
+			return;
+		}
+		subMenuPanelOpen = true;
+		subMenuPanelName = 'gCode termial';
+
 		if(windowSize != 3) {
 			if($(`#gCode-panel-ctrl`).css(`visibility`) == `hidden`) {
 				$$$.message(`Show gCode console`, INFO, `nav-console-ctrl.click`);
-				$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `nav-console-ctrl.click`);
+				$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `$nav-console-ctrl.click`);
 				$(`#gCode-panel-ctrl`).removeClass(`gCode-panel-x4`);
 				$(`#gCode-title-ctrl`).removeClass(`title-x4`);
 				$(`#gCode-monitor-ctrl`).removeClass(`gCode-monitor-x4`);
@@ -2122,7 +2160,7 @@ $(() => {
 				switch(gCodeSize) {
 					case 1:
 						$$$.message(`Show gCode console`, INFO, `nav-console-ctrl.click`);
-						$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `nav-console-ctrl.click`);
+						$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `$nav-console-ctrl.click`);
 						$(`#gCode-panel-ctrl`).removeClass(`gCode-panel-x4`);
 						$(`#gCode-title-ctrl`).removeClass(`title-x4`);
 						$(`#gCode-monitor-ctrl`).removeClass(`gCode-monitor-x4`);
@@ -2133,7 +2171,7 @@ $(() => {
 						break;
 					case 2:
 						$$$.message(`Show gCode console`, INFO, `nav-console-ctrl.click`);
-						$$$.message(`Set the screen when windowSize=3`, DEBUG, `nav-console-ctrl.click`);
+						$$$.message(`Set the screen when windowSize=3`, DEBUG, `$nav-console-ctrl.click`);
 						$(`#gCode-panel-ctrl`).addClass(`gCode-panel-x4`);
 						$(`#gCode-title-ctrl`).addClass(`title-x4`);
 						$(`#gCode-monitor-ctrl`).addClass(`gCode-monitor-x4`);
@@ -2145,7 +2183,7 @@ $(() => {
 				}
 			} else {
 				$$$.message(`Show gCode console`, INFO, `nav-console-ctrl.click`);
-				$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `nav-console-ctrl.click`);
+				$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `$nav-console-ctrl.click`);
 				$(`#gCode-panel-ctrl`).addClass(`gCode-panel-x4`);
 				$(`#gCode-title-ctrl`).addClass(`title-x4`);
 				$(`#gCode-monitor-ctrl`).addClass(`gCode-monitor-x4`);
@@ -2165,10 +2203,25 @@ $(() => {
 	$(`#big-manual-close-btn-ctrl`).click(() => {
 		$$$.message(`click big-manual-close-btn-ctrl`, DEBUG, `$big-manual-close-btn-ctrl.click`);
 		$(`#big-manual-panel-ctrl`).css({visibility: `hidden`});
+
+		subMenuPanelOpen = false;
+		subMenuPanelName = '';
 	});
 
 	$(`#nav-move-ctrl`).click(() => {
 		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-move-ctrl.click`);
+		
+		if(subMenuPanelOpen) {
+			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-move-ctrl.click');
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-move-ctrl.click`);
+			submenuToggle = false;
+			return;
+		}
+		subMenuPanelOpen = true;
+		subMenuPanelName = 'manual control';
+
 		$(`#big-manual-panel-ctrl`).css({visibility: `visible`});
 
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
@@ -2180,10 +2233,25 @@ $(() => {
 	$(`#big-graph-close-btn-ctrl`).click(() => {
 		$$$.message(`click big-graph-close-btn-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
 		$(`#big-graph-panel-ctrl`).css({visibility: `hidden`});
+
+		subMenuPanelOpen = false;
+		subMenuPanelName = '';
 	});
 
 	$(`#nav-stats-ctrl`).click(() => {
 		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-stats-ctrl.click`);
+
+		if(subMenuPanelOpen) {
+			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-stats-ctrl.click');
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-stats-ctrl.click`);
+			submenuToggle = false;
+			return;
+		}
+		subMenuPanelOpen = true;
+		subMenuPanelName = 'graph vierer';
+
 		$(`#big-graph-panel-ctrl`).css({visibility: `visible`});
 
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
@@ -2195,10 +2263,25 @@ $(() => {
 	$(`#log-close-btn-ctrl`).click(() => {
 		$$$.message(`click log-close-btn-ctrl`, DEBUG, `$log-close-btn-ctrl.click`);
 		$(`#log-panel-ctrl`).css({visibility: `hidden`});
+
+		subMenuPanelOpen = false;
+		subMenuPanelName = '';
 	});
 
 	$(`#nav-log-ctrl`).click(() => {
 		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-log-ctrl.click`);
+
+		if(subMenuPanelOpen) {
+			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-log-ctrl.click');
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-log-ctrl.click`);
+			submenuToggle = false;
+			return;
+		}
+		subMenuPanelOpen = true;
+		subMenuPanelName = 'log viewer';
+
 		$(`#log-panel-ctrl`).css({visibility: `visible`});
 
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);

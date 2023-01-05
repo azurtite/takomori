@@ -29,6 +29,7 @@ function createWindow () {
 		frame:			false,
 		maximizable:	false,
 		resizable:		false,
+		icon:			'./tako.png',
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js')
 		}

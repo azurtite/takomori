@@ -704,6 +704,7 @@ $(() => {
 	$(`#uri-host-ctrl`).val(serverHost);
 	$(`#uri-port-ctrl`).val(serverPort);
 	$(`#uri-apikey-ctrl`).val(serverApikey);
+	$$$.message(`Set config panel uri data`, DEBUG, 'jQuery');
 	
 	$(`#seed-value-p1`).text(`${feedAmount[1]}mm`);
 	$(`#seed-value-p2`).text(`${feedAmount[2]}mm`);
@@ -713,19 +714,31 @@ $(() => {
 	$(`#movement-p2`).val(feedAmount[2]);
 	$(`#movement-p3`).val(feedAmount[3]);
 	$(`#movement-p4`).val(feedAmount[4]);
+	$$$.message(`Set config panel movement data`, DEBUG, 'jQuery');
 
 	$(`#win-pos-x`).val(localStorage.getItem(`win-pos-x`));
 	$(`#win-pos-y`).val(localStorage.getItem(`win-pos-y`));
 	
 	if(localStorage.getItem(`debug-mode`) == `true`) {
 		$(`#reload-btn-ctrl`).css({visibility: `visible`});
+		$$$.message(`Change css(visibility:visible) reload-btn-ctrl`, DEBUG, `jQuery`);
 		$(`#ID-powerFlag`).css({visibility: `visible`});
+		$$$.message(`Change css(visibility:visible) ID-powerFlag`, DEBUG, `jQuery`);
+		$(`#base-path-ctrl`).css({visibility: 'visible'});
+		$$$.message(`Change css(visibility:visible) base-path-ctrl`, DEBUG, `jQuery`);
 		$(`#debug-mode-ctrl`).prop(`checked`, true);
+		$$$.message(`Change property(checked:true) debug-mode-ctrl`, DEBUG, `jQuery`);
 	} else {
 		$(`#reload-btn-ctrl`).css({visibility: `hidden`});
+		$$$.message(`Change css(visibility:hidden) reload-btn-ctrl`, DEBUG, `jQuery`);
 		$(`#ID-powerFlag`).css({visibility: `hidden`});
+		$$$.message(`Change css(visibility:hidden) ID-powerFlag`, DEBUG, `jQuery`);
+		$(`#base-path-ctrl`).css({visibility: 'hidden'});
+		$$$.message(`Change css(visibility:hidden) base-path-ctrl`, DEBUG, `jQuery`);
 		$(`#debug-mode-ctrl`).prop(`checked`, false);
+		$$$.message(`Change property(checked:false) debug-mode-ctrl`, DEBUG, `jQuery`);
 	}
+	$$$.message(`Set config panel application data`, DEBUG, 'jQuery');
 
 	$(`#reload-btn-ctrl`).click(() => {
 		$$$.message(`Click reload-btn`, DEBUG, `$reload-btn-ctrl.click`);

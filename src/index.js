@@ -32,7 +32,7 @@ let extruderMovingTemp	= 200;
 let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
 let locationPath		= ``;
-let contentPosition		= 2;
+let contentPosition		= 0;
 let maxContentPosition	= 2;
 let gCodeSize			= 2;
 let subMenuPanelOpen	= false;
@@ -2042,7 +2042,12 @@ $(() => {
 	});
 
 	$(`#conf-set-ctrl`).click(() => {
-		$$$.message(`Click conf-set-ctrl`, DEBUG, `conf-set-ctrl.click`);
+		$$$.message(`Click conf-set-ctrl`, DEBUG, `$conf-set-ctrl.click`);
+
+		if(!checkConfigValue()) return;
+		$(`[id^=movement-remove-p]`).css({color: skyhigh});
+		$$$.message(`Change css(color:skyhigh) id^=movement-remove-p`, DEBUG, `$conf-set-ctrl.click`);
+				
 		$(`#setting-panel-ctrl`).css({visibility: `hidden`});
 		$$$.message(`Change css(visibility:hidden) setting-panel-ctrl`, DEBUG, `$conf-set-ctrl.click`);
 
@@ -2096,6 +2101,44 @@ $(() => {
 		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
 		$$$.message(`Change css(visibility:hidden) barrierLayer`, DEBUG, `$conf-set-ctrl.click`);
 	});
+	function checkConfigValue() {
+		var checked = true;
+		for(var i=1; i<=4; i++) {
+			if($(`#movement-p1`).val() == $(`#movement-p${i}`).val() && i != 1) {
+				$(`#movement-remove-p1`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p2`).val() == $(`#movement-p${i}`).val() && i != 2) {
+				$(`#movement-remove-p2`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p3`).val() == $(`#movement-p${i}`).val() && i != 3) {
+				$(`#movement-remove-p3`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p3`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p4`).val() == $(`#movement-p${i}`).val() && i != 4) {
+				$(`#movement-remove-p4`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p4`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+		}
+		return checked;
+	}
 
 	$(`#leftmark-ctrl`).click(() => {
 		$$$.message(`Call leftmark-ctrl`, DEBUG, `leftmark-ctrl.click`);

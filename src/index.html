@@ -31,9 +31,6 @@
 		<title>tokomori</title>
 	</head>
 	<body>
-		<div class="content-counter">
-			Current value: <strong id="counter">0</strong>
-		</div>
 	<!-- main window -->
 		<div class="main-window" id="main-window-ctrl">
 			<!-- base body -->
@@ -45,7 +42,7 @@
 					<strong class="target" id="tool-target-text">N/A</strong>
 				</div>
 				<div class="nav-fire-icon" id="tool-icon">
-					<span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="tool" id="tool-text">N/A</strong>
@@ -58,7 +55,7 @@
 					<strong class="target" id="bed-target-text">N/A</strong>
 				</div>
 				<div class="nav-fire-icon" id="bed-icon">
-					<span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="bed" id="bed-text">N/A</strong>
@@ -71,7 +68,7 @@
 					&nbsp;
 				</div>
 				<div class="nav-fire-icon" id="fan-icon">
-					<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="fan" id="fan-text">0%</strong>
@@ -84,7 +81,7 @@
 					&nbsp;
 				</div>
 				<div class="nav-fire-icon" id="print-icon">
-					<span class="glyphicon glyphicon glyphicon-print" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-print" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="printer"></strong>
@@ -93,7 +90,7 @@
 			<!-- job title -->
 			<div class="nav-file-name">
 				<div class="nav-off" id="power-btn">
-					<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 				</div>
 				&nbsp;<strong class="nav-jobname" id="jobname">not printed</strong><br />
 			</div>
@@ -201,10 +198,10 @@
 					</div>
 				</div>
 				<div class="tool-on-sw" id="tool-on-sw-btn">
-					<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 				</div>
 				<div class="tool-on-remove" id="tool-on-remove-btn">
-					<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
+					<sapn class="glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 				</div>
 			</div>
 			<!-- slider panel bed -->
@@ -290,10 +287,10 @@
 					</div>
 				</div>
 				<div class="bed-on-sw" id="bed-on-sw-btn">
-					<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 				</div>
 				<div class="bed-on-remove" id="bed-on-remove-btn">
-					<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
+					<sapn class="glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 				</div>
 			</div>
 			<!-- left angle -->
@@ -305,21 +302,21 @@
 			<!-- right angle -->
 			<div class="main-triangle-right">
 				<div class="main-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-main"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-main"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="main-triangle-down">
 				<div class="main-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-main"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-main"></span>
 				</div>
 			</div>
 		</div>
 	<!-- file window -->
 		<div class="file-window" id="file-window-ctrl">
 			<div class="file-list-title">
-				<span class="glyphicon glyphicon glyphicon glyphicon-floppy-open" id="upload-btn"></span>
-				<span class="glyphicon glyphicon glyphicon-refresh" id="reload-btn"></span>
+				<span class="glyphicon glyphicon-floppy-open file-upload-btn" id="upload-btn"></span>
+				<span class="glyphicon glyphicon-refresh file-reload-btn" id="reload-btn"></span>
 			</div>
 			<div class="file-list" id="file-list-ctrl"></div>
 			<div class="information-panel" id="information-panel-ctrl"></div>
@@ -340,19 +337,19 @@
 			<!-- left angle -->
 			<div class="file-triangle-left">
 				<div class="file-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-file"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-file"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="file-triangle-right">
 				<div class="file-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-file"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-file"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="file-triangle-down">
 				<div class="file-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-file"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-file"></span>
 				</div>
 			</div>
 		</div>
@@ -389,11 +386,11 @@
 					<td class="button-w25">&nbsp;</td>
 					<td id="manu-btn-p2" class="button-w50" colspan="2">BL</td>
 					<td class="button-w3 small-font">&nbsp;</td>
-					<td id="manu-btn-p3" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+					<td id="manu-btn-p3" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-up"></span></td>
 					<td class="button-w3 small-font">8</td>
 					<td id="manu-btn-p4" class="button-w50" colspan="2">BR</td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-p5" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+					<td id="manu-btn-p5" class="button-w50"><span class="glyphicon glyphicon-arrow-up"></span></td>
 				</tr>
 				<tr>
 					<td class="small-font space-50">&nbsp;</td>
@@ -412,13 +409,13 @@
 				<tr>
 					<td id="manu-btn-p6" class="button-w50">Hy</td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-p7" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-left"></td>
+					<td id="manu-btn-p7" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-left"></td>
 					<td class="button-w3 small-font">&nbsp;</td>
-					<td id="manu-btn-p8" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-repeat"></span></td>
+					<td id="manu-btn-p8" class="button-w50" colspan="2"><span class="glyphicon glyphicon-repeat"></span></td>
 					<td class="button-w3 small-font">8</td>
-					<td id="manu-btn-p9" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-right"></td>
+					<td id="manu-btn-p9" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-right"></td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-pa" class="button-w50"><span class="glyphicon glyphicon glyphicon-home"></span></td>
+					<td id="manu-btn-pa" class="button-w50"><span class="glyphicon glyphicon-home"></span></td>
 				</tr>
 				<tr>
 					<td class="small-font space-50">&nbsp;</td>
@@ -439,11 +436,11 @@
 					<td class="button-w25">&nbsp;</td>
 					<td id="manu-btn-pc" class="button-w50" colspan="2">FL</td>
 					<td class="button-w3 small-font">&nbsp;</td>
-					<td id="manu-btn-pd" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+					<td id="manu-btn-pd" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-down"></span></td>
 					<td class="button-w3 small-font">8</td>
 					<td id="manu-btn-pe" class="button-w50" colspan="2">FR</td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-pf" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+					<td id="manu-btn-pf" class="button-w50"><span class="glyphicon glyphicon-arrow-down"></span></td>
 				</tr>
 				<tr>
 					<td class="header-50">Home</td>
@@ -462,9 +459,9 @@
 				</div>
 				<table class="table1x2">
 					<tr>
-						<td id="extruder-btn-up" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+						<td id="extruder-btn-up" class="button-w50"><span class="glyphicon glyphicon-arrow-up"></span></td>
 						<td class="button-w3 smallfont">&nbsp;</td>
-						<td id="extruder-btn-down" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+						<td id="extruder-btn-down" class="button-w50"><span class="glyphicon glyphicon-arrow-down"></span></td>
 					</tr>
 				</table>
 			</div>
@@ -474,19 +471,19 @@
 			<!-- left angle -->
 			<div class="manu-triangle-left">
 				<div class="manu-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-manu"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-manu"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="manu-triangle-right">
 				<div class="manu-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-manu"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-manu"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="manu-triangle-down">
 				<div class="manu-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-manu"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-manu"></span>
 				</div>
 			</div>
 		</div>
@@ -638,32 +635,32 @@
 		<!-- left angle -->
 			<div class="temp-triangle-left">
 				<div class="temp-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="temp-triangle-right">
 				<div class="temp-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-temp"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-temp"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="temp-triangle-down">
 				<div class="temp-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-temp"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-temp"></span>
 				</div>
 			</div>
 		</div>
 	<!-- winctrl -->
 		<div class="nav-winctrl">
 			<div class="nav-minimum" id="minimize-btn">
-				<span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fullscreen" id="fullscreen-btn">
-				<span class="glyphicon glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
 			</div>
 			<div class="nav-remove" id="remove-btn">
-				<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</div>
 		</div>
 	<!-- sub menu -->
@@ -673,7 +670,7 @@
 			</div>
 			<div class="nav-move" id="nav-move-ctrl">
 				<div class="nav-move-icon">
-					<span class="glyphicon glyphicon glyphicon-move"></span><br />
+					<span class="glyphicon glyphicon-move"></span><br />
 				</div>
 				<div class="nav-move-title">
 					move
@@ -681,7 +678,7 @@
 			</div>
 			<div class="nav-stats" id="nav-stats-ctrl">
 				<div class="nav-stats-icon">
-					<span class="glyphicon glyphicon glyphicon-stats"></span><br />
+					<span class="glyphicon glyphicon-stats"></span><br />
 				</div>
 				<div class="nav-stats-title">
 					glaph
@@ -689,15 +686,15 @@
 			</div>
 			<div class="nav-console" id="nav-console-ctrl">
 				<div class="nav-console-icon">
-					<span class="glyphicon glyphicon glyphicon-console"></span><br />
+					<span class="glyphicon glyphicon-console"></span><br />
 				</div>
 				<div class="nav-console-title">
 					gCode
 				</div>
 			</div>
-			<div class="nav-cog" id="nav-cog-icon-ctrl">
+			<div class="nav-cog" id="nav-cog-ctrl">
 				<div class="nav-cog-icon">
-					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
+					<span class="glyphicon glyphicon-cog"></span><br />
 				</div>
 				<div class="nav-cog-title">
 					config
@@ -705,7 +702,7 @@
 			</div>
 			<div class="nav-log" id="nav-log-ctrl">
 				<div class="nav-log-icon">
-					<span class="glyphicon glyphicon glyphicon-file"></span><br />
+					<span class="glyphicon glyphicon-file"></span><br />
 				</div>
 				<div class="nav-log-title">
 					log
@@ -713,7 +710,7 @@
 			</div>
 			<div class="nav-suspend" id="suspend-btn">
 				<div class="nav-suspend-icon">
-					<span class="glyphicon glyphicon glyphicon-remove"></span><br />
+					<span class="glyphicon glyphicon-remove"></span><br />
 				</div>
 				<div class="nav-suspend-title">
 					close
@@ -731,7 +728,7 @@
 		</div>
 	<!-- reload button -->
 		<div class="reload-btn debug-contents">
-			<span class="glyphicon glyphicon glyphicon-repeat" id="reload-btn-ctrl"></span>
+			<span class="glyphicon glyphicon-repeat" id="reload-btn-ctrl"></span>
 		</div>
 	<!-- setting panel -->
 		<div class="setting-panel" id="setting-panel-ctrl">
@@ -807,6 +804,7 @@
 							/>
 							<label class="label">P1 movement amount</label>
 							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p1"></span></div>
 						</div>
 						<script>
 							$(() => {if($('#movement-p1').val() != '') $('#movement-p1').attr('value', 'not-null');});
@@ -822,6 +820,7 @@
 							/>
 							<label class="label">P2 movement amount</label>
 							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p2"></span></div>
 						</div>
 						<script>
 							$(() => {if($('#movement-p2').val() != '') $('#movement-p2').attr('value', 'not-null');});
@@ -837,6 +836,7 @@
 							/>
 							<label class="label">P3 movement amount</label>
 							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p3"></span></div>
 						</div>
 						<script>
 							$(() => {if($('#movement-p3').val() != '') $('#movement-p3').attr('value', 'not-null');});
@@ -852,6 +852,7 @@
 							/>
 							<label class="label">P4 movement amount</label>
 							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p4"></span></div>
 						</div>
 						<script>
 							$(() => {if($('#movement-p4').val() != '') $('#movement-p4').attr('value', 'not-null');});
@@ -895,13 +896,15 @@
 					</div>
 				</div>
 				<div class="leftmark" id="leftmark-ctrl">
-					<span class="glyphicon glyphicon glyphicon-triangle-right"></span>
+					<span class="glyphicon glyphicon-triangle-right"></span>
 				</div>
 				<div class="conf-set" id="conf-set-ctrl">
 					<span class="text">Set</span>
 				</div>
 			</div>
 		</div>
+	<!-- barrier layer -->
+		<div class="barrierLayer" id="barrierLayer-ctrl"></div>
 	<!-- gcode panel -->
 		<div class="gCode-panel gCode-panel-x4" id="gCode-panel-ctrl">
 			<div class="title title-x4" id="gCode-title-ctrl">

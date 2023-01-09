@@ -1614,6 +1614,8 @@ div::-webkit-scrollbar-thumb {
 		top:				4px;
 		border:				1px solid @sunshine;
 		background-color:	@skyhigh;
+		overflow-x:			hidden;
+		overflow-y:			scroll;
 		-webkit-app-region:	no-darg;
 	}
 	.gCode-monitor-x4 {
@@ -1672,6 +1674,14 @@ div::-webkit-scrollbar-thumb {
 	border-style:			solid;
 	border-color:			transparent @ceruleanblue @peleskyblue transparent;
 	border-width:			0 25px 25px 0;
+}
+textarea::-webkit-scrollbar {
+	background:		 			@skyhigh;
+	width:						8px;
+}
+textarea::-webkit-scrollbar-thumb {
+	background:					@sunshine;
+	border-radius:				5px;
 }
 
 .big-manual-panel {
@@ -1805,8 +1815,8 @@ div::-webkit-scrollbar-thumb {
 	display:					table;
 	left:						24px;
 	top:						24px;
-	height:						432px;
-	width:						752px;
+	height:						192px;
+	width:						352px;
 	z-index:					90;
 	color:						@sunshine;
 	background-color:			@skyhigh;
@@ -1815,22 +1825,94 @@ div::-webkit-scrollbar-thumb {
 		position:				relative;
 		left:					16px;
 		height:					28px;
-		width:					710px;
+		width:					310px;
 		border-bottom:			1px solid @sunshine;
 		font-size:				20px;
 	}
-	.content {
+	.title-x4 {
+		width:					710px;
+	}
+	.content-log-panel {
 		position:				absolute;
 		display:				table-cell;
 		left:					16px;
 		top:					30px;
-		height:					360px;
-		width:					712px;
+		height:					110px;
+		width:					320px;
 		text-align:				center;
-		.text {
-			position:			relative;
-			top:				180px;
+		color:					@sunshine;
+		.button {
+			position:			absolute;
+			border-radius:		3px;
+			border:				1px solid;
+			font-size:			14px;
+			text-align:			center;
+			cursor:				pointer;
 		}
+		.all-btn {
+			left:				4px;
+			top:				4px;
+			width:				23px;
+		}
+		.error-btn {
+			left:				31px;
+			top:				4px;
+			width:				39px;
+		}
+		.warn-btn {
+			left:				74px;
+			top:				4px;
+			width:				40px;
+		}
+		.info-btn {
+			left:				118px;
+			top:				4px;
+			width:				32px;
+		}
+		.debug-btn {
+			left:				154px;
+			top:				4px;
+			width:				48px;
+		}
+		.low-info-btn {
+			left:				206px;
+			top:				4px;
+			width:				44px;
+		}
+		.low-info-btn-x4 {
+			left:				206px;
+			width:				68px;
+		}
+		.low-debug-btn {
+			left:				254px;
+			top:				4px;
+			width:				58px;
+		}
+		.low-debug-btn-x4 {
+			left:				278px;
+			width:				80px;
+		}
+		.log-information {
+			position:			absolute;
+			left:				0px;
+			top:				28px;
+			width:				320px;
+			height:				80px;
+			text-align:			left;
+			color:				@lapislazuli;
+			overflow-y:			scroll;
+			.log-message {
+				border-bottom:		1px solid @sunshine;
+			}
+		}
+		.log-information-x4 {
+			width:				720px;
+			height:				320px;
+		}
+	}
+	.content-log-panel-x4 {
+		height:					350px;
+		width:					720px;
 	}
 	.log-close-btn {
 		cursor:					pointer;
@@ -1850,6 +1932,10 @@ div::-webkit-scrollbar-thumb {
 			-webkit-app-region: no-drag;
 		}
 	}
+}
+.log-panel-x4 {
+	height:					432px;
+	width:					752px;
 }
 .log-panel::after {
 	content:				'';

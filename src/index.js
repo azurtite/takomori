@@ -5,6 +5,7 @@ let forestleaf			= `#008554`;
 let peleskyblue			= `#C2E5F9`;
 let lapislazuli			= `#261F87`;
 let skyhigh				= `#51A5DC`;
+let flameOrange			= '#ee7700';
 
 let powerFlag			= false;
 let tool0Flag			= false;
@@ -34,7 +35,7 @@ let actionPowerBtnClick	= false;
 let locationPath		= ``;
 let contentPosition		= 0;
 let maxContentPosition	= 2;
-let gCodeSize			= 2;
+let subPanelSize		= 2;
 let subMenuPanelOpen	= false;
 let subMenuPanelName	= '';
 
@@ -719,6 +720,8 @@ $(() => {
 	$(`#win-pos-x`).val(localStorage.getItem(`win-pos-x`));
 	$(`#win-pos-y`).val(localStorage.getItem(`win-pos-y`));
 	
+	allBtnBlink();
+
 	if(localStorage.getItem(`debug-mode`) == `true`) {
 		$(`#reload-btn-ctrl`).css({visibility: `visible`});
 		$$$.message(`Change css(visibility:visible) reload-btn-ctrl`, DEBUG, `jQuery`);
@@ -2179,6 +2182,9 @@ $(() => {
 		$$$.message(`Click gCode-close-btn-ctrl`, DEBUG, `gCode-close-btn-ctrl.click`);
 		$(`#gCode-panel-ctrl`).css({visibility: `hidden`});
 
+		$(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+		$$$.message(`Change css(visibility:hidden) barrierLayer-ctrl`, DEBUG, `$gCode-close-btn-ctrl.click`);
+
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
 	});
@@ -2186,7 +2192,7 @@ $(() => {
 	$(`#nav-console-ctrl`).click(() => {
 		$$$.message(`Click nav-console-ctrl`, DEBUG, `$nav-console-ctrl.click`);
 
-		if(subMenuPanelOpen) {
+		if(subMenuPanelOpen && subMenuPanelName != 'gCode terminal') {
 			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-console-ctrl.click')
 			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 			$(`.nav-submenu`).css({right: `-288px`});
@@ -2195,7 +2201,7 @@ $(() => {
 			return;
 		}
 		subMenuPanelOpen = true;
-		subMenuPanelName = 'gCode termial';
+		subMenuPanelName = 'gCode terminal';
 
 		if(windowSize != 3) {
 			if($(`#gCode-panel-ctrl`).css(`visibility`) == `hidden`) {
@@ -2211,9 +2217,9 @@ $(() => {
 			}
 		} else {
 			if($(`#gCode-panel-ctrl`).css(`visibility`) != `hidden`) {
-				gCodeSize++;
-				if(gCodeSize > 2) gCodeSize = 1;
-				switch(gCodeSize) {
+				subPanelSize++;
+				if(subPanelSize> 2) subPanelSize= 1;
+				switch(subPanelSize) {
 					case 1:
 						$$$.message(`Show gCode console`, INFO, `nav-console-ctrl.click`);
 						$$$.message(`Set the screen when windowSize=1 or 2`, DEBUG, `$nav-console-ctrl.click`);
@@ -2250,10 +2256,39 @@ $(() => {
 			}
 		}
 
+		$(`#barrierLayer-ctrl`).css({visibility: `visible`});
+		$$$.message(`Change css(visibility:visible) barrierLayer-ctrl`, DEBUG, `$nav-console-ctrl.click`);
+
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 		$(`.nav-submenu`).css({right: `-288px`});
 		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-console-ctrl.click`);
 		submenuToggle = false;
+	});
+
+	$(`#gCode-send-btn-ctrl`).click(() => {
+		$$$.message(`Call gCode-send-btn-ctrl`, DEBUG, `$gCode-send-btn-ctrl.click`);
+
+		if($(`#gCode-line-ctrl`).val() != '') {
+			$$$.message(`Send gCode [ ${$(`#gCode-line-ctrl`).val().toUpperCase()} ]`, INFO, `$gCode-send-btn-ctrl.click`);
+			$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Send : ${$(`#gCode-line-ctrl`).val().toUpperCase()}\n`);
+			client.control.sendGcode($(`#gCode-line-ctrl`).val().toUpperCase())
+				.done(() => {
+					$$$.message(`Send gCode success`, INFO, `$gCode-send-btn-ctrl.click`)
+					$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Send ok.\n`);
+					$(`#gCode-line-ctrl`).val(``);
+				})
+				.fail((err) => {
+					$$$.message(`Send gCode failure`, INFO, `$gCode-send-btn-ctrl.click`)
+					$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Send error.\n`);
+					$(`#gCode-line-ctrl`).val(``);
+				})
+		} else $$$.message(`gCode value is empty`, WARN, `$gCode-send-btn-ctrl.click`);
+
+		if(!powerFlag) {
+			$$$.message(`gCode cannot be sent unless a printer is connected.`, ERROR, `gCode-send-btn-ctrl.click`);
+			$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Error : gCode cannot be sent unless a printer is connected.\n`);
+			$(`#gCode-line-ctrl`).val();
+		}
 	});
 
 	$(`#big-manual-close-btn-ctrl`).click(() => {
@@ -2327,7 +2362,7 @@ $(() => {
 	$(`#nav-log-ctrl`).click(() => {
 		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-log-ctrl.click`);
 
-		if(subMenuPanelOpen) {
+		if(subMenuPanelOpen && subMenuPanelName != 'log viewer') {
 			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-log-ctrl.click');
 			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 			$(`.nav-submenu`).css({right: `-288px`});
@@ -2338,11 +2373,197 @@ $(() => {
 		subMenuPanelOpen = true;
 		subMenuPanelName = 'log viewer';
 
+		if($(`#log-panel-ctrl`).css('visibility') == 'hidden' && windowSize == 3) subPanelSize = 2;
+		else if($(`#log-panel-ctrl`).css('visibility') == 'visible' && windowSize == 3) {
+			console.log('hoge')
+			subPanelSize++;
+			if(subPanelSize > 2) subPanelSize = 1;
+		} else subPanelSize = 1;
+		$$$.message(`Determine panel size`, DEBUG, `$nav-log-ctrl.click`);
+		switch(subPanelSize) {
+			case 1:
+				$(`#log-panel-ctrl`).removeClass(`log-panel-x4`);
+				$(`#log-panel-title-ctrl`).removeClass(`title-x4`);
+				$(`#content-log-panel-ctrl`).removeClass(`content-log-panel-x4`);
+				$(`#low-info-btn-ctrl`).text('l-info');
+				$(`#low-info-btn-ctrl`).removeClass(`low-info-btn-x4`);
+				$(`#low-debug-btn-ctrl`).text('l-debug');
+				$(`#low-debug-btn-ctrl`).removeClass(`low-debug-btn-x4`);
+				$(`#log-information-ctrl`).removeClass(`log-information-x4`);
+				$$$.message(`Set panel mode 1`, DEBUG, `$nav-log-ctrl.click`);
+				break;
+			case 2:
+				$(`#log-panel-ctrl`).addClass(`log-panel-x4`);
+				$(`#log-panel-title-ctrl`).addClass(`title-x4`);
+				$(`#content-log-panel-ctrl`).addClass(`content-log-panel-x4`);
+				$(`#low-info-btn-ctrl`).text('low-info');
+				$(`#low-info-btn-ctrl`).addClass(`low-info-btn-x4`);
+				$(`#low-debug-btn-ctrl`).text('low-debug');
+				$(`#low-debug-btn-ctrl`).addClass(`low-debug-btn-x4`);
+				$(`#log-information-ctrl`).addClass(`log-information-x4`);
+				$$$.message(`Set panel mode 2`, DEBUG, `$nav-log-ctrl.click`);
+				break;
+		}
 		$(`#log-panel-ctrl`).css({visibility: `visible`});
+		$$$.message(`Change css(visibility:visible) log-panel-ctrl`, DEBUG, `$nav-log-ctrl.click`);
 
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 		$(`.nav-submenu`).css({right: `-288px`});
 		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-log-ctrl.click`);
 		submenuToggle = false;
+
+		allBtnBlink();
+		writeLog();
 	});
+	$(`#all-btn-ctrl`).click(() => {
+		$$$.message(`Click all-btn-ctrl`, DEBUG, `$all-btn-ctrl.click`);
+		if($(`#all-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) return;
+
+		$(`#all-btn-ctrl`).css({'background-color': lapislazuli});
+		$$$.message(`Change css(background-color:lapislazuli) all-btn-ctrl`, DEBUG, `$all-btn-ctrl.click`);
+		$(`#error-btn-ctrl`).css({'background-color': skyhigh});
+		$(`#warn-btn-ctrl`).css({'background-color': skyhigh});
+		$(`#info-btn-ctrl`).css({'background-color': skyhigh});
+		$(`#debug-btn-ctrl`).css({'background-color': skyhigh});
+		$(`#low-info-btn-ctrl`).css({'background-color': skyhigh});
+		$(`#low-debug-btn-ctrl`).css({'background-color': skyhigh});
+		$$$.message(`Change css(background-color:skyhigh) ***-btn-ctrl`, DEBUG, `$all-btn-ctrl.click`);
+		allBtnBlink();
+		writeLog();
+	});
+	$(`#error-btn-ctrl`).click(() => {
+		$$$.message(`Click error-btn-ctrl`, DEBUG, `$error-btn-ctrl.click`);
+		if($(`#error-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) {
+			$(`#error-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) error-btn-ctrl`, DEBUG, `$error-btn-ctrl.click`);
+		} else {
+			$(`#error-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) error-btn-ctrl`, DEBUG, `$error-btn-ctrl.click`);
+			$(`#all-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) all-btn-ctrl`, DEBUG, `$error-btn-ctrl.click`);
+		}
+		allBtnBlink();
+		writeLog();
+	});
+	$(`#warn-btn-ctrl`).click(() => {
+		$$$.message(`Click warn-btn-ctrl`, DEBUG, `$warn-btn-ctrl.click`);
+		if($(`#warn-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) {
+			$(`#warn-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) warn-btn-ctrl`, DEBUG, `$warn-btn-ctrl.click`);
+		} else {
+			$(`#warn-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) warn-btn-ctrl`, DEBUG, `$warn-btn-ctrl.click`);
+			$(`#all-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) all-btn-ctrl`, DEBUG, `$warn-btn-ctrl.click`);
+		}
+		allBtnBlink();
+		writeLog();
+	});
+	$(`#info-btn-ctrl`).click(() => {
+		$$$.message(`Click info-btn-ctrl`, DEBUG, `$info-btn-ctrl.click`);
+		if($(`#info-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) {
+			$(`#info-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) info-btn-ctrl`, DEBUG, `$info-btn-ctrl.click`);
+		} else {
+			$(`#info-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) info-btn-ctrl`, DEBUG, `$info-btn-ctrl.click`);
+			$(`#all-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) all-btn-ctrl`, DEBUG, `$info-btn-ctrl.click`);
+		}
+		allBtnBlink();
+		writeLog();
+	});
+	$(`#debug-btn-ctrl`).click(() => {
+		$$$.message(`Click debug-btn-ctrl`, DEBUG, `$debug-btn-ctrl.click`);
+		if($(`#debug-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) {
+			$(`#debug-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) debug-btn-ctrl`, DEBUG, `$debug-btn-ctrl.click`);
+		} else {
+			$(`#debug-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) debug-btn-ctrl`, DEBUG, `$debug-btn-ctrl.click`);
+			$(`#all-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) all-btn-ctrl`, DEBUG, `$debug-btn-ctrl.click`);
+		}
+		allBtnBlink();
+		writeLog();
+	});
+	$(`#low-info-btn-ctrl`).click(() => {
+		$$$.message(`Click low-info-btn-ctrl`, DEBUG, `$low-info-btn-ctrl.click`);
+		if($(`#low-info-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) {
+			$(`#low-info-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) low-info-btn-ctrl`, DEBUG, `$low-info-btn-ctrl.click`);
+		} else {
+			$(`#low-info-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) low-info-btn-ctrl`, DEBUG, `$low-info-btn-ctrl.click`);
+			$(`#all-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) all-btn-ctrl`, DEBUG, `$low-info-btn-ctrl.click`);
+		}
+		allBtnBlink();
+		writeLog();
+	});
+	$(`#low-debug-btn-ctrl`).click(() => {
+		$$$.message(`Click low-debug-btn-ctrl`, DEBUG, `$low-debug-btn-ctrl.click`);
+		if($(`#low-debug-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) {
+			$(`#low-debug-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) low-debug-btn-ctrl`, DEBUG, `$low-debug-btn-ctrl.click`);
+		} else {
+			$(`#low-debug-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) low-debug-btn-ctrl`, DEBUG, `$low-debug-btn-ctrl.click`);
+			$(`#all-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) all-btn-ctrl`, DEBUG, `$low-debug-btn-ctrl.click`);
+		}
+		allBtnBlink();
+		writeLog();
+	});
+	function allBtnBlink() {
+		$$$.message(`Call allBtnBlink`, DEBUG, 'allBtnBlink');
+		var flag = false;
+		if($(`#low-debug-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) flag = true;
+		if($(`#low-info-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) flag = true;
+		if($(`#debug-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) flag = true;
+		if($(`#info-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) flag = true;
+		if($(`#warn-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) flag = true;
+		if($(`#error-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) flag = true;
+		if(!flag) {
+			$(`#all-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) all-btn-ctrl`, DEBUG, `allBtnBlink`);
+		}
+	}
+	function writeLog() {
+		$$$.message(`Call writeLog`, DEBUG, `writeLog`);
+		var colorPallet = ['N/A', 'Deadly', rescueorange, sunshine, forestleaf, lapislazuli, peleskyblue, peleskyblue]
+		$(`#log-information-ctrl`).html('');
+		
+		var detect =[];
+		if($(`#low-debug-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) detect[detect.length] = 7;
+		if($(`#low-info-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) detect[detect.length] = 6;
+		if($(`#debug-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) detect[detect.length] = 5;
+		if($(`#info-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) detect[detect.length] = 4;
+		if($(`#warn-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) detect[detect.length] = 3;
+		if($(`#error-btn-ctrl`).css('background-color') == `rgb(38, 31, 135)`) detect[detect.length] = 2;
+		if($(`#all-btn-ctrl`).css('background-color') ==  `rgb(38, 31, 135)`) detect[detect.length] = 0;
+		$$$.message(`Detect message type to output`, LOWDEBUG, `writeLog`);
+
+		for(var i=0; i<$$$.log.length; i++) {
+			var date =
+				$$$.timeStamp($$$.log[i].time)[0].split('T')[0].substr(0,4) + '/' +
+				$$$.timeStamp($$$.log[i].time)[0].split('T')[0].substr(4,2) + '/' +
+				$$$.timeStamp($$$.log[i].time)[0].split('T')[0].substr(6,2);
+			var timeStamp = `<font color="${forestleaf}">${date}</font> <font color="${sunshine}">${$$$.timeStamp($$$.log[i].time)[0].split('T')[1]}</font>`;
+			var msg = $$$.log[i].msg;
+			msg = msg.replace(`Change css`, `<font color="${flameOrange}"style="font-weight: bold;">Change css</font>`)
+			msg = msg.replace(`Call`, `<font color="${forestleaf}"style="font-weight: bold;">Call</font>`)
+			msg = msg.replace(`Click`, `<font color="${lapislazuli}"style="font-weight: bold;">Click</font>`)
+			var elem = document.createElement(`div`);
+			elem.innerHTML = 
+				`<font color="${peleskyblue}">[${i.toString().padStart(3, 0)}]</font>` +
+				`${timeStamp}${subPanelSize == 2 ? ` : ` : `<br />`}` +
+				`<font color="${colorPallet[$$$.log[i].type]}">[${TYPE[$$$.log[i].type]}]</font>` +
+				`<font color="${rescueorange}">(${$$$.log[i].position})</font>${subPanelSize == 2 ? `` : `<br />`}` +
+				` ${msg}`;
+			if(subPanelSize == 1) elem.className = 'log-message';
+			if(detect.indexOf($$$.log[i].type) != -1) $('#log-information-ctrl').append(elem);
+			else if(detect.indexOf(0) != -1) $('#log-information-ctrl').append(elem);
+		}
+	}
 });

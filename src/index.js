@@ -2182,6 +2182,9 @@ $(() => {
 		$$$.message(`Click gCode-close-btn-ctrl`, DEBUG, `gCode-close-btn-ctrl.click`);
 		$(`#gCode-panel-ctrl`).css({visibility: `hidden`});
 
+		$(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+		$$$.message(`Change css(visibility:hidden) barrierLayer-ctrl`, DEBUG, `$gCode-close-btn-ctrl.click`);
+
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
 	});
@@ -2189,7 +2192,7 @@ $(() => {
 	$(`#nav-console-ctrl`).click(() => {
 		$$$.message(`Click nav-console-ctrl`, DEBUG, `$nav-console-ctrl.click`);
 
-		if(subMenuPanelOpen) {
+		if(subMenuPanelOpen && subMenuPanelName != 'gCode terminal') {
 			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-console-ctrl.click')
 			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 			$(`.nav-submenu`).css({right: `-288px`});
@@ -2198,7 +2201,7 @@ $(() => {
 			return;
 		}
 		subMenuPanelOpen = true;
-		subMenuPanelName = 'gCode termial';
+		subMenuPanelName = 'gCode terminal';
 
 		if(windowSize != 3) {
 			if($(`#gCode-panel-ctrl`).css(`visibility`) == `hidden`) {
@@ -2253,10 +2256,39 @@ $(() => {
 			}
 		}
 
+		$(`#barrierLayer-ctrl`).css({visibility: `visible`});
+		$$$.message(`Change css(visibility:visible) barrierLayer-ctrl`, DEBUG, `$nav-console-ctrl.click`);
+
 		$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
 		$(`.nav-submenu`).css({right: `-288px`});
 		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-console-ctrl.click`);
 		submenuToggle = false;
+	});
+
+	$(`#gCode-send-btn-ctrl`).click(() => {
+		$$$.message(`Call gCode-send-btn-ctrl`, DEBUG, `$gCode-send-btn-ctrl.click`);
+
+		if($(`#gCode-line-ctrl`).val() != '') {
+			$$$.message(`Send gCode [ ${$(`#gCode-line-ctrl`).val().toUpperCase()} ]`, INFO, `$gCode-send-btn-ctrl.click`);
+			$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Send : ${$(`#gCode-line-ctrl`).val().toUpperCase()}\n`);
+			client.control.sendGcode($(`#gCode-line-ctrl`).val().toUpperCase())
+				.done(() => {
+					$$$.message(`Send gCode success`, INFO, `$gCode-send-btn-ctrl.click`)
+					$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Send ok.\n`);
+					$(`#gCode-line-ctrl`).val(``);
+				})
+				.fail((err) => {
+					$$$.message(`Send gCode failure`, INFO, `$gCode-send-btn-ctrl.click`)
+					$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Send error.\n`);
+					$(`#gCode-line-ctrl`).val(``);
+				})
+		} else $$$.message(`gCode value is empty`, WARN, `$gCode-send-btn-ctrl.click`);
+
+		if(!powerFlag) {
+			$$$.message(`gCode cannot be sent unless a printer is connected.`, ERROR, `gCode-send-btn-ctrl.click`);
+			$(`#gCode-monitor-ctrl`).val(`${$(`#gCode-monitor-ctrl`).val()}Error : gCode cannot be sent unless a printer is connected.\n`);
+			$(`#gCode-line-ctrl`).val();
+		}
 	});
 
 	$(`#big-manual-close-btn-ctrl`).click(() => {

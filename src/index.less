@@ -1614,6 +1614,8 @@ div::-webkit-scrollbar-thumb {
 		top:				4px;
 		border:				1px solid @sunshine;
 		background-color:	@skyhigh;
+		overflow-x:			hidden;
+		overflow-y:			scroll;
 		-webkit-app-region:	no-darg;
 	}
 	.gCode-monitor-x4 {
@@ -1672,6 +1674,14 @@ div::-webkit-scrollbar-thumb {
 	border-style:			solid;
 	border-color:			transparent @ceruleanblue @peleskyblue transparent;
 	border-width:			0 25px 25px 0;
+}
+textarea::-webkit-scrollbar {
+	background:		 			@skyhigh;
+	width:						8px;
+}
+textarea::-webkit-scrollbar-thumb {
+	background:					@sunshine;
+	border-radius:				5px;
 }
 
 .big-manual-panel {

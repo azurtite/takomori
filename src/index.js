@@ -2329,6 +2329,9 @@ $(() => {
 		$$$.message(`click big-graph-close-btn-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
 		$(`#big-graph-panel-ctrl`).css({visibility: `hidden`});
 
+		$(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+		$$$.message(`Change css(visibility:hidden) barrierLayer-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
+
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
 	});
@@ -2570,6 +2573,7 @@ $(() => {
 			else if(detect.indexOf(0) != -1) $('#log-information-ctrl').append(elem);
 		}
 	}
+
 	$(`#barrierLayer-ctrl`).click(() => {
 		$$$.message(`Call barrierLayer-ctrl`, DEBUG, `@barrierLayer-ctrl.click`);
 

@@ -869,11 +869,15 @@ $(() => {
 		$$$.message(`Click submen ctrl btn`, DEBUG, `$submenu-btn`);
 		if(submenuToggle) {
 			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
+			$$$.message(`Change css(visibility:hidden) barrierLayer-ctrl`, DEBUG, `$submenu-btn`);
 			$(`.nav-submenu`).css({right: `-288px`});
 			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$submenu-btn`);
 			submenuToggle = false;
 		} else {
 			$$$.message(`Show submenu`, INFO, `$submenu-btn`);
+			$(`#barrierLayer-ctrl`).css({visibility: 'visible'});
+			$$$.message(`Change css(visibility:visible) barrierLayer-ctrl`, DEBUG, `$submenu-btn`);
 			$(`.nav-submenu`).css({right: `0px`});
 			$$$.message(`Change css(right:0px) nav-submenu`, DEBUG, `$submenu-btn`);
 			submenuToggle = true;
@@ -2566,4 +2570,82 @@ $(() => {
 			else if(detect.indexOf(0) != -1) $('#log-information-ctrl').append(elem);
 		}
 	}
+	$(`#barrierLayer-ctrl`).click(() => {
+		$$$.message(`Call barrierLayer-ctrl`, DEBUG, `@barrierLayer-ctrl.click`);
+
+		if(submenuToggle) {
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+			$$$.message(`Change css(right:-288px) barrierLayer-ctrl`, DEBUG, `$barrierLayer-ctrl.click`);
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$barrierLayer-ctrl.click`);
+			submenuToggle = false;
+		}
+	});
+	$(`#big-manual-panel-ctrl`).click(() => {
+		$$$.message(`Call big-manual-panel-ctrl`, DEBUG, `$big-manual-panel-ctrl.click`);
+	
+		if(submenuToggle) {
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+			$$$.message(`Change css(right:-288px) barrierLayer-ctrl`, DEBUG, `$big-manual-panel-ctrl.click`);
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$big-manual-panel-ctrl.click`);
+			submenuToggle = false;
+		}
+	});
+	$(`#big-graph-panel-ctrl`).click(() => {
+		$$$.message(`Call big-graph-panel-ctrl`, DEBUG, `$big-graph-panel-ctrl.click`);
+	
+		if(submenuToggle) {
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+			$$$.message(`Change css(right:-288px) barrierLayer-ctrl`, DEBUG, `$big-graph-panel-ctrl.click`);
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$big-graph-panel-ctrl.click`);
+			submenuToggle = false;
+		}
+	});
+	$(`#gCode-panel-ctrl`).click(() => {
+		$$$.message(`Call gCode-panel-ctrl`, DEBUG, `$gCode-panel-ctrl.click`);
+	
+		if(submenuToggle) {
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+			$$$.message(`Change css(right:-288px) barrierLayer-ctrl`, DEBUG, `$gCode-panel-ctrl.click`);
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$gCode-panel-ctrl.click`);
+			submenuToggle = false;
+		}
+	});
+	$(`#setting-panel-ctrl`).click(() => {
+		$$$.message(`Call setting-panel-ctrl`, DEBUG, `$setting-panel-ctrl.click`);
+	
+		if(submenuToggle) {
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+			$$$.message(`Change css(right:-288px) barrierLayer-ctrl`, DEBUG, `$setting-panel-ctrl.click`);
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$setting-panel-ctrl.click`);
+			submenuToggle = false;
+		}
+	});
+	$(`#log-panel-ctrl`).click(() => {
+		$$$.message(`Call log-panel-ctrl`, DEBUG, `$log-panel-ctrl.click`);
+	
+		if(submenuToggle) {
+			if(!subMenuPanelOpen) $(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+			$$$.message(`Change css(right:-288px) barrierLayer-ctrl`, DEBUG, `$log-panel-ctrl.click`);
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$log-panel-ctrl.click`);
+			submenuToggle = false;
+		}
+	});
 });

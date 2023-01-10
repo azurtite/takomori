@@ -2357,6 +2357,34 @@ $(() => {
 		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-stats-ctrl.click`);
 		submenuToggle = false;
 	});
+	$(`#big-graph-tool-btn-ctrl`).click(() => {
+		$$$.message(`Call big-graph-tool-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+		if($(`#big-graph-bed-btn-ctrl`).css(`background-color`) == `rgb(38, 31, 135)`) {
+			$(`#big-graph-tool-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) big-graph-tool-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+			$(`#big-graph-bed-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) big-graph-bed-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+		}
+	});
+	$(`#big-graph-bed-btn-ctrl`).click(() => {
+		$$$.message(`Call big-graph-bed-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+		if($(`#big-graph-tool-btn-ctrl`).css(`background-color`) == `rgb(38, 31, 135)`) {
+			$(`#big-graph-tool-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) big-graph-tool-btn-ctrl`, DEBUG, `$big-graph-bed-btn-ctrl.click`);
+			$(`#big-graph-bed-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) big-graph-bed-btn-ctrl`, DEBUG, `$big-graph-bed-btn-ctrl.click`);
+		}
+	});
+	$(`#big-graph-pause-btn-ctrl`).click(() => {
+		$$$.message(`Call big-graph-pause-btn-ctrl`, DEBUG, `$big-graph-pause-btn-ctrl.click`);
+		if($(`#big-graph-pause-btn-ctrl`).css(`background-color`) == 'rgb(38, 31, 135)') {
+			$(`#big-graph-pause-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) big-graph-pause-btn-ctrl`, DEBUG, `$big-graph-pause-btn-ctrl.click`);
+		} else {
+			$(`#big-graph-pause-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) big-graph-pause-btn-ctrl`, DEBUG, `$big-graph-pause-btn-ctrl.click`);
+		}
+	});
 
 	$(`#log-close-btn-ctrl`).click(() => {
 		$$$.message(`click log-close-btn-ctrl`, DEBUG, `$log-close-btn-ctrl.click`);

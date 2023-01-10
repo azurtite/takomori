@@ -2329,6 +2329,9 @@ $(() => {
 		$$$.message(`click big-graph-close-btn-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
 		$(`#big-graph-panel-ctrl`).css({visibility: `hidden`});
 
+		$(`#barrierLayer-ctrl`).css({visibility: `hidden`});
+		$$$.message(`Change css(visibility:hidden) barrierLayer-ctrl`, DEBUG, `$big-graph-close-btn-ctrl.click`);
+
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
 	});
@@ -2353,6 +2356,34 @@ $(() => {
 		$(`.nav-submenu`).css({right: `-288px`});
 		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-stats-ctrl.click`);
 		submenuToggle = false;
+	});
+	$(`#big-graph-tool-btn-ctrl`).click(() => {
+		$$$.message(`Call big-graph-tool-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+		if($(`#big-graph-bed-btn-ctrl`).css(`background-color`) == `rgb(38, 31, 135)`) {
+			$(`#big-graph-tool-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) big-graph-tool-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+			$(`#big-graph-bed-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) big-graph-bed-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+		}
+	});
+	$(`#big-graph-bed-btn-ctrl`).click(() => {
+		$$$.message(`Call big-graph-bed-btn-ctrl`, DEBUG, `$big-graph-tool-btn-ctrl.click`);
+		if($(`#big-graph-tool-btn-ctrl`).css(`background-color`) == `rgb(38, 31, 135)`) {
+			$(`#big-graph-tool-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) big-graph-tool-btn-ctrl`, DEBUG, `$big-graph-bed-btn-ctrl.click`);
+			$(`#big-graph-bed-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) big-graph-bed-btn-ctrl`, DEBUG, `$big-graph-bed-btn-ctrl.click`);
+		}
+	});
+	$(`#big-graph-pause-btn-ctrl`).click(() => {
+		$$$.message(`Call big-graph-pause-btn-ctrl`, DEBUG, `$big-graph-pause-btn-ctrl.click`);
+		if($(`#big-graph-pause-btn-ctrl`).css(`background-color`) == 'rgb(38, 31, 135)') {
+			$(`#big-graph-pause-btn-ctrl`).css({'background-color': skyhigh});
+			$$$.message(`Change css(background-color:skyhigh) big-graph-pause-btn-ctrl`, DEBUG, `$big-graph-pause-btn-ctrl.click`);
+		} else {
+			$(`#big-graph-pause-btn-ctrl`).css({'background-color': lapislazuli});
+			$$$.message(`Change css(background-color:lapislazuli) big-graph-pause-btn-ctrl`, DEBUG, `$big-graph-pause-btn-ctrl.click`);
+		}
 	});
 
 	$(`#log-close-btn-ctrl`).click(() => {
@@ -2570,6 +2601,7 @@ $(() => {
 			else if(detect.indexOf(0) != -1) $('#log-information-ctrl').append(elem);
 		}
 	}
+
 	$(`#barrierLayer-ctrl`).click(() => {
 		$$$.message(`Call barrierLayer-ctrl`, DEBUG, `@barrierLayer-ctrl.click`);
 

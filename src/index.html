@@ -31,6 +31,9 @@
 		<title>tokomori</title>
 	</head>
 	<body>
+		<script>
+			const tempInitialValue = 300;
+		</script>
 	<!-- main window -->
 		<div class="main-window" id="main-window-ctrl">
 			<!-- base body -->
@@ -585,6 +588,7 @@
 						},
 					},
 				});
+				myChart.options.elements.point.radius = 1;
 				$$$.message('Create new temperature graph', DEBUG, '$power-btn.click(html)');
 
 				intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
@@ -934,7 +938,181 @@
 			<div class="title">
 				Graph panel
 			</div>
-			<div class="content"><span class="text">This panel is scheduled to implement functionality in a future update.</span></div>
+			<div class="big-temperature-panel">
+				<div class="big-graph1" id="big-graph1-ctrl">
+					<canvas class="big-temperature-canvas-p1" id="big-graph-panel1"></canvas>
+				</div>
+			</div>
+			<script>
+				let ctx_big			= document.getElementById('big-graph-panel1');
+				let refreshCnt		= 1;
+				let targetTool		= 'tool'
+				let labelArr		= [];
+				let temperatureArr	= [];
+				let max,min;
+				let myChart_big = new Chart(ctx_big, {
+					type: 'line',
+					data: {
+						labels: [],
+						datasets: [{
+							label: 'tool',
+							data: [],
+							// データライン
+							borderColor: '#f88',
+						}],
+					},
+					options: {
+						plugins: {
+							// グラフタイトル
+							title: {
+								display: false,
+							},
+							// 凡例
+							legend: {
+								position: 'right',
+								align: 'center',
+								// 凡例ラベル
+								labels: {
+									boxWidth: 10,
+									boxHeight: 8,
+								},
+							},
+							// ツールチップ
+							tooltip: {
+								backgroundColor: '#933',
+							},
+						},
+						scales: {
+							y: {
+								// 最小値・最大値
+								min: 0,
+								max: 240,
+								// 軸タイトル
+								title: {
+									display: true,
+								},
+								// 目盛ラベル
+								ticks: {
+									color: lapislazuli,
+									stepSize: 20,
+									showLabelBackdrop: true,
+									backdropColor: skyhigh,
+									backdropPadding: { x: 1, y: 1 },
+									major: {
+										enabled: true,
+									},
+									align: 'end',
+									crossAlign: 'center',
+									sampleSize: 2,
+								},
+								grid: {
+									// 軸線
+									borderColor: 'orange',
+									borderWidth: 2,
+									drawBorder: true,
+									// 目盛線＆グリッド線
+									color: lapislazuli,
+									display: true,
+									// グリッド線
+									borderDash: [3, 3],
+									borderDashOffset: 0,
+									// 目盛線
+									drawTicks: true,
+									tickColor: 'blue',
+									tickLength: 10,
+									tickWidth: 2,
+									tickBorderDash: [2, 2],
+									tickBorderDashOffset: 0,
+								},
+							},
+							x: {
+								grid: {
+									borderColor: 'orange',
+									borderWidth: 2,
+								},
+							},
+						},
+					},
+				});
+				myChart_big.options.elements.point.radius = 1;
+				intervalIDtmpBig = setInterval(updateBigGraph, 1000);
+				function updateBigGraph() {
+					$$$.message(`Call updateBigGraph`, LOWDEBUG, 'updateBigGraph');
+					
+					var flag;
+					$(`#big-graph-pause-btn-ctrl`).css(`background-color`) == `rgb(38, 31, 135)` ? flag = false : flag = true;
+
+					if($('input[name="powerFlag"]').prop('checked') == true && flag) {
+						if(!powerFlagTemp) {
+							$$$.message(`Change powerFlagTemp. value is true`, DEBUG, 'updateBigGraph');
+							powerFlagTemp = true;
+						}
+						var oldTargetTool = targetTool;
+						$(`#big-graph-tool-btn-ctrl`).css('background-color') == 'rgb(38, 31, 135)' ? targetTool = 'tool' : targetTool = 'bed';
+						client.printer.getFullState()
+							.done((response) => {
+								var val = NaN;
+								if('tool0' in response.temperature && targetTool == 'tool') val = response.temperature.tool0.actual;
+								if('bed' in response.temperature && targetTool == 'bed') val = response.temperature.bed.actual;
+								if(val == NaN) return;
+
+								if(oldTargetTool != targetTool) {
+									myChart_big.options.scales.y.max = 240;
+									myChart_big.options.scales.y.min = 0;
+									myChart_big.options.scales.y.ticks.stepSize = 20;
+									labelArr = [];
+									temperatureArr = [];
+									myChart_big.data.labels = labelArr;
+									myChart_big.data.datasets[0].data = temperatureArr;;
+									myChart_big.data.datasets[0].label = targetTool;
+									max = 0;
+									min = tempInitialValue;
+									targetTool == 'tool' ? myChart_big.data.datasets[0].borderColor = '#f88' : myChart_big.data.datasets[0].borderColor = '#484';
+									myChart_big.update();
+								}
+
+								refreshCnt++;
+								var omax = max,omin = min;
+								
+								max = 0;
+								for(var i=0; i<temperatureArr.length; i++)
+									if(temperatureArr[i] > max) max = temperatureArr[i];
+								min = tempInitialValue;
+								for(var i=0; i<temperatureArr.length; i++)
+									if(temperatureArr[i] < min) min = temperatureArr[i];
+
+								if(omax < max || omin > min) {
+									myChart_big.options.scales.y.max = max + 1;
+									myChart_big.options.scales.y.min = min - 1;
+									myChart_big.options.scales.y.ticks.stepSize = (max - min) / 10
+								}
+								if(labelArr.length >= 60) labelArr.shift();
+								labelArr.push(new Date().getSeconds());
+								if(temperatureArr.length  >= 60) temperatureArr.shift();
+								temperatureArr.push(val);
+
+								myChart_big.data.labels = labelArr;
+								myChart_big.data.datasets[0].data = temperatureArr;
+								if(refreshCnt > 10) {
+									refreshCnt = 1;
+									myChart_big.options.scales.y.max = max + 1;
+									myChart_big.options.scales.y.min = min - 1;
+									myChart_big.options.scales.y.ticks.stepSize = (max - min) / 10
+								}
+								myChart_big.update();
+							}).fail((err)=>{});
+					}
+				}
+			</script>
+			<div class="big-graph-pause-btn" id="big-graph-pause-btn-ctrl">
+				<span class="text"><span class="glyphicon glyphicon-pause">Pause</span></span>
+			</div>
+			<div class="big-graph-tool-btn" id="big-graph-tool-btn-ctrl">
+				<span class="text">Tool</span>
+			</div>
+			<div class="big-graph-bed-btn" id="big-graph-bed-btn-ctrl">
+				<span class="text">Bed</span>
+			</div>
 			<div class="big-graph-close-btn" id="big-graph-close-btn-ctrl">
 				<span class="text">Close</span>
 			</div>

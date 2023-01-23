@@ -42,9 +42,17 @@ let subMenuPanelName	= '';
 let folderList			= [`/`];
 let windowList			= [null, `main-window-ctrl`, `file-window-ctrl`, `manu-window-ctrl`, `temp-window-ctrl`];
 let feedAmount			= [0];
+let feedAmountBigP1		= [0];
+let feedAmountBigP2		= [0];
 let extruderPosition	= [-99, -99, -99];
 let bedSize				= [230, 220, 200];
 let bedPositionName		= [`rear-left`, `rear-right`, `front-left`, `front-right`];
+
+const btnNameToBedPos	= ['', `9x9-21`, `9x9-25`, `9x9-41`, `9x9-45`];
+const btnNameToHome		= [`1x7-1`, `1x7-2`, `1x7-3`, `1x7-4`, `9x9-33`, `1x9-3`];
+const btnNameToLevel1	= [``, `9x9-22`, `9x9-23`, `9x9-24`, `9x9-32`, `9x9-34`, `9x9-42`, `9x9-43`, `9x9-44`, `1x9-2`, `1x9-4`];
+const btnNameToLevel2	= [``, `9x9-11`, `9x9-13`, `9x9-15`, `9x9-31`, `9x9-35`, `9x9-51`, `9x9-53`, `9x9-55`, `1x9-1`, `1x9-5`];
+const btnNameExtruder	= [``, `5x1-1`, `5x1-2`];
 
 let baseURL;
 let client;
@@ -77,6 +85,16 @@ if(feedAmount[4] == null || feedAmount[4] == ``) feedAmount[4] = 100;
 let feedPosition = Number(localStorage.getItem(`feedPosition`));
 if(feedPosition == null || feedPosition == ``) feedPosition = 3;
 feedValue = feedAmount[feedPosition];
+feedAmountBigP1[1] = 0.1
+feedAmountBigP1[2] = 1
+feedAmountBigP1[3] = 10
+feedAmountBigP1[4] = 100;
+let feedValueBigP1 = 10;
+feedAmountBigP2[1] = 0.1
+feedAmountBigP2[2] = 1
+feedAmountBigP2[3] = 10
+feedAmountBigP2[4] = 100;
+let feedValueBigP2 = 100; 
 
 let $$$ = new logMan(true, false);
 
@@ -471,14 +489,28 @@ function getPrinterFullState() {
 				else {
 					$$$.message(`Update bed target temperature value and icon color(off)`, DEBUG, `bedTemperatureCheck`);
 					$(`#bed-target-text`).text(`N/A`);
+					$$$.message(`Change text(bed-target-text:N/A) bed-target-text`, DEBUG, `bedTemperatureCheck`);
 					$(`#bed-icon`).css({color: sunshine});
+					$$$.message(`Change css(color:sunshine) bed-icon`, DEBUG, `bedTemperatureCheck`);
+					$(`#fire-bed-target-ctrl`).text(`N/A`)
+					$$$.message(`Change text(fire-bed-target-ctrl:N/A) fire-bed-target-ctrl`, DEBUG, `bedTemperatureCheck`);
+					$(`#fire-bed-icon-ctrl`).css({color: sunshine})
+					$$$.message(`Change css(color:sunshine) fire-bed-icon-ctrl`, DEBUG, `bedTemperatureCheck`);
 				}
 			} else {
 				var now = $(`#bed-target-text`).text();
 				if(now != (`${response.temperature.bed.target}C`)) {
 					$$$.message(`Update bed target temperature value and icon color(on)`, DEBUG, `bedTemperatureCheck`);
-					$(`#bed-target-text`).text(response.temperature.bed.target + `C`);
+					var val;
+					val = response.temperature.bed.target;
+					$(`#bed-target-text`).text(`${val}C`);
+					$$$.message(`Change text(bed-target-text:${val}C) bed-target-text`, DEBUG, `bedTemperatureCheck`);
 					$(`#bed-icon`).css({color: rescueorange});
+					$$$.message(`Change css(color:rescueorange) bed-icon`, DEBUG, `bedTemperatureCheck`);
+					$(`#fire-bed-target-ctrl`).text(`${val}C`)
+					$$$.message(`Change text(fire-bed-target-ctrl:${val}C) fire-bed-target-ctrl`, DEBUG, `bedTemperatureCheck`);
+					$(`#fire-bed-icon-ctrl`).css({color: rescueorange})
+					$$$.message(`Change css(color:rescueorange) fire-bed-icon-ctrl`, DEBUG, `bedTemperatureCheck`);
 				}
 			}
 		}
@@ -492,14 +524,28 @@ function getPrinterFullState() {
 				else {
 					$$$.message(`Update tool0 temperature value and icon color(off)`, DEBUG, `tool0TemperatureCheck`);
 					$(`#tool-target-text`).text(`N/A`);
+					$$$.message(`Change text(tool-target-text:N/A) tool-target-text`, DEBUG, `tool0TemperatureCheck`);
 					$(`#tool-icon`).css({color: sunshine});
+					$$$.message(`Change css(color:sunshine) tool-icon`, DEBUG, `tool0TemperatureCheck`);
+					$(`#fire-tool-target-ctrl`).text(`N/A`)
+					$$$.message(`Change text(fire-tool-target-ctrl:N/A) fire-tool-target-ctrl`, DEBUG, `tool0TemperatureCheck`);
+					$(`#fire-tool-icon-ctrl`).css({color: sunshine});
+					$$$.message(`Change css(color:sunshine) fire-tool-icon-ctrl`, DEBUG, `tool0TemperatureCheck`);
 				}
 			} else {
 				var now = $(`#tool-target-text`).text();
 				if(now != (`${response.temperature.tool0.target}C`)) {
-					$$$.message(`Update tool0 target temperature value and icon color(on)`, DEBUG, `bedTemperatureCheck`);
-					$(`#tool-target-text`).text(response.temperature.tool0.target + `C`);
+					var val;
+					val = response.temperature.tool0.target;
+					$$$.message(`Update tool0 target temperature value and icon color(on)`, DEBUG, `tool0TemperatureCheck`);
+					$(`#tool-target-text`).text(`${val}C`);
+					$$$.message(`Change text(fire-tool-target-ctrl:${val}C) tool-target-text`, DEBUG, `tool0TemperatureCheck`);
 					$(`#tool-icon`).css({color: rescueorange});
+					$$$.message(`Change css(color:rescueorange) tool-icon`, DEBUG, `tool0TemperatureCheck`);
+					$(`#fire-tool-target-ctrl`).text(`${val}C`)
+					$$$.message(`Change text(fire-tool-target-ctrl:${val}C) fire-tool-target-ctrl`, DEBUG, `tool0TemperatureCheck`);
+					$(`#fire-tool-icon-ctrl`).css({color: rescueorange});
+					$$$.message(`Change css(color:rescueorange) fire-tool-icon-ctrl`, DEBUG, `tool0TemperatureCheck`);
 				}
 			}
 		}
@@ -566,24 +612,39 @@ function getPrinterFullState() {
 	client.printer.getFullState()
 		.done((response) => {
 			if(`tool0` in response.temperature) {
-				$(`#tool-text`).text(response.temperature.tool0.actual+`C`);
+				var val;
+				val = response.temperature.tool0.actual;
+				$(`#tool-text`).text(`${val}C`);
+				$$$.message(`Change text(tool-text:${val}C) tool-text`, LOWDEBUG, `getFullState`);
+				$(`#fire-tool-actual-ctrl`).text(`${val}C`);
+				$$$.message(`Change text(fire-tool-actual-ctrl:${val}C) fire-tool-actual-ctrl`, LOWDEBUG, `getFullState`);
+
 				$$$.message(`Update tool0 temperature value is ${response.temperature.tool0.actual}C`, LOWDEBUG, `getFullState`);
 				if(response.temperature.tool0.actual >= extruderMovingTemp && !canRunExtruder) {
 					$(`[id^=extruder-btn-]`).css({'background-color': lapislazuli});
-					$$$.message(`Change css(background-color:lapislazuli) extruder-btn-up/down`, DEBUG, `getPrinterFullState`);
+					$$$.message(`Change css(background-color:lapislazuli) extruder-btn-up/down`, DEBUG, `getFullState`);
+					$(`[id^=button-big-5x1-]`).css({'background-color': lapislazuli});
+					$$$.message(`Change css(background-color:lapislazuli) button-big-5x1-1/2`, DEBUG, `getFullState`);
 					canRunExtruder = true;
-					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, `getPrinterFullState`);
+					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, `getFullState`);
 				}
 				if(response.temperature.tool0.actual < extruderMovingTemp && canRunExtruder) {
 					$(`[id^=extruder-btn-]`).css({'background-color': skyhigh});
-					$$$.message(`Change css(background-color:skyhigh) extruder-btn-up/down`, DEBUG, `getPrinterFullState`);
+					$$$.message(`Change css(background-color:skyhigh) extruder-btn-up/down`, DEBUG, `getFullState`);
+					$(`[id^=button-big-5x1-]`).css({'background-color': skyhigh});
+					$$$.message(`Change css(background-color:skyhigh) button-big-5x1-1/2`, DEBUG, `getFullState`);
 					canRunExtruder = false;
-					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, `getPrinterFullState`);
+					$$$.message(`Change canRunExtruder. value is ${canRunExtruder}`, DEBUG, `getFullState`);
 				}
 			}
 			if(`bed` in response.temperature) {
-				$$$.message(`Update bed temperature value is ${response.temperature.bed.actual}C`, LOWDEBUG, `getFullState`);
-				$(`#bed-text`).text(response.temperature.bed.actual+`C`);
+				var val;
+				val = response.temperature.bed.actual;
+				$$$.message(`Update bed temperature value is ${val}C`, LOWDEBUG, `getFullState`);
+				$(`#bed-text`).text(`${val}C`);
+				$$$.message(`Change text(bed-text:${val}C) bed-text`, LOWDEBUG, `getFullState`);
+				$(`#fire-bed-actual-ctrl`).text(`${val}C`);
+				$$$.message(`Change text(fire-bed-actual-ctrl:${val}C) fire-bed-actual-ctrl`, LOWDEBUG, `getFullState`);
 			}
 
 			tool0TemperatureCheck(response);
@@ -698,6 +759,11 @@ $(() => {
 	getFilelist(undefined);
 	$(`#seed-value-p` + feedAmount.indexOf(feedValue)).css({'background-color': lapislazuli});
 	$$$.message(`Initialize feedValue display`, DEBUG, `jQuery`);
+	$(`#feed-amount-big-p1${feedAmountBigP1.indexOf(feedValueBigP1)}`).css({'background-color': lapislazuli});
+	$$$.message(`Initialize feedValueBigP1 display`, DEBUG, `jQuery`);
+	$(`#feed-amount-big-p2${feedAmountBigP2.indexOf(feedValueBigP2)}`).css({'background-color': lapislazuli});
+	$$$.message(`Initialize feedValueBigP2 display`, DEBUG, `jQuery`);
+
 	$(`#progressbar-one`).addClass(`progress-bar-forestleaf`);
 	$$$.message(`Initialize progress-bar color`, DEBUG, `jQuery`);
 	triggerWindowSizeChange();
@@ -1053,12 +1119,14 @@ $(() => {
 		}
 	});
 
-	$(`#tool-on-remove-btn`).click(() => {
+	$(`[id^=tool-on-remove-]`).click(() => {
 		$$$.message(`Click tool-on-remove-btn`, DEBUG, `$tool-on-remove-btn.click`);
 		$(`#slider-panel-tool-ctrl`).css({'z-index': -1});
-		$$$.message(`Change css(z-index:-1) slider-panel-tool-ctrl`, DEBUG, `$tool-on-remove-btn.click`);
+		$$$.message(`Change css(z-index:-1) slider-panel-tool-ctrl`, DEBUG, `$id^=tool-on-remove-.click`);
+		$(`#slider-panel-tool-big-ctrl`).css({'z-index': -1});
+		$$$.message(`Change css(z-index:-1) slider-panel-tool-big-ctrl`, DEBUG, `$id^=tool-on-remove-.click`);
 		toolTempFlag = false;
-		$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, `$tool-on-remove-btn.click`);
+		$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, `$id^=tool-on-remove-.click`);
 	});
 
 	$(`#tool-icon`).click(() => {
@@ -1084,33 +1152,38 @@ $(() => {
 			})
 	});
 	
-	$(`#tool-on-sw-btn`).click(() => {
+	$(`[id^=tool-on-sw-]`).click(() => {
 		$$$.message(`Click tool-on-sw-btn`, DEBUG, `$tool-on-sw-btn.click`);
 		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done((data) => {
 				if(data.state.toLowerCase() != `printing` && powerFlag) {
-					$$$.message(`Click tool-on-sw-btn`, DEBUG, `$tool-on-sw-btn.click`);
 					client.printer.setToolTargetTemperatures({tool0: toolTempValue});
-					$$$.message(`Detect tool-0 temperature. value is ${toolTempValue}`, INFO, `$tool-on-sw-btn.click`);
-					if(toolTempValue > 0 ) $(`#tool-on-sw-btn`).css({color: rescueorange});
-					else $(`#tool-on-sw-btn`).css({color: sunshine});
-					$$$.message(`Change css(color:sunshine) tool-on-sw-btn`, DEBUG, `$tool-on-sw-btn.click`);
-					$(`#slider-panel-tool-ctrl`).css({'z-index': -1});
-					$$$.message(`Change css(z-index:-1) tool-on-sw-btn`, DEBUG, `$tool-on-sw-btn.click`);
+					$$$.message(`Detect tool-0 temperature. value is ${toolTempValue}`, INFO, `$id^=tool-on-sw-.click`);
+					if(toolTempValue > 0 ) {
+						$(`[id^=tool-on-sw-]`).css({color: rescueorange});
+						$$$.message(`Change css(color:rescueorange) id^=tool-on-sw-`, DEBUG, `$id^=tool-on-sw-.click`);
+					} else {
+						$(`[id^=tool-on-sw-]`).css({color: sunshine});
+						$$$.message(`Change css(color:sunshine) id^=tool-on-sw-`, DEBUG, `$id^=tool-on-sw-.click`);
+					}
+					$(`[id^=slider-panel-tool-]`).css({'z-index': -1});
+					$$$.message(`Change css(z-index:-1) id^=slider-panel-tool-`, DEBUG, `$id^=tool-on-sw-.click`);
 					toolTempFlag = false;
-					$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, `$tool-on-sw-btn.click`);
+					$$$.message(`Change toolTempFlag. value is ${toolTempFlag}`, DEBUG, `$id^=tool-on-sw-.click`);
 				}
 			}).fail(() => {
 				$$$.message(`Printer not found`, ERROR, `$tool-on-sw-btn.click`);
 			})
 	});
 
-	$(`#bed-on-remove-btn`).click(() => {
+	$(`[id^=bed-on-remove-]`).click(() => {
 		$$$.message(`Click bed-on-remove-btn`, DEBUG, `$bed-on-remove-btn.click`);
 		$(`#slider-panel-bed-ctrl`).css({'z-index': -1});
-		$$$.message(`Change css(z-index:-1) bed-on-remove-btn`, DEBUG, `$tool-on-sw-btn.click`);
+		$$$.message(`Change css(z-index:-1) slider-panel-bed-ctrl`, DEBUG, `$id^=bed-on-remove-.click`);
+		$(`#slider-panel-bed-big-ctrl`).css({'z-index': -1});
+		$$$.message(`Change css(z-index:-1) slider-panel-bed-big-ctrl`, DEBUG, `$id^=bed-on-remove-.click`);
 		bedTempFlag = false;
-		$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, `tool-on-remove-btn.click`);
+		$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, `$id^=bed-on-remove-.click`);
 	});
 
 	$(`#bed-icon`).click(() => {
@@ -1136,24 +1209,30 @@ $(() => {
 			})
 	});
 
-	$(`#bed-on-sw-btn`).click(() => {
+	$(`[id^=bed-on-sw-]`).click(() => {
 		$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 			.done(function(data){
 				if(data.state.toLowerCase() != `printing` && powerFlag) {
-					$$$.message(`Click bed-on-sw-btn`, DEBUG, `$bed-on-sw-btn.click`);
+					$$$.message(`Click bed-on-sw-btn`, DEBUG, `$id^=bed-on-sw-.click`);
 					client.printer.setBedTargetTemperature(bedTempValue);
-					$$$.message(`Detect bed temperature. value is ${bedTempValue}`, INFO, `$bed-on-sw-btn.click`);
+					$$$.message(`Detect bed temperature. value is ${bedTempValue}`, INFO, `$id^=bed-on-sw-.click`);
 					if(bedTempValue > 0) {
 						$(`#bed-on-sw-btn`).css({color: rescueorange});
-						$$$.message(`Change css(color:rescueorange) bed-on-sw-btn`, DEBUG, `$bed-on-sw-btn.click`);
+						$$$.message(`Change css(color:rescueorange) bed-on-sw-btn`, DEBUG, `$id^=bed-on-sw-.click`);
+						$(`#bed-on-sw-big-btn`).css({color: rescueorange});
+						$$$.message(`Change css(color:rescueorange) bed-on-sw-big-btn`, DEBUG, `$id^=bed-on-sw-.click`);
 					} else {
 						$(`#bed-on-sw-btn`).css({color: sunshine});
-						$$$.message(`Change css(color:sunshine) bed-on-sw-btn`, DEBUG, `$bed-on-sw-btn.click`);
+						$$$.message(`Change css(color:sunshine) bed-on-sw-btn`, DEBUG, `$id^=bed-on-sw-.click`);
+						$(`#bed-on-sw-big-btn`).css({color: sunshine});
+						$$$.message(`Change css(color:sunshine) bed-on-sw-big-btn`, DEBUG, `$id^=bed-on-sw-.click`);
 					}
 					$(`#slider-panel-bed-ctrl`).css({'z-index': -1});
-					$$$.message(`Change css(z-index:-1) slider-panel-bed-ctrl`, DEBUG, `$tool-on-sw-btn.click`);
+					$$$.message(`Change css(z-index:-1) slider-panel-bed-ctrl`, DEBUG, `$id^=bed-on-sw-.click`);
+					$(`#slider-panel-bed-big-ctrl`).css({'z-index': -1});
+					$$$.message(`Change css(z-index:-1) slider-panel-bed-big-ctrl`, DEBUG, `$id^=bed-on-sw-.click`);
 					bedTempFlag = false;
-					$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, `$bed-on-sw-btn.click`);
+					$$$.message(`Change bedTempFlag. value is ${bedTempFlag}`, DEBUG, `$id^=bed-on-sw-.click`);
 				}
 			}).fail(function(err){
 				$$$.message(`Printer not found`, ERROR, `$bed-on-sw-btn.click`);
@@ -1848,7 +1927,7 @@ $(() => {
 		}
 	});
 	function bedLevelingPosition(p) {
-		$$$.message(`Call bedLevelingPostion`, DEBUG, `bedLevelingPosition`);
+		$$$.message(`Call bedLevelingPosition`, DEBUG, `bedLevelingPosition`);
 		var x, y;
 		switch(p) {
 			case 1:
@@ -2299,6 +2378,9 @@ $(() => {
 		$$$.message(`click big-manual-close-btn-ctrl`, DEBUG, `$big-manual-close-btn-ctrl.click`);
 		$(`#big-manual-panel-ctrl`).css({visibility: `hidden`});
 
+		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
+		$$$.message(`Change css(visibility:hidden) barrierLayer`, DEBUG, `$big-manual-close-btn-ctrl.click`);
+
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
 	});
@@ -2306,6 +2388,16 @@ $(() => {
 	$(`#nav-move-ctrl`).click(() => {
 		$$$.message(`click nav-move-ctrl`, DEBUG, `$nav-move-ctrl.click`);
 		
+		if(windowSize != 3) {
+			$$$.message(`Large manual controller only works in x4 mode`, WARN, '$nav-move-ctrl.click');
+
+			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
+			$(`.nav-submenu`).css({right: `-288px`});
+			$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-move-ctrl.click`);
+			submenuToggle = false;
+			return;
+		}
+
 		if(subMenuPanelOpen) {
 			$$$.message(`Already have the ${subMenuPanelName} panel open`, WARN, '$nav-move-ctrl.click');
 			$$$.message(`Hide submenu`, INFO, `$submenu-btn`);
@@ -2323,6 +2415,672 @@ $(() => {
 		$(`.nav-submenu`).css({right: `-288px`});
 		$$$.message(`Change css(right:-288px) nav-submenu`, DEBUG, `$nav-move-ctrl.click`);
 		submenuToggle = false;
+	});
+	$(`#feed-amount-big-p11`).click(() => {
+		$$$.message(`Click feed-amount-big-p11`, DEBUG, `$feed-amount-big-p11.click`);
+		changeFeedAmountBigP1(1);
+	});
+	$(`#feed-amount-big-p12`).click(() => {
+		$$$.message(`Click feed-amount-big-p12`, DEBUG, `$feed-amount-big-p12.click`);
+		changeFeedAmountBigP1(2);
+	});
+	$(`#feed-amount-big-p13`).click(() => {
+		$$$.message(`Click feed-amount-big-p13`, DEBUG, `$feed-amount-big-p13.click`);
+		changeFeedAmountBigP1(3);
+	});
+	$(`#feed-amount-big-p14`).click(() => {
+		$$$.message(`Click feed-amount-big-p14`, DEBUG, `$feed-amount-big-p14.click`);
+		changeFeedAmountBigP1(4);
+	});
+	function changeFeedAmountBigP1(pos) {
+		$$$.message(`Call changeFeedAmountBigP1`, DEBUG, `changeFeedAmountBigP1`);
+
+		$(`[id^=feed-amount-big-p1]`).css({'background-color': skyhigh});
+		$$$.message(`Change css(background-color:skyhigh) feed-amount-big-p1`, DEBUG, `changeFeedAmountBigP1`);
+		$(`#feed-amount-big-p1${pos}`).css({'background-color': lapislazuli});
+		$$$.message(`Change css(background-color:lapislazuli) feed-amount-big-p1${pos}`, DEBUG, `changeFeedAmountBigP1`);
+		feedValueBigP1 = feedAmountBigP1[pos];
+		$$$.message(`Change value(feedValueBigP1:${feedValueBigP1})`, INFO, `changeFeedAmountBigP1`);
+	}
+	$(`#feed-amount-big-p21`).click(() => {
+		$$$.message(`Click feed-amount-big-p21`, DEBUG, `$feed-amount-big-p21.click`);
+		changeFeedAmountBigP2(1);
+	});
+	$(`#feed-amount-big-p22`).click(() => {
+		$$$.message(`Click feed-amount-big-p22`, DEBUG, `$feed-amount-big-p12.click`);
+		changeFeedAmountBigP2(2);
+	});
+	$(`#feed-amount-big-p23`).click(() => {
+		$$$.message(`Click feed-amount-big-p23`, DEBUG, `$feed-amount-big-p23.click`);
+		changeFeedAmountBigP2(3);
+	});
+	$(`#feed-amount-big-p24`).click(() => {
+		$$$.message(`Click feed-amount-big-p24`, DEBUG, `$feed-amount-big-p24.click`);
+		changeFeedAmountBigP2(4);
+	});
+	function changeFeedAmountBigP2(pos) {
+		$$$.message(`Call changeFeedAmountBigP1`, DEBUG, `changeFeedAmountBigP2`);
+
+		$(`[id^=feed-amount-big-p2]`).css({'background-color': skyhigh});
+		$$$.message(`Change css(background-color:skyhigh) feed-amount-big-p2`, DEBUG, `changeFeedAmountBigP2`);
+		$(`#feed-amount-big-p2${pos}`).css({'background-color': lapislazuli});
+		$$$.message(`Change css(background-color:lapislazuli) feed-amount-big-p2${pos}`, DEBUG, `changeFeedAmountBigP2`);
+		feedValueBigP2 = feedAmountBigP2[pos];
+		$$$.message(`Change value(feedValueBigP2:${feedValueBigP2})`, INFO, `changeFeedAmountBigP2`);
+	}
+
+	$(`#button-big-1x7-1`).click(() => {
+		$$$.message(`Click button-big-1x7-1`, DEBUG, `$button-big-1x7-1.click`);
+		moveToHome(0);
+	});
+
+	$(`#button-big-1x7-2`).click(() => {
+		$$$.message(`Click button-big-1x7-2`, DEBUG, `$button-big-1x7-2.click`);
+		moveToHome(1);
+	});
+
+	$(`#button-big-1x7-3`).click(() => {
+		$$$.message(`Click button-big-1x7-3`, DEBUG, `$button-big-1x7-3.click`);
+		moveToHome(2);
+	});
+
+	$(`#button-big-1x7-4`).click(() => {
+		$$$.message(`Click button-big-1x7-4`, DEBUG, `$button-big-1x7-4.click`);
+		moveToHome(3);
+	});
+
+	$(`#button-big-1x9-1`).click(() => {
+		$$$.message(`Click button-big-1x9-1`, DEBUG, `$button-big-1x9-1.click;`);
+		moveToLevel2(9);
+	});
+
+	$(`#button-big-1x9-2`).click(() => {
+		$$$.message(`Click button-big-1x9-2`, DEBUG, `$button-big-1x9-2.click;`);
+		moveToLevel1(9);
+	});
+
+	$(`#button-big-1x9-3`).click(() => {
+		$$$.message(`Click button-big-1x9-3`, DEBUG, `$button-big-1x9-3.click;`);
+		moveToHome(5);
+	});
+
+	$(`#button-big-1x9-4`).click(() => {
+		$$$.message(`Click button-big-1x9-4`, DEBUG, `$button-big-1x9-4.click;`);
+		moveToLevel1(10);
+	});
+
+	$(`#button-big-1x9-5`).click(() => {
+		$$$.message(`Click button-big-1x9-5`, DEBUG, `$button-big-1x9-5.click;`);
+		moveToLevel2(10);
+	});
+
+	$(`#button-big-5x1-1`).click(() => {
+		$$$.message(`Click button-big-5x1-1`, DEBUG, `$button-big-5x1-1.click`);
+		moveToExtruder(1);
+	});
+
+	$(`#button-big-5x1-2`).click(() => {
+		$$$.message(`Click button-big-5x1-2`, DEBUG, `$button-big-5x1-2.click`);
+		moveToExtruder(2);
+	});
+	function moveToExtruder(order) {
+		$$$.message(`Call mobeExtruder`, DEBUG, `moveToExtruder`);
+		if(!canRunExtruder) {
+			$$$.message(`Dispensable temperature not reached`, WARN, `moveToExtruder`);
+			return;
+		}
+		if(!waitNextClick) {
+			$(`#button-big-${btnNameExtruder[order]}`).css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message(`Change css(color:rescueorange) button-big-${btnNameExtruder[order]}`, DEBUG, `moveToExtruder`);
+			$$$.message(`Change css(background-color:peleskyblue) button-big-${btnNameExtruder[order]}`, DEBUG, `moveToExtruder`);
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `moveToExtruder`);
+			setTimeout(()=>{restoreButtonCSSBig(btnNameExtruder[order])}, 500);
+
+			if(!powerFlag) {
+				$$$.message(`Printer connection required for manual operation`, WARN, `moveToExtruder`);
+				return;
+			}
+	
+			client.control.sendGcode(`G92 E0`)
+				.done(() =>{
+					$$$.message(`Reset extruder retract position`, DEBUG, `moveToExtruder`);
+					client.control.sendGcode(`G0 E${order == 1 ? '-' : ''}${$(`#amount-value-big`).val()}MM`)
+						.done(() => {
+							$$$.message(`Retract filament ${$(`#amount-value-big`).val()}mm`, DEBUG, `moveToExtruder`);
+						})
+						.fail((err) => {
+							console.log(err)
+						})
+				})
+				.fail((err) => {
+					console.log(err);
+				});
+		}
+	}
+
+	$(`#button-big-9x9-11`).click(() => {
+		$$$.message(`Click button-big-9x9-11`, DEBUG, `$button-big-9x9-11.click`);
+		moveToLevel2(1);
+	});
+
+	$(`#button-big-9x9-12`).click(() => {
+		$$$.message(`Click button-big-9x9-12`, DEBUG, `$button-big-9x9-12.click`);
+	});
+
+	$(`#button-big-9x9-13`).click(() => {
+		$$$.message(`Click button-big-9x9-13`, DEBUG, `$button-big-9x9-13.click`);
+		moveToLevel2(2);
+	});
+
+	$(`#button-big-9x9-14`).click(() => {
+		$$$.message(`Click button-big-9x9-14`, DEBUG, `$button-big-9x9-14.click`);
+	});
+
+	$(`#button-big-9x9-15`).click(() => {
+		$$$.message(`Click button-big-9x9-15`, DEBUG, `$button-big-9x9-15.click`);
+		moveToLevel2(3);
+	});
+
+	$(`#button-big-9x9-21`).click(() => {
+		$$$.message(`Click button-big-9x9-21`, DEBUG, `$button-big-9x9-21.click`);
+		bedLevelingPositionBig(1);
+	});
+
+	$(`#button-big-9x9-22`).click(() => {
+		$$$.message(`Click button-big-9x9-22`, DEBUG, `$button-big-9x9-22.click`);
+		moveToLevel1(1);
+	});
+
+	$(`#button-big-9x9-23`).click(() => {
+		$$$.message(`Click button-big-9x9-23`, DEBUG, `$button-big-9x9-23.click`);
+		moveToLevel1(2);
+	});
+
+	$(`#button-big-9x9-24`).click(() => {
+		$$$.message(`Click button-big-9x9-24`, DEBUG, `$button-big-9x9-24.click`);
+		moveToLevel1(3);
+	});
+
+	$(`#button-big-9x9-25`).click(() => {
+		$$$.message(`Click button-big-9x9-25`, DEBUG, `$button-big-9x9-25.click`);
+		bedLevelingPositionBig(2);
+	});
+
+	$(`#button-big-9x9-31`).click(() => {
+		$$$.message(`Click button-big-9x9-31`, DEBUG, `$button-big-9x9-31.click`);
+		moveToLevel2(4);
+	});
+
+	$(`#button-big-9x9-32`).click(() => {
+		$$$.message(`Click button-big-9x9-32`, DEBUG, `$button-big-9x9-32.click`);
+		moveToLevel1(4);
+	});
+
+	$(`#button-big-9x9-33`).click(() => {
+		$$$.message(`Click button-big-9x9-33`, DEBUG, `$button-big-9x9-33.click`);
+		moveToHome(4);
+	});
+
+	$(`#button-big-9x9-34`).click(() => {
+		$$$.message(`Click button-big-9x9-34`, DEBUG, `$button-big-9x9-34.click`);
+		moveToLevel1(5);
+	});
+
+	$(`#button-big-9x9-35`).click(() => {
+		$$$.message(`Click button-big-9x9-35`, DEBUG, `$button-big-9x9-35.click`);
+		moveToLevel2(5);
+	});
+
+	$(`#button-big-9x9-41`).click(() => {
+		$$$.message(`Click button-big-9x9-41`, DEBUG, `$button-big-9x9-41.click`);
+		bedLevelingPositionBig(3);
+	});
+
+	$(`#button-big-9x9-42`).click(() => {
+		$$$.message(`Click button-big-9x9-42`, DEBUG, `$button-big-9x9-42.click`);
+		moveToLevel1(6);
+	});
+
+	$(`#button-big-9x9-43`).click(() => {
+		$$$.message(`Click button-big-9x9-43`, DEBUG, `$button-big-9x9-43.click`);
+		moveToLevel1(7);
+	});
+
+	$(`#button-big-9x9-44`).click(() => {
+		$$$.message(`Click button-big-9x9-44`, DEBUG, `$button-big-9x9-44.click`);
+		moveToLevel1(8);
+	});
+
+	$(`#button-big-9x9-45`).click(() => {
+		$$$.message(`Click button-big-9x9-45`, DEBUG, `$button-big-9x9-45.click`);
+		bedLevelingPositionBig(4);
+	});
+
+	$(`#button-big-9x9-51`).click(() => {
+		$$$.message(`Click button-big-9x9-51`, DEBUG, `$button-big-9x9-51.click`);
+		moveToLevel2(6);
+	});
+
+	$(`#button-big-9x9-52`).click(() => {
+		$$$.message(`Click button-big-9x9-52`, DEBUG, `$button-big-9x9-52.click`);
+	});
+
+	$(`#button-big-9x9-53`).click(() => {
+		$$$.message(`Click button-big-9x9-53`, DEBUG, `$button-big-9x9-53.click`);
+		moveToLevel2(7);
+	});
+
+	$(`#button-big-9x9-54`).click(() => {
+		$$$.message(`Click button-big-9x9-54`, DEBUG, `$button-big-9x9-54.click`);
+	});
+
+	$(`#button-big-9x9-55`).click(() => {
+		$$$.message(`Click button-big-9x9-55`, DEBUG, `$button-big-9x9-55.click`);
+		moveToLevel2(8);
+	});
+	function moveToHome(order) {
+		$$$.message(`Call moveToHome`, DEBUG, `moveToHome`);
+		if(!waitNextClick) {
+			$(`#button-big-${btnNameToHome[order]}`).css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message(`Change css(color:rescueorange) button-big-${btnNameToHome[order]}`, DEBUG, `moveToHome`);
+			$$$.message(`Change css(background-color:peleskyblue) button-big-${btnNameToHome[order]}`, DEBUG, `moveToHome`);
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `moveToHome`);
+			setTimeout(()=>{restoreButtonCSSBig(btnNameToHome[order])}, 500);
+
+			if(!powerFlag) {
+				$$$.message(`Printer connection required for manual operation`, WARN, `moveToHome`);
+				return;
+			}
+
+			switch(order) {
+				case 0:
+					$$$.message(`Execute G28 X0 Y0 Z0`, INFO, `moveToHome`);
+					client.control.sendGcode(`G28 X0 Y0 Z0`)
+						.done(() => {
+							$$$.message(`Success`, INFO, `moveToHome`);
+							extruderPosition[0] = 0;
+							extruderPosition[1] = 0;
+							extruderPosition[2] = 0;
+						})
+						.fail((err) => {
+							console.error(err);
+						})
+					break;
+				case 1:
+					$$$.message(`Execute G28 X0`, INFO, `moveToHome`);
+					client.control.sendGcode(`G28 X0`)
+						.done(() => {
+							$$$.message(`Success`, INFO, `moveToHome`);
+							extruderPosition[0] = 0;
+						})
+						.fail((err) => {
+							console.error(err);
+						})
+					break;
+				case 2:
+					$$$.message(`Execute G28 Y0`, INFO, `moveToHome`);
+					client.control.sendGcode(`G28 Y0`)
+						.done(() => {
+							$$$.message(`Success`, INFO, `moveToHome`);
+							extruderPosition[1] = 0;
+						})
+						.fail((err) => {
+							console.error(err);
+						})
+					break;
+				case 3:
+					$$$.message(`Execute G28 Z0`, INFO, `moveToHome`);
+					client.control.sendGcode(`G28 Z0`)
+						.done(() => {
+							$$$.message(`Success`, INFO, `moveToHome`);
+							extruderPosition[2] = 0;
+						})
+						.fail((err) => {
+							console.error(err);
+						})
+					break;
+				case 4:
+					$$$.message(`Execute G28 X0 Y0`, INFO, `moveToHome`);
+					client.control.sendGcode(`G28 X0 Y0`)
+						.done(() => {
+							$$$.message(`Success`, INFO, `moveToHome`);
+						})
+						.fail((err) => {
+							console.error(err);
+						})
+					break;
+				case 5:
+					$$$.message(`Execute G28 Z0`, INFO, `moveToHome`);
+					client.control.sendGcode(`G28 Z0`)
+						.done(() => {
+							$$$.message(`Success`, INFO, `moveToHome`);
+							extruderPosition[2] = 0;
+						})
+						.fail((err) => {
+							console.error(err);
+						})
+					break;
+			}
+		}
+	}
+	function moveToLevel1(order) {
+		$$$.message(`Call moveToLevel1`, DEBUG, `moveToLevel1`);
+
+		if(!waitNextClick) {
+			$(`#button-big-${btnNameToLevel1[order]}`).css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message(`Change css(color:rescueorange) button-big-${btnNameToLevel1[order]}`, DEBUG, `moveToHome`);
+			$$$.message(`Change css(background-color:peleskyblue) button-big-${btnNameToLevel1[order]}`, DEBUG, `moveToHome`);
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `moveToLevel1`);
+			setTimeout(()=>{restoreButtonCSSBig(btnNameToLevel1[order])}, 500);
+
+			if(bedSize[0] < 0 && bedSize[1] < 0 && bedSize[2] < 0) {
+				$$$.message(`Nozzle movement requires return to origin`, WARN, `moveToLevel1`);
+				return;
+			}
+	
+			if(!powerFlag) {
+				$$$.message(`Printer connection required for manual operation`, WARN, `moveToLevel1`);
+				return;
+			}
+
+			var x, y;
+			$$$.message(`Nozzle position calculation`, DEBUG, `moveToLevel1`);
+			switch(order) {
+				case 1:
+					x = extruderPosition[0] - feedValueBigP1;
+					y = extruderPosition[1] + feedValueBigP1;
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 2:
+					x = extruderPosition[0];
+					y = extruderPosition[1] + feedValueBigP1;
+					z = extruderPosition[2];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 3:
+					x = extruderPosition[0] + feedValueBigP1;
+					y = extruderPosition[1] + feedValueBigP1;
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 4:
+					x = extruderPosition[0] - feedValueBigP1;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					break;
+				case 5:
+					x = extruderPosition[0] + feedValueBigP1;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					break;
+				case 6:
+					x = extruderPosition[0] - feedValueBigP1;
+					y = extruderPosition[1] - feedValueBigP1;
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					if(y < 0) y = 0;
+					break;
+				case 7:
+					x = extruderPosition[0];
+					y = extruderPosition[1] - feedValueBigP1;
+					z = extruderPosition[2];
+					if(y < 0) y = 0;
+					break;
+				case 8:
+					x = extruderPosition[0] + feedValueBigP1;
+					y = extruderPosition[1] - feedValueBigP1;
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					if(y < 0) y = 0;
+					break;
+				case 9:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] + feedValueBigP1;
+					if(z > bedSize[2]) z = bedSize[2];
+					break;
+				case 10:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] - feedValueBigP1;
+					if(z < 0) z = 0;
+					break;
+			}
+
+			$$$.message(`Send gCode X${x} Y${y} Z${z}`, INFO, `moveToLevel1`);
+			client.control.sendGcode(`G0 X${x} Y${y} Z${z}`)
+				.done(() => {
+					$$$.message(`Success`, INFO, `moveToLevel1`);
+					extruderPosition[0] = x;
+					extruderPosition[1] = y;
+					extruderPosition[2] = z;
+					$$$.message(`Set extruder position x:${x} y:${y} z:${z}`, DEBUG, `moveToLevel1`);
+				})
+				.fail((err) => {
+					console.error(err);
+				})
+		}
+	}
+	function moveToLevel2(order) {
+		$$$.message(`Call moveToLevel2`, DEBUG, `moveToLevel2`);
+
+		if(!waitNextClick) {
+			$(`#button-big-${btnNameToLevel2[order]}`).css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message(`Change css(color:rescueorange) button-big-${btnNameToLevel2[order]}`, DEBUG, `moveToHome`);
+			$$$.message(`Change css(background-color:peleskyblue) button-big-${btnNameToLevel2[order]}`, DEBUG, `moveToHome`);
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `moveToLevel2`);
+			setTimeout(()=>{restoreButtonCSSBig(btnNameToLevel2[order])}, 500);
+
+			if(bedSize[0] < 0 && bedSize[1] < 0 && bedSize[2] < 0) {
+				$$$.message(`Nozzle movement requires return to origin`, WARN, `moveToLevel2`);
+				return;
+			}
+	
+			if(!powerFlag) {
+				$$$.message(`Printer connection required for manual operation`, WARN, `moveToLevel2`);
+				return;
+			}
+
+			var x, y;
+			console.log(feedValueBigP2);
+			$$$.message(`Nozzle position calculation`, DEBUG, `moveToLevel2`);
+			switch(order) {
+				case 1:
+					x = extruderPosition[0] - feedValueBigP2;
+					y = extruderPosition[1] + feedValueBigP2;
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 2:
+					x = extruderPosition[0];
+					y = extruderPosition[1] + feedValueBigP2;
+					z = extruderPosition[2];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 3:
+					x = extruderPosition[0] + feedValueBigP2;
+					y = extruderPosition[1] + feedValueBigP2;
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 4:
+					x = extruderPosition[0] - feedValueBigP2;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					break;
+				case 5:
+					x = extruderPosition[0] + feedValueBigP2;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					break;
+				case 6:
+					x = extruderPosition[0] - feedValueBigP2;
+					y = extruderPosition[1] - feedValueBigP2;
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					if(y < 0) y = 0;
+					break;
+				case 7:
+					x = extruderPosition[0];
+					y = extruderPosition[1] - feedValueBigP2;
+					z = extruderPosition[2];
+					if(y < 0) y = 0;
+					break;
+				case 8:
+					x = extruderPosition[0] + feedValueBigP2;
+					y = extruderPosition[1] - feedValueBigP2;
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					if(y < 0) y = 0;
+					break;
+				case 9:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] + feedValueBigP2;
+					if(z > bedSize[2]) z = bedSize[2];
+					break;
+				case 10:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] - feedValueBigP2;
+					if(z < 0) z = 0;
+					break;
+			}
+		
+			$$$.message(`Send gCode X${x} Y${y} Z${z}`, INFO, `moveToLevel2`);
+			client.control.sendGcode(`G0 X${x} Y${y} Z${z}`)
+				.done(() => {
+					$$$.message(`Success`, INFO, `moveToLevel2`);
+					extruderPosition[0] = x;
+					extruderPosition[1] = y;
+					extruderPosition[2] = z;
+					$$$.message(`Set extruder position x:${x} y:${y} z${z}`, DEBUG, `moveToLevel2`);
+				})
+				.fail((err) => {
+					console.error(err);
+				})
+		}
+	}
+	function bedLevelingPositionBig(order) {
+		$$$.message(`Call bedLevelingPositionBig`, DEBUG, `bedLevelingPositionBig`);
+
+		if(!waitNextClick) {
+			$(`#button-big-${btnNameToBedPos[order]}`).css({
+				color:				rescueorange,
+				'background-color':	peleskyblue
+			});
+			$$$.message(`Change css(color:rescueorange) button-big-${btnNameToBedPos[order]}`, DEBUG, `bedLevelingPositionBig`);
+			$$$.message(`Change css(background-color:peleskyblue) button-big-${btnNameToBedPos[order]}`, DEBUG, `bedLevelingPositionBig`);
+			waitNextClick = true;
+			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `bedLevelingPositionBig`);
+			setTimeout(()=>{restoreButtonCSSBig(btnNameToBedPos[order])}, 500);
+
+			if(bedSize[0] < 0 && bedSize[1] < 0 && bedSize[2] < 0) {
+				$$$.message(`Nozzle movement requires return to origin`, WARN, `moveToLevel1`);
+				return;
+			}
+	
+			if(!powerFlag) {
+				$$$.message(`Printer connection required for manual operation`, WARN, `bedLevelingPositionBig`);
+				return;
+			}
+
+			var x, y;
+			$$$.message(`Nozzle position calculation`, DEBUG, `moveToLevel2`);
+			switch(order) {
+				case 1:
+					x = bedMargin;
+					y = bedSize[1] -bedMargin;
+					break;
+				case 2:
+					x = bedSize[0] - bedMargin;
+					y = bedSize[1] - bedMargin;
+					break;
+				case 3:
+					x = bedMargin;
+					y = bedMargin;
+					break;
+				case 4:
+					x = bedSize[0] - bedMargin;
+					y = bedMargin;
+					break;
+			}
+
+			$$$.message(`Move bed leveling position ${order}`, INFO, `bedLevelingPositionBig`);
+			$$$.message(`Move Z10`, INFO, `bedLevelingPositionBig`);
+			client.control.sendGcode(`G0 Z10`)
+				.done(() => {
+					$$$.message(`Move X${x} Y${y}`, INFO, `bedLevelingPositionBig`);
+					client.control.sendGcode(`G0 X${x} Y${y}`)
+						.done(() =>{
+							extruderPosition[0] = x;
+							extruderPosition[1] = y;
+							$$$.message(`Set extruder position x:${x} y:${y}`, DEBUG, `bedLevelingPositionBig`);
+							$$$.message(`Home Z0`, INFO, `bedLevelingPositionBig`);
+							client.control.sendGcode(`G28 Z0`)
+								.done(() => {
+									$$$.message(`Success`, INFO, `bedLevelingPositionBig`);
+								})
+								.fail((err) => {
+									console.log(err);
+								})
+						})
+						.fail((err) => {
+							console.log(err);
+						})
+				})
+				.fail((err) => {
+					console.error(err);
+				})
+		}
+	}
+	function restoreButtonCSSBig(order) {
+		$$$.message(`Call restoreButtonCSSBig`, DEBUG, `restoreButtonCSSBig`);
+		waitNextClick = false;
+		$$$.message(`Change waitNextClick. value is ` + waitNextClick, DEBUG, `restoreButtonCSSBig`);
+		$(`#button-big-${order}`).css({
+			color:				sunshine,
+			'background-color':	lapislazuli
+		});
+		$$$.message(`Change css(color:sunshine) button-big-${order}`, DEBUG, `restoreButtonCSSBig`);
+		$$$.message(`Change css(background-color:lapislazuli) button-big-${order}`, DEBUG, `restoreButtonCSSBig`);
+	}
+
+	$(`#fire-tool-icon-ctrl`).click(() => {
+		$$$.message(`Click file-tool-icon`, DEBUG, `$fire-tool-icon-ctrl.click`);
+		$(`#slider-panel-tool-big-ctrl`).css({'z-index': 91});
+		$$$.message(`Change css(z-index:91) slider-panel-tool-big-ctrl`, DEBUG, `$fire-tool-icon-ctrl.click`);
+	});
+
+	$(`#fire-bed-icon-ctrl`).click(() => {
+		$$$.message(`Click file-bed-icon`, DEBUG, `$fire-bed-icon-ctrl.click`);
+		$(`#slider-panel-bed-big-ctrl`).css({'z-index': 91});
+		$$$.message(`Change css(z-index:91) slider-panel-bed-big-ctrl`, DEBUG, `$file-bed-icon.click`);
 	});
 
 	$(`#big-graph-close-btn-ctrl`).click(() => {

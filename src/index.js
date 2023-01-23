@@ -358,8 +358,17 @@ function fileClick(pos) {
 	var temporalyContainar;
 	if(`files` in fileInfoContainar) temporalyContainar = fileInfoContainar.files;
 	else if(`children` in fileInfoContainar) temporalyContainar = fileInfoContainar.children;
+	
+	var fontSize = 18;
+	$(`#textMeasure2`).text(detectName());
+	$(`#textMeasure2`).css({'font-size': `${fontSize}px`});
+	while($(`#textMeasure2`).width() > 160) {
+		fontSize--;
+		$(`#textMeasure2`).css({'font-size': `${fontSize}px`});
+	}
+
 	$(`#information-panel-ctrl`).html(
-		`<div class="title">${detectName()}</div>` +
+		`<div class="title" style="font-size: ${fontSize}px">${detectName()}</div>` +
 		`<table class="information-table">` +
 		`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split(`.`)[temporalyContainar[pos].display.split(`.`).length - 1]}</td></tr>` +
 		`<tr><td>Time:</td><td class="right">${calculateTime(temporalyContainar[pos].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +

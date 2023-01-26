@@ -1212,11 +1212,11 @@
 									handleShape:		"square",
 									circleShape:		"pie",
 									startAngle:			315,
-									tooltipFormat:		"changeTooltipTool",
-									valueChange:		"changeValueTool"
+									tooltipFormat:		"changeTooltipToolBig",
+									valueChange:		"changeValueToolBig"
 
 							});
-							function changeTooltipTool(event) {
+							function changeTooltipToolBig(event) {
 								var val = event.value, temperature;
 								if(val < 180) temperature = 'Low';
 								else if(val < 210) temperature = 'PLA';
@@ -1226,7 +1226,7 @@
 								if(val == 0) return `N/A<div>${temperature}</div>`; 
 								else return `${val}C<div>${temperature}</div>`;
 							}
-							function changeValueTool(event) {
+							function changeValueToolBig(event) {
 								toolTempValue = event.value;
 								$$$.message(`Tool value is ${toolTempValue}`, LOWDEBUG, 'changeValueTool');
 							}
@@ -1302,11 +1302,11 @@
 									handleShape:		"square",
 									circleShape:		"pie",
 									startAngle:			315,
-									tooltipFormat:		"changeTooltipTool",
-									valueChange:		"changeValueTool"
+									tooltipFormat:		"changeTooltipBedBig",
+									valueChange:		"changeValueBedBig"
 
 							});
-							function changeTooltipTool(event) {
+							function changeTooltipBedBig(event) {
 								var val = event.value, temperature;
 								if(val < 40) temperature = 'Low';
 								else if(val < 66) temperature = 'PLA';
@@ -1316,7 +1316,7 @@
 								if(val == 0) return `N/A<div>${temperature}</div>`; 
 								else return `${val}C<div>${temperature}</div>`;
 							}
-							function changeValueTool(event) {
+							function changeValueBedBig(event) {
 								bedTempValue = event.value;
 								$$$.message(`Tool value is ${bedTempValue}`, LOWDEBUG, 'changeValueTool');
 							}

@@ -1256,13 +1256,39 @@ $(() => {
 					client.job.start();
 					$$$.message(`Start print.`, DEBUG, `$print-icon.click`)
 				} else {
+				// cancelation process
+				if(data.state.toLowerCase() == `printing`) {
+					$(`#cancel-panel-ctrl`).css({visibility: 'visible'});
+					$(`#barrierLayer-ctrl`).css({visibility: 'visible'});
+				}
+				/*
 					if(!powerFlag) $$$.message(`This button is not active(print-icon)`, DEBUG, `print$print-icon.clickClick`);
 					else if(data.state.toLowerCase() == `printing`) $$$.message(`Unable to operate buttons because printing is in progress`, INFO, `$print-icon.click`);
 					return;
+				*/
 				}
 			}).fail(() => {
 				$$$.message(`Printer not found`, ERROR, `$printClick`);
 			});
+	});
+
+	$(`#cancel-ok-ctrl`).click(() => {
+		$$$.message(`Click cancel-no-ctrl`, DEBUG, `$cancel-ok-ctrl.click`);
+		client.job.cancel()
+			.done(() => {
+				$$$.message('Cancel success', INFO, `$cancel-ok-ctrl.click`);
+			})
+			.fail(() => {
+				console.log(err);
+			})
+		$(`#cancel-panel-ctrl`).css({visibility: 'hidden'});
+		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
+	});
+
+	$(`#cancel-no-ctrl`).click(() => {
+		$$$.message(`Click cancel-no-ctrl`, DEBUG, `$cancel-no-ctrl.click`);
+		$(`#cancel-panel-ctrl`).css({visibility: 'hidden'});
+		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
 	});
 
 	$(`#left-mark-main`).click(() => {

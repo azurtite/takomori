@@ -15,6 +15,10 @@ body {
 	position:					fixed;
 }
 
+@M1_winSizeX1Height:			240px;
+@M1_winSizeX1Width:				400px;
+@M1_TriangleWidth:				24px;
+
 .main-window {
 	position:					absolute;
 	top:						0px;
@@ -2315,6 +2319,71 @@ textarea::-webkit-scrollbar-thumb {
 	border-style:			solid;
 	border-color:			transparent @ceruleanblue @peleskyblue transparent;
 	border-width:			0 25px 25px 0;
+}
+
+.cancel-panel {
+	position:					absolute;
+	display:					table;
+	left:						@M1_TriangleWidth;
+	top:						@M1_TriangleWidth;
+	height:						@M1_winSizeX1Height - 48px;
+	width:						@M1_winSizeX1Width - 48px;
+	color:						@sunshine;
+	background-color:			@skyhigh;
+	z-index:					99;
+	visibility:					hidden;
+	.title {
+		position:				absolute;
+		left:					16px;
+		height:					28px;
+		width:					@M1_winSizeX1Width - 48px - 32px;
+		border-bottom:			1px solid @sunshine;
+		color:					@sunshine;
+		font-size:				20px;
+	}
+	.mbody {
+		position:				absolute;
+		left:					60px;
+		top:					60px;
+	}
+	.button {
+		display:				table-cell;
+		height:					32px;
+		width:					60px;
+		border-radius:			5px;
+		font-size:				16px;
+		background-color:		@ceruleanblue;
+		cursor:					pointer;
+	}
+	.cancel-ok {
+		position:				absolute;
+		bottom:					10px;
+		right:					80px;
+	}
+	.cancel-no {
+		position:				absolute;
+		bottom:					10px;
+		right:					10px;
+	}
+	.adjust {
+		position:				absolute;
+		left:					10px;
+		top:					5px;
+		height:					12px;
+		width:					40px;
+		text-align:				center;
+	}
+}
+.cancel-panel::after {
+	content:			'';
+	position:			absolute;
+	top:				0;
+	right:				0;
+	width:				0;
+	height:				0;
+	border-style:		solid;
+	border-color:		transparent @ceruleanblue @peleskyblue transparent;
+	border-width:		0 25px 25px 0;
 }
 
 .sampleText {

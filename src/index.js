@@ -415,19 +415,19 @@ function downloadClick(pos) {
 function trashClick(pos) {
 	$$$.message(`Call trashClick`, DEBUG, `trashClick`);
 	$$$.message(`Click the trash icon in listing ${pos}`, DEBUG, `trashClick`);
+	var f;
+	if(`files` in fileInfoContainar) f = fileInfoContainar.files[pos].path;
+	else if(`children` in fileInfoContainar) f = fileInfoContainar.children[pos].path;
 	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 		.done((data) => {
-			if(data.state.toLowerCase() != `printing`) {
-				var f;
-				if(`files` in fileInfoContainar) f = fileInfoContainar.files[pos].path;
-				else if(`children` in fileInfoContainar) f = fileInfoContainar.children[pos].path;
+			if(data.job.file.path != f) {
 				client.files.delete(`local`, f);
 				$$$.message(`Delete ${f}`, INFO, `trashClick`);
 				getFilelist(locationPath);
 			} else $$$.message(`Operation of this icon is prohibited during printing`, WARN, `trashClick`);
 		}).fail((err) => {
 			$$$.message(`trap message alert no 00005`, WARN, `getPrinterFullState`);
-		});;
+		});
 }
 function openClick(pos) {
 	$$$.message(`Call openClick`, DEBUG, `openClick`);
@@ -474,16 +474,28 @@ function printClick(pos) {
 function levelupClick(pos) {
 	$$$.message(`Call levelupClick`, DEBUG, `levelupClick`);
 	$$$.message(`Click the level-up icon in listing ${pos}`, DEBUG, `levelupClick`);
-	if(`files` in fileInfoContainar) {
-		$(`#filename-box-ctrl`).val(fileInfoContainar.files[pos].display);
-		$(`#base-path-ctrl`).text(fileInfoContainar.files[pos].path);
-	} else if(`children` in fileInfoContainar) {
-		$(`#filename-box-ctrl`).val(fileInfoContainar.children[pos].display);
-		$(`#base-path-ctrl`).text(fileInfoContainar.children[pos].path);
-	}
-	$$$.message(`Set filename to filename-box-ctrl`, DEBUG, `levelupClick`);
-	$(`#file-notice-ctrl`).css({visibility: `visible`});
-	$$$.message(`Change css(visibility:visible) file-notice-ctrl`, DEBUG, `levelupClick`);
+
+	var f;
+	if(`files` in fileInfoContainar) f = fileInfoContainar.files[pos].path;
+	else if('children' in fileInfoContainar) f = fileInfoContainar.children[pos].path;
+	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
+		.done((data) => {
+			if(data.job.file.path != f) {
+				if(`files` in fileInfoContainar) {
+					$(`#filename-box-ctrl`).val(fileInfoContainar.files[pos].display);
+					$(`#base-path-ctrl`).text(fileInfoContainar.files[pos].path);
+				} else if(`children` in fileInfoContainar) {
+					$(`#filename-box-ctrl`).val(fileInfoContainar.children[pos].display);
+					$(`#base-path-ctrl`).text(fileInfoContainar.children[pos].path);
+				}
+				$$$.message(`Set filename to filename-box-ctrl`, DEBUG, `levelupClick`);
+				$(`#file-notice-ctrl`).css({visibility: `visible`});
+				$$$.message(`Change css(visibility:visible) file-notice-ctrl`, DEBUG, `levelupClick`);
+			} else  $$$.message(`Operation of this icon is prohibited during printing`, WARN, `levelupClick`);
+		})
+		.fail((err) => {
+			console.log(err);
+		});
 }
 /**
  * getPrinterFullSate()

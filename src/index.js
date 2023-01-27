@@ -736,7 +736,7 @@ function postProcess() {
 	$$$.message(`Call upload`, DEBUG, `upload`);
 	var form = new FormData();
 	form.append(`file`, elem.files[0]);
-	form.append('path', locationPath);
+	if(locationPath == undefined) form.append(`path`, `/`); else form.append('path', locationPath);
 	form.append(`select`, false);
 	form.append(`print`, false);
 

@@ -415,19 +415,19 @@ function downloadClick(pos) {
 function trashClick(pos) {
 	$$$.message(`Call trashClick`, DEBUG, `trashClick`);
 	$$$.message(`Click the trash icon in listing ${pos}`, DEBUG, `trashClick`);
+	var f;
+	if(`files` in fileInfoContainar) f = fileInfoContainar.files[pos].path;
+	else if(`children` in fileInfoContainar) f = fileInfoContainar.children[pos].path;
 	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 		.done((data) => {
-			if(data.state.toLowerCase() != `printing`) {
-				var f;
-				if(`files` in fileInfoContainar) f = fileInfoContainar.files[pos].path;
-				else if(`children` in fileInfoContainar) f = fileInfoContainar.children[pos].path;
+			if(data.job.file.path != f) {
 				client.files.delete(`local`, f);
 				$$$.message(`Delete ${f}`, INFO, `trashClick`);
 				getFilelist(locationPath);
 			} else $$$.message(`Operation of this icon is prohibited during printing`, WARN, `trashClick`);
 		}).fail((err) => {
 			$$$.message(`trap message alert no 00005`, WARN, `getPrinterFullState`);
-		});;
+		});
 }
 function openClick(pos) {
 	$$$.message(`Call openClick`, DEBUG, `openClick`);
@@ -474,16 +474,28 @@ function printClick(pos) {
 function levelupClick(pos) {
 	$$$.message(`Call levelupClick`, DEBUG, `levelupClick`);
 	$$$.message(`Click the level-up icon in listing ${pos}`, DEBUG, `levelupClick`);
-	if(`files` in fileInfoContainar) {
-		$(`#filename-box-ctrl`).val(fileInfoContainar.files[pos].display);
-		$(`#base-path-ctrl`).text(fileInfoContainar.files[pos].path);
-	} else if(`children` in fileInfoContainar) {
-		$(`#filename-box-ctrl`).val(fileInfoContainar.children[pos].display);
-		$(`#base-path-ctrl`).text(fileInfoContainar.children[pos].path);
-	}
-	$$$.message(`Set filename to filename-box-ctrl`, DEBUG, `levelupClick`);
-	$(`#file-notice-ctrl`).css({visibility: `visible`});
-	$$$.message(`Change css(visibility:visible) file-notice-ctrl`, DEBUG, `levelupClick`);
+
+	var f;
+	if(`files` in fileInfoContainar) f = fileInfoContainar.files[pos].path;
+	else if('children' in fileInfoContainar) f = fileInfoContainar.children[pos].path;
+	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
+		.done((data) => {
+			if(data.job.file.path != f) {
+				if(`files` in fileInfoContainar) {
+					$(`#filename-box-ctrl`).val(fileInfoContainar.files[pos].display);
+					$(`#base-path-ctrl`).text(fileInfoContainar.files[pos].path);
+				} else if(`children` in fileInfoContainar) {
+					$(`#filename-box-ctrl`).val(fileInfoContainar.children[pos].display);
+					$(`#base-path-ctrl`).text(fileInfoContainar.children[pos].path);
+				}
+				$$$.message(`Set filename to filename-box-ctrl`, DEBUG, `levelupClick`);
+				$(`#file-notice-ctrl`).css({visibility: `visible`});
+				$$$.message(`Change css(visibility:visible) file-notice-ctrl`, DEBUG, `levelupClick`);
+			} else  $$$.message(`Operation of this icon is prohibited during printing`, WARN, `levelupClick`);
+		})
+		.fail((err) => {
+			console.log(err);
+		});
 }
 /**
  * getPrinterFullSate()
@@ -1256,13 +1268,39 @@ $(() => {
 					client.job.start();
 					$$$.message(`Start print.`, DEBUG, `$print-icon.click`)
 				} else {
+				// cancelation process
+				if(data.state.toLowerCase() == `printing`) {
+					$(`#cancel-panel-ctrl`).css({visibility: 'visible'});
+					$(`#barrierLayer-ctrl`).css({visibility: 'visible'});
+				}
+				/*
 					if(!powerFlag) $$$.message(`This button is not active(print-icon)`, DEBUG, `print$print-icon.clickClick`);
 					else if(data.state.toLowerCase() == `printing`) $$$.message(`Unable to operate buttons because printing is in progress`, INFO, `$print-icon.click`);
 					return;
+				*/
 				}
 			}).fail(() => {
 				$$$.message(`Printer not found`, ERROR, `$printClick`);
 			});
+	});
+
+	$(`#cancel-ok-ctrl`).click(() => {
+		$$$.message(`Click cancel-no-ctrl`, DEBUG, `$cancel-ok-ctrl.click`);
+		client.job.cancel()
+			.done(() => {
+				$$$.message('Cancel success', INFO, `$cancel-ok-ctrl.click`);
+			})
+			.fail(() => {
+				console.log(err);
+			})
+		$(`#cancel-panel-ctrl`).css({visibility: 'hidden'});
+		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
+	});
+
+	$(`#cancel-no-ctrl`).click(() => {
+		$$$.message(`Click cancel-no-ctrl`, DEBUG, `$cancel-no-ctrl.click`);
+		$(`#cancel-panel-ctrl`).css({visibility: 'hidden'});
+		$(`#barrierLayer-ctrl`).css({visibility: 'hidden'});
 	});
 
 	$(`#left-mark-main`).click(() => {

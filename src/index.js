@@ -34,7 +34,7 @@ let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
 let locationPath		= ``;
 let contentPosition		= 0;
-let maxContentPosition	= 2;
+let maxContentPosition	= 3;
 let subPanelSize		= 2;
 let subMenuPanelOpen	= false;
 let subMenuPanelName	= '';
@@ -45,7 +45,7 @@ let feedAmount			= [0];
 let feedAmountBigP1		= [0];
 let feedAmountBigP2		= [0];
 let extruderPosition	= [-99, -99, -99];
-let bedSize				= [230, 220, 200];
+let bedSize				= [220, 220, 250];
 let bedPositionName		= [`rear-left`, `rear-right`, `front-left`, `front-right`];
 
 const btnNameToBedPos	= ['', `9x9-21`, `9x9-25`, `9x9-41`, `9x9-45`];
@@ -95,6 +95,15 @@ feedAmountBigP2[2] = 1
 feedAmountBigP2[3] = 10
 feedAmountBigP2[4] = 100;
 let feedValueBigP2 = 100; 
+
+bedSize[0] = localStorage.getItem(`bdsize-w`);
+bedSize[1] = localStorage.getItem(`bdsize-d`);
+bedSize[2] = localStorage.getItem(`bdsize-h`);
+extruderMovingTemp = localStorage.getItem(`extruder-temp`);
+if(bedSize[0] == null || bedSize[0] == '') bedSize[0] = 220;
+if(bedSize[1] == null || bedSize[1] == '') bedSize[1] = 220;
+if(bedSize[2] == null || bedSize[2] == '') bedSize[2] = 250;
+if(extruderMovingTemp == null || extruderMovingTemp == '') extruderMovingTemp = 200;
 
 let $$$ = new logMan(true, false);
 
@@ -808,6 +817,11 @@ $(() => {
 	$(`#win-pos-y`).val(localStorage.getItem(`win-pos-y`));
 	
 	allBtnBlink();
+
+	$('#extruder-temp-ctrl').val(extruderMovingTemp);
+	$('#bedsize-w-ctrl').val(bedSize[0]);
+	$('#bedsize-d-ctrl').val(bedSize[1]);
+	$('#bedsize-h-ctrl').val(bedSize[2]);
 
 	if(localStorage.getItem(`debug-mode`) == `true`) {
 		$(`#reload-btn-ctrl`).css({visibility: `visible`});
@@ -2200,6 +2214,19 @@ $(() => {
 		localStorage.setItem(`win-pos-x`, $(`#win-pos-x`).val());
 		localStorage.setItem(`win-pos-y`, $(`#win-pos-y`).val());
 
+		extruderMovingTemp = $(`#extruder-temp-ctrl`).val();
+		localStorage.setItem(`extruder-temp`, extruderMovingTemp);
+		$$$.message(`Extruder dischage temperature is ${extruderMovingTemp}C`, DEBUG, `$conf-set-ctrl.click`);
+		bedSize[0] = $(`#bedsize-w-ctrl`).val();
+		localStorage.setItem(`bdsize-w`, bedSize[0]);
+		$$$.message(`Bed size  is ${bedSize[0]}mm`, DEBUG, `$conf-set-ctrl.click`);
+		bedSize[1] = $(`#bedsize-d-ctrl`).val();
+		localStorage.setItem(`bdsize-d`, bedSize[1]);
+		$$$.message(`Bed size  is ${bedSize[1]}mm`, DEBUG, `$conf-set-ctrl.click`);
+		bedSize[2] = $(`#bedsize-h-ctrl`).val();
+		localStorage.setItem(`bdsize-h`, bedSize[2]);
+		$$$.message(`Bed size  is ${bedSize[2]}mm`, DEBUG, `$conf-set-ctrl.click`);
+
 		if($(`#debug-mode-ctrl`).prop(`checked`) == true) {
 			$(`#reload-btn-ctrl`).css({visibility: `visible`});
 			$(`#ID-powerFlag`).css({visibility: `visible`});
@@ -2271,6 +2298,10 @@ $(() => {
 				$$$.message(`Change css(z-index:1) content-body-movement-ctrl`, DEBUG, `$leftmark-ctrl.click`);
 				break;
 			case 2:
+				$(`#content-body-printer-ctrl`).css({'z-index': 1});
+				$$$.message(`Change css(z-index:1) content-body-printer-ctrl`, DEBUG, `$leftmark-ctrl.click`);
+				break;
+			case 3:
 				$(`#content-body-win-control-ctrl`).css({'z-index': 1});
 				$$$.message(`Change css(z-index:1) content-body-win-control-ctrl`, DEBUG, `$leftmark-ctrl.click`);
 				break;

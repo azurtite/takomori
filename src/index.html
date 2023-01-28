@@ -863,6 +863,74 @@
 						</script>
 					</div>
 				</div>
+				<div class="content-body-printer" id="content-body-printer-ctrl">
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Discharge temp"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="extruder-temp-ctrl"
+							/>
+							<label class="label">Discharge temp</label>
+							<label class="error"></label>
+							<div class="unit">C</div> 
+						</div>
+						<script>
+							$(() => {if($(`#extruder-temp-ctrl`).val() != '') $(`#extruder-temp-ctrl`).attr(`value`, `not-null`);});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Bed size width"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="bedsize-w-ctrl"
+							/>
+							<label class="label">Bed size width</label>
+							<label class="error"></label>
+							<div class="unit">mm</div> 
+						</div>
+						<script>
+							$(() => {if($(`#bedsize-w-ctrl`).val() != '') $(`#bedsize-w-ctrl`).attr(`value`, `not-null`);});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Bed size depth"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="bedsize-d-ctrl"
+							/>
+							<label class="label">Bed size depth</label>
+							<label class="error"></label>
+							<div class="unit">mm</div> 
+						</div>
+						<script>
+							$(() => {if($(`#bedsize-d-ctrl`).val() != '') $(`#bedsize-d-ctrl`).attr(`value`, `not-null`);});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Bed size height"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="bedsize-h-ctrl"
+							/>
+							<label class="label">Bed size height</label>
+							<label class="error"></label>
+							<div class="unit">mm</div> 
+						</div>
+						<script>
+							$(() => {if($(`#bedsize-h-ctrl`).val() != '') $(`#bedsize-h-ctrl`).attr(`value`, `not-null`);});
+						</script>
+					</div>
+				</div>
 				<div class="content-body-win-control" id="content-body-win-control-ctrl">
 					<div class="input-width">
 						<div class="textbox">

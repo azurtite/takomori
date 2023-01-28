@@ -1589,15 +1589,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p1.click`);
 			setTimeout(()=>{restoreButtonCSS(`p1`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p1.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 X0`)
-					.done((response) => {
-						extruderPosition[0] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-p1.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00013`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-p1.click`);
+			moveToHomeManuP(1);
 		}
 	});
 
@@ -1640,18 +1632,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p3.click`);
 			setTimeout(()=>{restoreButtonCSS(`p3`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p3.click`);
-			var pos = extruderPosition[1] + feedValue;
-			if(pos > bedSize[1]) pos = bedSize[1];
-			if(powerFlag && extruderPosition[1] >= 0) {
-				client.control.sendGcode(`G0 Y${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[1] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p3.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p3.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00014`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Y-axis is not at the origin yet`, INFO, `$manu-btn-p3.click`);
+			diagonalMove(5);
 		}
 	});
 
@@ -1694,18 +1675,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p5.click`);
 			setTimeout(()=>{restoreButtonCSS(`p5`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p5.click`);
-			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] + feedValue;
-				if(pos > bedSize[2]) pos = bedSize[2];
-				client.control.sendGcode(`G0 Z${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[2] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p5.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p5.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00015`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Z-axis is not at the origin yet`, INFO, `$manu-btn-p5.click`);
+			diagonalMove(6);
 		}
 	});
 
@@ -1722,15 +1692,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p6.click`);
 			setTimeout(()=>{restoreButtonCSS(`p6`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p6.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 Y0`)
-					.done(() => {
-						extruderPosition[1] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-p6.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00016`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-p6.click`);
+			moveToHomeManuP(2);
 		}
 	});
 
@@ -1747,18 +1709,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p7.click`);
 			setTimeout(()=>{restoreButtonCSS(`p7`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p7.click`);
-			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] - feedValue;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode(`G0 X${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[0] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p7.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p7.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00017`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`X-axis is not at the origin yet`, INFO, `$manu-btn-p7.click`);
+			diagonalMove(7);
 		}
 	});
 
@@ -1803,18 +1754,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p9.click`);
 			setTimeout(()=>{restoreButtonCSS(`p9`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p9.click`);
-			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] + feedValue;
-				if(pos > bedSize[0]) pos = bedSize[0];
-				client.control.sendGcode(`G0 X${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[0] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p9.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p9.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00018`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`X-axis is not at the origin yet`, INFO, `$manu-btn-p9.click`);
+			diagonalMove(8);
 		}
 	});
 
@@ -1831,13 +1771,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pa.click`);
 			setTimeout(()=>{restoreButtonCSS(`pa`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pa.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 Z0`)
-					.done(() => {
-						extruderPosition[2] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-pa.click`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-pa.click`);
+			moveToHomeManuP(3);
 		}
 	});
 
@@ -1854,15 +1788,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pb.click`);
 			setTimeout(()=>{restoreButtonCSS(`pb`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pb.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 Z0`)
-					.done(() => {
-						extruderPosition[2] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-pb.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00019`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-pb.click`);
+			moveToHomeManuP(3);
 		}
 	});
 
@@ -1905,18 +1831,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pd.click`);
 			setTimeout(()=>{restoreButtonCSS(`pd`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pd.click`);
-			if(powerFlag && extruderPosition[1] >= 0) { 
-				var pos = extruderPosition[1] - feedValue;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode(`G0 Y${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[1] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-pd.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-pd.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00020`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Y-axis is not at the origin yet`, INFO, `$manu-btn-pd.click`);
+			diagonalMove(9);
 		}
 	});
 
@@ -1959,18 +1874,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pf.click`);
 			setTimeout(()=>{restoreButtonCSS(`pf`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pf.click`);
-			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] - feedValue;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode(`G0 Z${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[2] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-pf.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-pf.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00021`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Z-axis is not at the origin yet`, INFO, `$manu-btn-pf.click`);
+			diagonalMove(10);
 		}
 	});
 	function bedLevelingPosition(p) {
@@ -2014,44 +1918,109 @@ $(() => {
 				});
 		}
 	}
+	function moveToHomeManuP(pos) {
+		if(powerFlag) {
+			var originValue;
+			switch(pos) {
+				case 1:
+					originValue = 'X0';
+					break;
+				case 2:
+					originValue = 'Y0';
+					break;
+				case 3:
+					originValue = 'Z0';
+			}
+			client.control.sendGcode(`G28 ${originValue}`)
+				.done(() => {
+					if(originValue == `X0`) extruderPosition[0] = 0;
+					else if(originValue == `Y0`) extruderPosition[1] = 0;
+					else if(originValue == `Z0`) extruderPosition[2] = 0;
+					$$$.message(`g-code success`, DEBUG, `moveToHomeManuP`);
+				})
+				.fail((err) => {
+					console.log(err);
+				})
+		} else $$$.message(`Printer is not connect`, ERROR, `moveToHomeManuP`);
+	}
 	function diagonalMove(p) {
 		$$$.message(`diagonalMove`, DEBUG, `diagonalMove`);
-		var x, y;
+		var x, y, z;
 		if(powerFlag && extruderPosition[0] >= 0 && extruderPosition[1] >= 0) {
 			switch(p) {
 				case 1:
 					x = extruderPosition[0] - feedValue;
 					y = extruderPosition[1] + feedValue;
+					z = extruderPosition[2];
 					if(x < 0) x = 0;
 					if(y > bedSize[1]) y = bedSize[1];
 					break;
 				case 2:
 					x = extruderPosition[0] + feedValue;
 					y = extruderPosition[1] + feedValue;
+					z = extruderPosition[2];
 					if(x > bedSize[0]) x = bedSize[0];
 					if(y > bedSize[1]) y = bedSize[1];
 					break;
 				case 3:
 					x = extruderPosition[0] - feedValue;
 					y = extruderPosition[1] - feedValue;
+					z = extruderPosition[2];
 					if(x < 0) x = 0;
 					if(y < 0) y = 0;
 					break;
 				case 4:
 					x = extruderPosition[0] + feedValue;
 					y = extruderPosition[1] - feedValue;
+					z = extruderPosition[2];
 					if(x > bedSize[0]) x = bedSize[0];
 					if(y < 0) y = 0;
 					break;
+				case 5:
+					x = extruderPosition[0];
+					y = extruderPosition[1] + feedValue;
+					z = extruderPosition[2];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 6:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] = feedValue;
+					if(z > bedSize[2]) z = bedSize[2];
+					break;
+				case 7:
+					x = extruderPosition[0] - feedValue;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					break;
+				case 8:
+					x = extruderPosition[0] + feedValue;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					break;
+				case 9:
+					x = extruderPosition[0];
+					y = extruderPosition[1] - feedValue;
+					z = extruderPosition[2];
+					if(y < 0) y = 0;
+					break;
+				case 10:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] - feedValue;
+					if(z < 0) z = 0;
+					break;
 			}
-			client.control.sendGcode(`G0 X${x}MM Y${y}MM F1500`)
+			client.control.sendGcode(`G0 X${x}MM Y${y}MM Z${z}MM F1500`)
 				.done(() => {
 					extruderPosition[0] = x;
 					extruderPosition[1] = y;
 					$$$.message(`gCode succcess.`, INFO, `diagonalMove`);
-					$$$.message(`Extruder position is x=${x} y=${y} z=${extruderPosition[2]}`, INFO,  `diagonalMove`);
+					$$$.message(`Extruder position is x=${x} y=${y} z=${z}`, INFO,  `diagonalMove`);
 				}).fail((err) => {
-					$$$.message(`trap message alert no 00024`, WARN, `getPrinterFullState`);
+					$$$.message(`trap message alert no 00024`, WARN, `diagonalMove`);
 				});
 		}
 	}

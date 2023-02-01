@@ -85,16 +85,30 @@ if(feedAmount[4] == null || feedAmount[4] == ``) feedAmount[4] = 100;
 let feedPosition = Number(localStorage.getItem(`feedPosition`));
 if(feedPosition == null || feedPosition == ``) feedPosition = 3;
 feedValue = feedAmount[feedPosition];
-feedAmountBigP1[1] = 0.1
-feedAmountBigP1[2] = 1
-feedAmountBigP1[3] = 10
-feedAmountBigP1[4] = 100;
-let feedValueBigP1 = 10;
-feedAmountBigP2[1] = 0.1
-feedAmountBigP2[2] = 1
-feedAmountBigP2[3] = 10
-feedAmountBigP2[4] = 100;
-let feedValueBigP2 = 100; 
+
+feedAmountBigP1[1] = Number(localStorage.getItem(`movement-big-P1-1`));
+feedAmountBigP1[2] = Number(localStorage.getItem(`movement-big-P1-2`));
+feedAmountBigP1[3] = Number(localStorage.getItem(`movement-big-P1-3`));
+feedAmountBigP1[4] = Number(localStorage.getItem(`movement-big-P1-4`));
+if(feedAmountBigP1[1] == null || feedAmountBigP1[1] == ``) feedAmountBigP1[1] = 0.1;
+if(feedAmountBigP1[2] == null || feedAmountBigP1[2] == ``) feedAmountBigP1[2] = 1;
+if(feedAmountBigP1[3] == null || feedAmountBigP1[3] == ``) feedAmountBigP1[3] = 10;
+if(feedAmountBigP1[4] == null || feedAmountBigP1[4] == ``) feedAmountBigP1[4] = 100;
+let feedPositionBigP1 = Number(localStorage.getItem(`feedPosition-big-p1`));
+if(feedPositionBigP1 == null || feedPositionBigP1 == ``) feedPositionBigP1 = 2;
+let feedValueBigP1 = feedAmountBigP1[feedPositionBigP1];
+
+feedAmountBigP2[1] = Number(localStorage.getItem(`movement-big-P2-1`));
+feedAmountBigP2[2] = Number(localStorage.getItem(`movement-big-P2-2`));
+feedAmountBigP2[3] = Number(localStorage.getItem(`movement-big-P2-3`));
+feedAmountBigP2[4] = Number(localStorage.getItem(`movement-big-P2-4`));
+if(feedAmountBigP2[1] == null || feedAmountBigP2[1] == ``) feedAmountBigP2[1] = 0.1
+if(feedAmountBigP2[2] == null || feedAmountBigP2[2] == ``) feedAmountBigP2[2] = 1
+if(feedAmountBigP2[3] == null || feedAmountBigP2[3] == ``) feedAmountBigP2[3] = 10
+if(feedAmountBigP2[4] == null || feedAmountBigP2[4] == ``) feedAmountBigP2[4] = 100;
+let feedPositionBigP2 = Number(localStorage.getItem(`feedPosition-big-p2`));
+if(feedPositionBigP2 == null || feedPositionBigP2 == ``) feedPositionBigP2 = 3;
+let feedValueBigP2 = feedAmountBigP2[feedPositionBigP2];
 
 bedSize[0] = localStorage.getItem(`bdsize-w`);
 bedSize[1] = localStorage.getItem(`bdsize-d`);
@@ -807,10 +821,32 @@ $(() => {
 	$(`#seed-value-p2`).text(`${feedAmount[2]}mm`);
 	$(`#seed-value-p3`).text(`${feedAmount[3]}mm`);
 	$(`#seed-value-p4`).text(`${feedAmount[4]}mm`);
+
 	$(`#movement-p1`).val(feedAmount[1]);
 	$(`#movement-p2`).val(feedAmount[2]);
 	$(`#movement-p3`).val(feedAmount[3]);
 	$(`#movement-p4`).val(feedAmount[4]);
+	
+	$(`#feed-amount-big-p11`).val(`${feedAmountBigP1[1]}mm`);
+	$(`#feed-amount-big-p12`).val(`${feedAmountBigP1[2]}mm`);
+	$(`#feed-amount-big-p13`).val(`${feedAmountBigP1[3]}mm`);
+	$(`#feed-amount-big-p14`).val(`${feedAmountBigP1[4]}mm`);
+
+	$(`#movement-p11`).val(feedAmountBigP1[1]);
+	$(`#movement-p12`).val(feedAmountBigP1[2]);
+	$(`#movement-p13`).val(feedAmountBigP1[3]);
+	$(`#movement-p14`).val(feedAmountBigP1[4]);
+	
+	$(`#feed-amount-big-p21`).val(`${feedAmountBigP2[1]}mm`);
+	$(`#feed-amount-big-p22`).val(`${feedAmountBigP2[2]}mm`);
+	$(`#feed-amount-big-p23`).val(`${feedAmountBigP2[3]}mm`);
+	$(`#feed-amount-big-p24`).val(`${feedAmountBigP2[4]}mm`);
+
+	$(`#movement-p21`).val(feedAmountBigP2[1]);
+	$(`#movement-p22`).val(feedAmountBigP2[2]);
+	$(`#movement-p23`).val(feedAmountBigP2[3]);
+	$(`#movement-p24`).val(feedAmountBigP2[4]);
+	
 	$$$.message(`Set config panel movement data`, DEBUG, 'jQuery');
 
 	$(`#win-pos-x`).val(localStorage.getItem(`win-pos-x`));
@@ -2237,6 +2273,33 @@ $(() => {
 			localStorage.setItem(`debug-mode`, false);
 		}
 
+
+		feedAmountBigP1[1] = Number($(`#movement-p11`).val());
+		feedAmountBigP1[2] = Number($(`#movement-p12`).val());
+		feedAmountBigP1[3] = Number($(`#movement-p13`).val());
+		feedAmountBigP1[4] = Number($(`#movement-p14`).val());
+		localStorage.setItem(`movement-big-P1-1`, feedAmountBigP1[1]);
+		localStorage.setItem(`movement-big-P1-2`, feedAmountBigP1[2]);
+		localStorage.setItem(`movement-big-P1-3`, feedAmountBigP1[3]);
+		localStorage.setItem(`movement-big-P1-4`, feedAmountBigP1[4]);
+		$(`#feed-amount-big-p11`).text(`${feedAmountBigP1[1]}mm`);
+		$(`#feed-amount-big-p12`).text(`${feedAmountBigP1[2]}mm`);
+		$(`#feed-amount-big-p13`).text(`${feedAmountBigP1[3]}mm`);
+		$(`#feed-amount-big-p14`).text(`${feedAmountBigP1[4]}mm`);
+
+		feedAmountBigP2[1] = Number($(`#movement-p21`).val());
+		feedAmountBigP2[2] = Number($(`#movement-p22`).val());
+		feedAmountBigP2[3] = Number($(`#movement-p23`).val());
+		feedAmountBigP2[4] = Number($(`#movement-p24`).val());
+		localStorage.setItem(`movement-big-P2-1`, feedAmountBigP2[1]);
+		localStorage.setItem(`movement-big-P2-2`, feedAmountBigP2[2]);
+		localStorage.setItem(`movement-big-P2-3`, feedAmountBigP2[3]);
+		localStorage.setItem(`movement-big-P2-4`, feedAmountBigP2[4]);
+		$(`#feed-amount-big-p21`).text(`${feedAmountBigP2[1]}mm`);
+		$(`#feed-amount-big-p22`).text(`${feedAmountBigP2[2]}mm`);
+		$(`#feed-amount-big-p23`).text(`${feedAmountBigP2[3]}mm`);
+		$(`#feed-amount-big-p24`).text(`${feedAmountBigP2[4]}mm`);
+
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
 
@@ -2277,6 +2340,74 @@ $(() => {
 				$$$.message(`Change css(color:rescueorange) movement-remove-p${i}`, DEBUG, `checkConfigValue`);
 				checked = false;
 				$$$.message(`Change checked(${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+		}
+		for(var i=1; i<=4; i++) {
+			if($(`#movement-p11`).val() == $(`#movement-p1${i}`).val() && i != 1) {
+				$(`#movement-remove-p11`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p11`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p12`).val() == $(`#movement-p1${i}`).val() && i != 2) {
+				$(`#movement-remove-p12`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p12`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p13`).val() == $(`#movement-p1${i}`).val() && i != 3) {
+				$(`#movement-remove-p13`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p13`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p14`).val() == $(`#movement-p1${i}`).val() && i != 4) {
+				$(`#movement-remove-p14`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p14`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+		}
+		for(var i=1; i<=4; i++) {
+			if($(`#movement-p21`).val() == $(`#movement-p2${i}`).val() && i != 1) {
+				$(`#movement-remove-p21`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p21`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p22`).val() == $(`#movement-p2${i}`).val() && i != 2) {
+				$(`#movement-remove-p22`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p22`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p23`).val() == $(`#movement-p2${i}`).val() && i != 3) {
+				$(`#movement-remove-p23`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p23`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p24`).val() == $(`#movement-p2${i}`).val() && i != 4) {
+				$(`#movement-remove-p24`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p24`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
 			}
 		}
 		return checked;

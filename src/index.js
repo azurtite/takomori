@@ -34,7 +34,7 @@ let extruderPanelShown	= false;
 let actionPowerBtnClick	= false;
 let locationPath		= ``;
 let contentPosition		= 0;
-let maxContentPosition	= 2;
+let maxContentPosition	= 3;
 let subPanelSize		= 2;
 let subMenuPanelOpen	= false;
 let subMenuPanelName	= '';
@@ -45,7 +45,7 @@ let feedAmount			= [0];
 let feedAmountBigP1		= [0];
 let feedAmountBigP2		= [0];
 let extruderPosition	= [-99, -99, -99];
-let bedSize				= [230, 220, 200];
+let bedSize				= [220, 220, 250];
 let bedPositionName		= [`rear-left`, `rear-right`, `front-left`, `front-right`];
 
 const btnNameToBedPos	= ['', `9x9-21`, `9x9-25`, `9x9-41`, `9x9-45`];
@@ -85,16 +85,39 @@ if(feedAmount[4] == null || feedAmount[4] == ``) feedAmount[4] = 100;
 let feedPosition = Number(localStorage.getItem(`feedPosition`));
 if(feedPosition == null || feedPosition == ``) feedPosition = 3;
 feedValue = feedAmount[feedPosition];
-feedAmountBigP1[1] = 0.1
-feedAmountBigP1[2] = 1
-feedAmountBigP1[3] = 10
-feedAmountBigP1[4] = 100;
-let feedValueBigP1 = 10;
-feedAmountBigP2[1] = 0.1
-feedAmountBigP2[2] = 1
-feedAmountBigP2[3] = 10
-feedAmountBigP2[4] = 100;
-let feedValueBigP2 = 100; 
+
+feedAmountBigP1[1] = Number(localStorage.getItem(`movement-big-P1-1`));
+feedAmountBigP1[2] = Number(localStorage.getItem(`movement-big-P1-2`));
+feedAmountBigP1[3] = Number(localStorage.getItem(`movement-big-P1-3`));
+feedAmountBigP1[4] = Number(localStorage.getItem(`movement-big-P1-4`));
+if(feedAmountBigP1[1] == null || feedAmountBigP1[1] == ``) feedAmountBigP1[1] = 0.1;
+if(feedAmountBigP1[2] == null || feedAmountBigP1[2] == ``) feedAmountBigP1[2] = 1;
+if(feedAmountBigP1[3] == null || feedAmountBigP1[3] == ``) feedAmountBigP1[3] = 10;
+if(feedAmountBigP1[4] == null || feedAmountBigP1[4] == ``) feedAmountBigP1[4] = 100;
+let feedPositionBigP1 = Number(localStorage.getItem(`feedPosition-big-p1`));
+if(feedPositionBigP1 == null || feedPositionBigP1 == ``) feedPositionBigP1 = 2;
+let feedValueBigP1 = feedAmountBigP1[feedPositionBigP1];
+
+feedAmountBigP2[1] = Number(localStorage.getItem(`movement-big-P2-1`));
+feedAmountBigP2[2] = Number(localStorage.getItem(`movement-big-P2-2`));
+feedAmountBigP2[3] = Number(localStorage.getItem(`movement-big-P2-3`));
+feedAmountBigP2[4] = Number(localStorage.getItem(`movement-big-P2-4`));
+if(feedAmountBigP2[1] == null || feedAmountBigP2[1] == ``) feedAmountBigP2[1] = 0.1
+if(feedAmountBigP2[2] == null || feedAmountBigP2[2] == ``) feedAmountBigP2[2] = 1
+if(feedAmountBigP2[3] == null || feedAmountBigP2[3] == ``) feedAmountBigP2[3] = 10
+if(feedAmountBigP2[4] == null || feedAmountBigP2[4] == ``) feedAmountBigP2[4] = 100;
+let feedPositionBigP2 = Number(localStorage.getItem(`feedPosition-big-p2`));
+if(feedPositionBigP2 == null || feedPositionBigP2 == ``) feedPositionBigP2 = 3;
+let feedValueBigP2 = feedAmountBigP2[feedPositionBigP2];
+
+bedSize[0] = localStorage.getItem(`bdsize-w`);
+bedSize[1] = localStorage.getItem(`bdsize-d`);
+bedSize[2] = localStorage.getItem(`bdsize-h`);
+extruderMovingTemp = localStorage.getItem(`extruder-temp`);
+if(bedSize[0] == null || bedSize[0] == '') bedSize[0] = 220;
+if(bedSize[1] == null || bedSize[1] == '') bedSize[1] = 220;
+if(bedSize[2] == null || bedSize[2] == '') bedSize[2] = 250;
+if(extruderMovingTemp == null || extruderMovingTemp == '') extruderMovingTemp = 200;
 
 let $$$ = new logMan(true, false);
 
@@ -798,16 +821,43 @@ $(() => {
 	$(`#seed-value-p2`).text(`${feedAmount[2]}mm`);
 	$(`#seed-value-p3`).text(`${feedAmount[3]}mm`);
 	$(`#seed-value-p4`).text(`${feedAmount[4]}mm`);
+
 	$(`#movement-p1`).val(feedAmount[1]);
 	$(`#movement-p2`).val(feedAmount[2]);
 	$(`#movement-p3`).val(feedAmount[3]);
 	$(`#movement-p4`).val(feedAmount[4]);
+	
+	$(`#feed-amount-big-p11`).val(`${feedAmountBigP1[1]}mm`);
+	$(`#feed-amount-big-p12`).val(`${feedAmountBigP1[2]}mm`);
+	$(`#feed-amount-big-p13`).val(`${feedAmountBigP1[3]}mm`);
+	$(`#feed-amount-big-p14`).val(`${feedAmountBigP1[4]}mm`);
+
+	$(`#movement-p11`).val(feedAmountBigP1[1]);
+	$(`#movement-p12`).val(feedAmountBigP1[2]);
+	$(`#movement-p13`).val(feedAmountBigP1[3]);
+	$(`#movement-p14`).val(feedAmountBigP1[4]);
+	
+	$(`#feed-amount-big-p21`).val(`${feedAmountBigP2[1]}mm`);
+	$(`#feed-amount-big-p22`).val(`${feedAmountBigP2[2]}mm`);
+	$(`#feed-amount-big-p23`).val(`${feedAmountBigP2[3]}mm`);
+	$(`#feed-amount-big-p24`).val(`${feedAmountBigP2[4]}mm`);
+
+	$(`#movement-p21`).val(feedAmountBigP2[1]);
+	$(`#movement-p22`).val(feedAmountBigP2[2]);
+	$(`#movement-p23`).val(feedAmountBigP2[3]);
+	$(`#movement-p24`).val(feedAmountBigP2[4]);
+	
 	$$$.message(`Set config panel movement data`, DEBUG, 'jQuery');
 
 	$(`#win-pos-x`).val(localStorage.getItem(`win-pos-x`));
 	$(`#win-pos-y`).val(localStorage.getItem(`win-pos-y`));
 	
 	allBtnBlink();
+
+	$('#extruder-temp-ctrl').val(extruderMovingTemp);
+	$('#bedsize-w-ctrl').val(bedSize[0]);
+	$('#bedsize-d-ctrl').val(bedSize[1]);
+	$('#bedsize-h-ctrl').val(bedSize[2]);
 
 	if(localStorage.getItem(`debug-mode`) == `true`) {
 		$(`#reload-btn-ctrl`).css({visibility: `visible`});
@@ -1589,15 +1639,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p1.click`);
 			setTimeout(()=>{restoreButtonCSS(`p1`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p1.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 X0`)
-					.done((response) => {
-						extruderPosition[0] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-p1.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00013`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-p1.click`);
+			moveToHomeManuP(1);
 		}
 	});
 
@@ -1640,18 +1682,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p3.click`);
 			setTimeout(()=>{restoreButtonCSS(`p3`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p3.click`);
-			var pos = extruderPosition[1] + feedValue;
-			if(pos > bedSize[1]) pos = bedSize[1];
-			if(powerFlag && extruderPosition[1] >= 0) {
-				client.control.sendGcode(`G0 Y${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[1] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p3.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p3.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00014`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Y-axis is not at the origin yet`, INFO, `$manu-btn-p3.click`);
+			diagonalMove(5);
 		}
 	});
 
@@ -1694,18 +1725,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p5.click`);
 			setTimeout(()=>{restoreButtonCSS(`p5`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p5.click`);
-			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] + feedValue;
-				if(pos > bedSize[2]) pos = bedSize[2];
-				client.control.sendGcode(`G0 Z${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[2] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p5.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p5.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00015`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Z-axis is not at the origin yet`, INFO, `$manu-btn-p5.click`);
+			diagonalMove(6);
 		}
 	});
 
@@ -1722,15 +1742,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p6.click`);
 			setTimeout(()=>{restoreButtonCSS(`p6`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p6.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 Y0`)
-					.done(() => {
-						extruderPosition[1] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-p6.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00016`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-p6.click`);
+			moveToHomeManuP(2);
 		}
 	});
 
@@ -1747,18 +1759,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p7.click`);
 			setTimeout(()=>{restoreButtonCSS(`p7`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p7.click`);
-			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] - feedValue;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode(`G0 X${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[0] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p7.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p7.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00017`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`X-axis is not at the origin yet`, INFO, `$manu-btn-p7.click`);
+			diagonalMove(7);
 		}
 	});
 
@@ -1803,18 +1804,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-p9.click`);
 			setTimeout(()=>{restoreButtonCSS(`p9`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-p9.click`);
-			if(powerFlag && extruderPosition[0] >= 0) {
-				var pos = extruderPosition[0] + feedValue;
-				if(pos > bedSize[0]) pos = bedSize[0];
-				client.control.sendGcode(`G0 X${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[0] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-p9.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-p9.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00018`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`X-axis is not at the origin yet`, INFO, `$manu-btn-p9.click`);
+			diagonalMove(8);
 		}
 	});
 
@@ -1831,13 +1821,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pa.click`);
 			setTimeout(()=>{restoreButtonCSS(`pa`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pa.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 Z0`)
-					.done(() => {
-						extruderPosition[2] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-pa.click`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-pa.click`);
+			moveToHomeManuP(3);
 		}
 	});
 
@@ -1854,15 +1838,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pb.click`);
 			setTimeout(()=>{restoreButtonCSS(`pb`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pb.click`);
-			if(powerFlag) {
-				client.control.sendGcode(`G28 Z0`)
-					.done(() => {
-						extruderPosition[2] = 0;
-						$$$.message(`g-code success`, DEBUG, `$manu-btn-pb.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00019`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Printer is not connect`, ERROR, `$manu-btn-pb.click`);
+			moveToHomeManuP(3);
 		}
 	});
 
@@ -1905,18 +1881,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pd.click`);
 			setTimeout(()=>{restoreButtonCSS(`pd`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pd.click`);
-			if(powerFlag && extruderPosition[1] >= 0) { 
-				var pos = extruderPosition[1] - feedValue;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode(`G0 Y${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[1] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-pd.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-pd.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00020`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Y-axis is not at the origin yet`, INFO, `$manu-btn-pd.click`);
+			diagonalMove(9);
 		}
 	});
 
@@ -1959,18 +1924,7 @@ $(() => {
 			$$$.message(`Change waitNextClick. value is ${waitNextClick}`, DEBUG, `$manu-btn-pf.click`);
 			setTimeout(()=>{restoreButtonCSS(`pf`)}, 500);
 			$$$.message(`Execute button click process`, DEBUG, `$manu-btn-pf.click`);
-			if(powerFlag && extruderPosition[2] >= 0) {
-				var pos = extruderPosition[2] - feedValue;
-				if(pos < 0) pos = 0;
-				client.control.sendGcode(`G0 Z${pos}MM F1500`)
-					.done(() => {
-						extruderPosition[2] = pos;
-						$$$.message(`gCode succcess.`, INFO, `$manu-btn-pf.click`);
-						$$$.message(`Extruder position is x=${extruderPosition[0]} y=${extruderPosition[1]} z=${extruderPosition[2]}`, INFO,  `$manu-btn-pf.click`);
-					}).fail((err) => {
-						$$$.message(`trap message alert no 00021`, WARN, `getPrinterFullState`);
-					});
-			} else $$$.message(`Z-axis is not at the origin yet`, INFO, `$manu-btn-pf.click`);
+			diagonalMove(10);
 		}
 	});
 	function bedLevelingPosition(p) {
@@ -2014,44 +1968,109 @@ $(() => {
 				});
 		}
 	}
+	function moveToHomeManuP(pos) {
+		if(powerFlag) {
+			var originValue;
+			switch(pos) {
+				case 1:
+					originValue = 'X0';
+					break;
+				case 2:
+					originValue = 'Y0';
+					break;
+				case 3:
+					originValue = 'Z0';
+			}
+			client.control.sendGcode(`G28 ${originValue}`)
+				.done(() => {
+					if(originValue == `X0`) extruderPosition[0] = 0;
+					else if(originValue == `Y0`) extruderPosition[1] = 0;
+					else if(originValue == `Z0`) extruderPosition[2] = 0;
+					$$$.message(`g-code success`, DEBUG, `moveToHomeManuP`);
+				})
+				.fail((err) => {
+					console.log(err);
+				})
+		} else $$$.message(`Printer is not connect`, ERROR, `moveToHomeManuP`);
+	}
 	function diagonalMove(p) {
 		$$$.message(`diagonalMove`, DEBUG, `diagonalMove`);
-		var x, y;
+		var x, y, z;
 		if(powerFlag && extruderPosition[0] >= 0 && extruderPosition[1] >= 0) {
 			switch(p) {
 				case 1:
 					x = extruderPosition[0] - feedValue;
 					y = extruderPosition[1] + feedValue;
+					z = extruderPosition[2];
 					if(x < 0) x = 0;
 					if(y > bedSize[1]) y = bedSize[1];
 					break;
 				case 2:
 					x = extruderPosition[0] + feedValue;
 					y = extruderPosition[1] + feedValue;
+					z = extruderPosition[2];
 					if(x > bedSize[0]) x = bedSize[0];
 					if(y > bedSize[1]) y = bedSize[1];
 					break;
 				case 3:
 					x = extruderPosition[0] - feedValue;
 					y = extruderPosition[1] - feedValue;
+					z = extruderPosition[2];
 					if(x < 0) x = 0;
 					if(y < 0) y = 0;
 					break;
 				case 4:
 					x = extruderPosition[0] + feedValue;
 					y = extruderPosition[1] - feedValue;
+					z = extruderPosition[2];
 					if(x > bedSize[0]) x = bedSize[0];
 					if(y < 0) y = 0;
 					break;
+				case 5:
+					x = extruderPosition[0];
+					y = extruderPosition[1] + feedValue;
+					z = extruderPosition[2];
+					if(y > bedSize[1]) y = bedSize[1];
+					break;
+				case 6:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] = feedValue;
+					if(z > bedSize[2]) z = bedSize[2];
+					break;
+				case 7:
+					x = extruderPosition[0] - feedValue;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x < 0) x = 0;
+					break;
+				case 8:
+					x = extruderPosition[0] + feedValue;
+					y = extruderPosition[1];
+					z = extruderPosition[2];
+					if(x > bedSize[0]) x = bedSize[0];
+					break;
+				case 9:
+					x = extruderPosition[0];
+					y = extruderPosition[1] - feedValue;
+					z = extruderPosition[2];
+					if(y < 0) y = 0;
+					break;
+				case 10:
+					x = extruderPosition[0];
+					y = extruderPosition[1];
+					z = extruderPosition[2] - feedValue;
+					if(z < 0) z = 0;
+					break;
 			}
-			client.control.sendGcode(`G0 X${x}MM Y${y}MM F1500`)
+			client.control.sendGcode(`G0 X${x}MM Y${y}MM Z${z}MM F1500`)
 				.done(() => {
 					extruderPosition[0] = x;
 					extruderPosition[1] = y;
 					$$$.message(`gCode succcess.`, INFO, `diagonalMove`);
-					$$$.message(`Extruder position is x=${x} y=${y} z=${extruderPosition[2]}`, INFO,  `diagonalMove`);
+					$$$.message(`Extruder position is x=${x} y=${y} z=${z}`, INFO,  `diagonalMove`);
 				}).fail((err) => {
-					$$$.message(`trap message alert no 00024`, WARN, `getPrinterFullState`);
+					$$$.message(`trap message alert no 00024`, WARN, `diagonalMove`);
 				});
 		}
 	}
@@ -2231,6 +2250,19 @@ $(() => {
 		localStorage.setItem(`win-pos-x`, $(`#win-pos-x`).val());
 		localStorage.setItem(`win-pos-y`, $(`#win-pos-y`).val());
 
+		extruderMovingTemp = $(`#extruder-temp-ctrl`).val();
+		localStorage.setItem(`extruder-temp`, extruderMovingTemp);
+		$$$.message(`Extruder dischage temperature is ${extruderMovingTemp}C`, DEBUG, `$conf-set-ctrl.click`);
+		bedSize[0] = $(`#bedsize-w-ctrl`).val();
+		localStorage.setItem(`bdsize-w`, bedSize[0]);
+		$$$.message(`Bed size  is ${bedSize[0]}mm`, DEBUG, `$conf-set-ctrl.click`);
+		bedSize[1] = $(`#bedsize-d-ctrl`).val();
+		localStorage.setItem(`bdsize-d`, bedSize[1]);
+		$$$.message(`Bed size  is ${bedSize[1]}mm`, DEBUG, `$conf-set-ctrl.click`);
+		bedSize[2] = $(`#bedsize-h-ctrl`).val();
+		localStorage.setItem(`bdsize-h`, bedSize[2]);
+		$$$.message(`Bed size  is ${bedSize[2]}mm`, DEBUG, `$conf-set-ctrl.click`);
+
 		if($(`#debug-mode-ctrl`).prop(`checked`) == true) {
 			$(`#reload-btn-ctrl`).css({visibility: `visible`});
 			$(`#ID-powerFlag`).css({visibility: `visible`});
@@ -2240,6 +2272,33 @@ $(() => {
 			$(`#ID-powerFlag`).css({visibility: `hidden`});
 			localStorage.setItem(`debug-mode`, false);
 		}
+
+
+		feedAmountBigP1[1] = Number($(`#movement-p11`).val());
+		feedAmountBigP1[2] = Number($(`#movement-p12`).val());
+		feedAmountBigP1[3] = Number($(`#movement-p13`).val());
+		feedAmountBigP1[4] = Number($(`#movement-p14`).val());
+		localStorage.setItem(`movement-big-P1-1`, feedAmountBigP1[1]);
+		localStorage.setItem(`movement-big-P1-2`, feedAmountBigP1[2]);
+		localStorage.setItem(`movement-big-P1-3`, feedAmountBigP1[3]);
+		localStorage.setItem(`movement-big-P1-4`, feedAmountBigP1[4]);
+		$(`#feed-amount-big-p11`).text(`${feedAmountBigP1[1]}mm`);
+		$(`#feed-amount-big-p12`).text(`${feedAmountBigP1[2]}mm`);
+		$(`#feed-amount-big-p13`).text(`${feedAmountBigP1[3]}mm`);
+		$(`#feed-amount-big-p14`).text(`${feedAmountBigP1[4]}mm`);
+
+		feedAmountBigP2[1] = Number($(`#movement-p21`).val());
+		feedAmountBigP2[2] = Number($(`#movement-p22`).val());
+		feedAmountBigP2[3] = Number($(`#movement-p23`).val());
+		feedAmountBigP2[4] = Number($(`#movement-p24`).val());
+		localStorage.setItem(`movement-big-P2-1`, feedAmountBigP2[1]);
+		localStorage.setItem(`movement-big-P2-2`, feedAmountBigP2[2]);
+		localStorage.setItem(`movement-big-P2-3`, feedAmountBigP2[3]);
+		localStorage.setItem(`movement-big-P2-4`, feedAmountBigP2[4]);
+		$(`#feed-amount-big-p21`).text(`${feedAmountBigP2[1]}mm`);
+		$(`#feed-amount-big-p22`).text(`${feedAmountBigP2[2]}mm`);
+		$(`#feed-amount-big-p23`).text(`${feedAmountBigP2[3]}mm`);
+		$(`#feed-amount-big-p24`).text(`${feedAmountBigP2[4]}mm`);
 
 		subMenuPanelOpen = false;
 		subMenuPanelName = '';
@@ -2283,6 +2342,74 @@ $(() => {
 				$$$.message(`Change checked(${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
 			}
 		}
+		for(var i=1; i<=4; i++) {
+			if($(`#movement-p11`).val() == $(`#movement-p1${i}`).val() && i != 1) {
+				$(`#movement-remove-p11`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p11`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p12`).val() == $(`#movement-p1${i}`).val() && i != 2) {
+				$(`#movement-remove-p12`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p12`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p13`).val() == $(`#movement-p1${i}`).val() && i != 3) {
+				$(`#movement-remove-p13`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p13`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p14`).val() == $(`#movement-p1${i}`).val() && i != 4) {
+				$(`#movement-remove-p14`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p14`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p1${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p1${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(1${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+		}
+		for(var i=1; i<=4; i++) {
+			if($(`#movement-p21`).val() == $(`#movement-p2${i}`).val() && i != 1) {
+				$(`#movement-remove-p21`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p21`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p22`).val() == $(`#movement-p2${i}`).val() && i != 2) {
+				$(`#movement-remove-p22`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p22`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p23`).val() == $(`#movement-p2${i}`).val() && i != 3) {
+				$(`#movement-remove-p23`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p23`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+			if($(`#movement-p24`).val() == $(`#movement-p2${i}`).val() && i != 4) {
+				$(`#movement-remove-p24`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p24`, DEBUG, `checkConfigValue`);
+				$(`#movement-remove-p2${i}`).css({color: rescueorange});
+				$$$.message(`Change css(color:rescueorange) movement-remove-p2${i}`, DEBUG, `checkConfigValue`);
+				checked = false;
+				$$$.message(`Change checked(2${i}). value is ${checked}`, DEBUG, `checkConfigValue`);
+			}
+		}
 		return checked;
 	}
 
@@ -2302,6 +2429,10 @@ $(() => {
 				$$$.message(`Change css(z-index:1) content-body-movement-ctrl`, DEBUG, `$leftmark-ctrl.click`);
 				break;
 			case 2:
+				$(`#content-body-printer-ctrl`).css({'z-index': 1});
+				$$$.message(`Change css(z-index:1) content-body-printer-ctrl`, DEBUG, `$leftmark-ctrl.click`);
+				break;
+			case 3:
 				$(`#content-body-win-control-ctrl`).css({'z-index': 1});
 				$$$.message(`Change css(z-index:1) content-body-win-control-ctrl`, DEBUG, `$leftmark-ctrl.click`);
 				break;

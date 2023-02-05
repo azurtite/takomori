@@ -1383,6 +1383,99 @@ div::-webkit-scrollbar-thumb {
 			-webkit-app-region:		no-drag;
 			background-color:		@skyhigh;
 			z-index:				-1;
+			.titlebox {
+				position:			relative;
+				margin-bottom:		3vh;
+			}
+			.input-width {
+				width:				25vw;
+			}
+			.textbox {
+				position:			relative;
+				height:				45px;
+				width:				100%;
+				padding-top:		10px;
+				display:			inline-flex;
+				margin-bottom:		3vh;
+			}
+			.textbox .text {
+				font-weight:		500;
+				width:				calc(100% - 2vw);
+				height:				27px;
+				padding-left:		0.5vw;
+				background-color:	transparent;
+				color:				@sunshine;
+				position:			absolute;
+				bottom:				0px;
+				outline:			none;
+				border-style:		solid;
+				border-color:		@sunshine;
+				border-width:		0px 0px 2px 0px;
+				font-size:			16px;
+				-webkit-transition: border-color 0.45s linear;
+				transition:			border-color 0.45s linear;
+			}
+			.textbox > input.text:focus {
+				border-color:		@rescueorange;
+			}
+			.textbox .label {
+				opacity:			0.1;
+				pointer-events:		none;
+				z-index:			1;
+				color:				#C0C0C0;
+				position:			absolute;
+				padding-left:		0.5vw;
+				bottom:				3px;
+				font-size:			20px;
+				font-weight:		300;
+				-webkit-transition-property:		opacity bottom font-size;
+				transition-property:				opacity bottom font-size;
+				-webkit-transition-duration:		0.45s;
+				transition-duration:				0.45s;
+				-webkit-transition-timing-function:	cubic-bezier(.68,-0.55,.27,1.55);
+				transition-timing-function:			cubic-bezier(.68,-0.55,.27,1.55);
+			}
+			.textbox .error {
+				position:			absolute;
+				margin-top:			48px;
+				width:				100%;
+				color:				#e74c3c;
+				text-align:			center;
+			}
+			.textbox > input.text:focus ~ .label, .textbox > input.text:not([value=""]) ~ .label {
+				opacity:			1;
+				z-index:			1;
+				bottom:				55%;
+				font-size:			12px;
+			}
+			.textbox > input.text:focus ~ .label {
+				color:				@rescueorange;
+			}
+			.textbox ::-webkit-input-placeholder {
+				color:				@sunshine;
+				font-size:			16px;
+				font-weight:		200;
+				font-family:		'Roboto', sans-serif;
+			}
+			.unit {
+				position:			absolute;
+				left:				188px;
+				top:				30px;
+				width:				60px;
+				.remove {
+					color:			@skyhigh;
+				}
+			}
+		}
+		.content-body-printer {
+			position:				absolute;
+			left:					16px;
+			height:					150px;
+			width:					320px;
+			overflow-y:				scroll;
+			-webkit-app-region:		no-drag;
+			background-color:		@skyhigh;
+			z-index:				-1;
 			.input-width {
 				width:				25vw;
 			}

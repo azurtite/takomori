@@ -390,20 +390,37 @@ function fileClick(pos) {
 		$(`#textMeasure2`).css({'font-size': `${fontSize}px`});
 	}
 
-	$(`#information-panel-ctrl`).html(
-		`<div class="title" style="font-size: ${fontSize}px">${detectName()}</div>` +
-		`<table class="information-table">` +
-		`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split(`.`)[temporalyContainar[pos].display.split(`.`).length - 1]}</td></tr>` +
-		`<tr><td>Time:</td><td class="right">${calculateTime(temporalyContainar[pos].gcodeAnalysis.estimatedPrintTime)}</td></tr>` +
-		`<tr><td>Filament:</td><td class="right">${calculateFilament(temporalyContainar[pos].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
-		`<th>Size:</th>` +
-		`<tr><td colspan=2 class="right">
-		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.width * 100) / 100} x 
-		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.depth * 100) / 100} x 
-		${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.height * 100) / 100} mm` +
-		`</td></tr>` +
-		`</table>`
-	);
+	var htmlBody;
+	if(`gcodeAnalysis` in temporalyContainar[pos]) {
+		htmlBody = 
+			`<div class="title" style="font-size: ${fontSize}px">${detectName()}</div>` +
+			`<table class="information-table">` +
+			`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split(`.`)[temporalyContainar[pos].display.split(`.`).length - 1]}</td></tr>`+
+			`<tr><td>Time:</td><td class="right">${calculateTime(temporalyContainar[pos].gcodeAnalysis.estimatedPrintTime)}</td></tr>`+
+			`<tr><td>Filament:</td><td class="right">${calculateFilament(temporalyContainar[pos].gcodeAnalysis.filament.tool0.length)}</td></tr>` +
+			`<th>Size:</th>` +
+			`<tr><td colspan=2 class="right">
+			${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.width * 100) / 100} x 
+			${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.depth * 100) / 100} x 
+			${Math.floor(temporalyContainar[pos].gcodeAnalysis.dimensions.height * 100) / 100} mm` +
+			`</td></tr>` +
+			`</table>`;
+	} else {
+		htmlBody = 
+			`<div class="title" style="font-size: ${fontSize}px">${detectName()}</div>` +
+			`<table class="information-table">` +
+			`<tr><td>Type:</td><td class="right">${temporalyContainar[pos].display.split(`.`)[temporalyContainar[pos].display.split(`.`).length - 1]}</td></tr>`+
+			`<tr><td>Time:</td><td class="right">${NaN}</td></tr>`+
+			`<tr><td>Filament:</td><td class="right">${NaN}</td></tr>` +
+			`<th>Size:</th>` +
+			`<tr><td colspan=2 class="right">
+			${NaN} x 
+			${NaN} x 
+			${NaN} mm` +
+			`</td></tr>` +
+			`</table>`;
+	}
+	$(`#information-panel-ctrl`).html(htmlBody);
 }
 function downloadClick(pos) {
 	function changeStream(data) {
@@ -444,6 +461,11 @@ function trashClick(pos) {
 	$.get(`${baseURL}api/job?apikey=${serverApikey}`)
 		.done((data) => {
 			if(data.job.file.path != f) {
+				client.files.delete(`local`, f);
+				$$$.message(`Delete ${f}`, INFO, `trashClick`);
+				getFilelist(locationPath);
+			} else if(data.state.toLowerCase() != 'printing'){
+				if(data.job.file.path == f) $(`#jobname`).text(`not printed`);
 				client.files.delete(`local`, f);
 				$$$.message(`Delete ${f}`, INFO, `trashClick`);
 				getFilelist(locationPath);

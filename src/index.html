@@ -25,16 +25,15 @@
 			<script src="../node_modules/round-slider/dist/roundslider.min.js"></script>
 			<script src="../node_modules/chart.js/dist/chart.min.js"></script>
 			<script src="./logMan.js"></script>
-			<script src="./location.js"></script>
 			<script src="./index.js"></script>
 		<!-- install liblary css -->
 			<link rel="stylesheet" href="../node_modules/round-slider/dist/roundslider.min.css">
 		<title>tokomori</title>
 	</head>
 	<body>
-		<div class="content-counter">
-			Current value: <strong id="counter">0</strong>
-		</div>
+		<script>
+			const tempInitialValue = 300;
+		</script>
 	<!-- main window -->
 		<div class="main-window" id="main-window-ctrl">
 			<!-- base body -->
@@ -46,7 +45,7 @@
 					<strong class="target" id="tool-target-text">N/A</strong>
 				</div>
 				<div class="nav-fire-icon" id="tool-icon">
-					<span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="tool" id="tool-text">N/A</strong>
@@ -59,7 +58,7 @@
 					<strong class="target" id="bed-target-text">N/A</strong>
 				</div>
 				<div class="nav-fire-icon" id="bed-icon">
-					<span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="bed" id="bed-text">N/A</strong>
@@ -72,7 +71,7 @@
 					&nbsp;
 				</div>
 				<div class="nav-fire-icon" id="fan-icon">
-					<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="fan" id="fan-text">0%</strong>
@@ -85,7 +84,7 @@
 					&nbsp;
 				</div>
 				<div class="nav-fire-icon" id="print-icon">
-					<span class="glyphicon glyphicon glyphicon-print" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-print" aria-hidden="true"></span>
 				</div>
 				<div class="nav-fire-value">
 					<strong class="printer"></strong>
@@ -94,7 +93,7 @@
 			<!-- job title -->
 			<div class="nav-file-name">
 				<div class="nav-off" id="power-btn">
-					<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 				</div>
 				&nbsp;<strong class="nav-jobname" id="jobname">not printed</strong><br />
 			</div>
@@ -202,10 +201,10 @@
 					</div>
 				</div>
 				<div class="tool-on-sw" id="tool-on-sw-btn">
-					<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 				</div>
 				<div class="tool-on-remove" id="tool-on-remove-btn">
-					<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
+					<sapn class="glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 				</div>
 			</div>
 			<!-- slider panel bed -->
@@ -291,36 +290,36 @@
 					</div>
 				</div>
 				<div class="bed-on-sw" id="bed-on-sw-btn">
-					<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 				</div>
 				<div class="bed-on-remove" id="bed-on-remove-btn">
-					<sapn class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></sapn>
+					<sapn class="glyphicon glyphicon-remove" aria-hidden="true"></sapn>
 				</div>
 			</div>
 			<!-- left angle -->
 			<div class="main-triangle-left">
 				<div class="main-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-main"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-main"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="main-triangle-right">
 				<div class="main-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-main"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-main"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="main-triangle-down">
 				<div class="main-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-main"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-main"></span>
 				</div>
 			</div>
 		</div>
 	<!-- file window -->
 		<div class="file-window" id="file-window-ctrl">
 			<div class="file-list-title">
-				<span class="glyphicon glyphicon glyphicon glyphicon-floppy-open" id="upload-btn"></span>
-				<span class="glyphicon glyphicon glyphicon-refresh" id="reload-btn"></span>
+				<span class="glyphicon glyphicon-floppy-open file-upload-btn" id="upload-btn"></span>
+				<span class="glyphicon glyphicon-refresh file-reload-btn" id="reload-btn"></span>
 			</div>
 			<div class="file-list" id="file-list-ctrl"></div>
 			<div class="information-panel" id="information-panel-ctrl"></div>
@@ -341,19 +340,19 @@
 			<!-- left angle -->
 			<div class="file-triangle-left">
 				<div class="file-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-file"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-file"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="file-triangle-right">
 				<div class="file-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-file"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-file"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="file-triangle-down">
 				<div class="file-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-file"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-file"></span>
 				</div>
 			</div>
 		</div>
@@ -390,11 +389,11 @@
 					<td class="button-w25">&nbsp;</td>
 					<td id="manu-btn-p2" class="button-w50" colspan="2">BL</td>
 					<td class="button-w3 small-font">&nbsp;</td>
-					<td id="manu-btn-p3" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+					<td id="manu-btn-p3" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-up"></span></td>
 					<td class="button-w3 small-font">8</td>
 					<td id="manu-btn-p4" class="button-w50" colspan="2">BR</td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-p5" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+					<td id="manu-btn-p5" class="button-w50"><span class="glyphicon glyphicon-arrow-up"></span></td>
 				</tr>
 				<tr>
 					<td class="small-font space-50">&nbsp;</td>
@@ -413,13 +412,13 @@
 				<tr>
 					<td id="manu-btn-p6" class="button-w50">Hy</td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-p7" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-left"></td>
+					<td id="manu-btn-p7" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-left"></td>
 					<td class="button-w3 small-font">&nbsp;</td>
-					<td id="manu-btn-p8" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-repeat"></span></td>
+					<td id="manu-btn-p8" class="button-w50" colspan="2"><span class="glyphicon glyphicon-repeat"></span></td>
 					<td class="button-w3 small-font">8</td>
-					<td id="manu-btn-p9" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-right"></td>
+					<td id="manu-btn-p9" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-right"></td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-pa" class="button-w50"><span class="glyphicon glyphicon glyphicon-home"></span></td>
+					<td id="manu-btn-pa" class="button-w50"><span class="glyphicon glyphicon-home"></span></td>
 				</tr>
 				<tr>
 					<td class="small-font space-50">&nbsp;</td>
@@ -440,11 +439,11 @@
 					<td class="button-w25">&nbsp;</td>
 					<td id="manu-btn-pc" class="button-w50" colspan="2">FL</td>
 					<td class="button-w3 small-font">&nbsp;</td>
-					<td id="manu-btn-pd" class="button-w50" colspan="2"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+					<td id="manu-btn-pd" class="button-w50" colspan="2"><span class="glyphicon glyphicon-arrow-down"></span></td>
 					<td class="button-w3 small-font">8</td>
 					<td id="manu-btn-pe" class="button-w50" colspan="2">FR</td>
 					<td class="button-w25">&nbsp;</td>
-					<td id="manu-btn-pf" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+					<td id="manu-btn-pf" class="button-w50"><span class="glyphicon glyphicon-arrow-down"></span></td>
 				</tr>
 				<tr>
 					<td class="header-50">Home</td>
@@ -463,9 +462,9 @@
 				</div>
 				<table class="table1x2">
 					<tr>
-						<td id="extruder-btn-up" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-up"></span></td>
+						<td id="extruder-btn-up" class="button-w50"><span class="glyphicon glyphicon-arrow-up"></span></td>
 						<td class="button-w3 smallfont">&nbsp;</td>
-						<td id="extruder-btn-down" class="button-w50"><span class="glyphicon glyphicon glyphicon-arrow-down"></span></td>
+						<td id="extruder-btn-down" class="button-w50"><span class="glyphicon glyphicon-arrow-down"></span></td>
 					</tr>
 				</table>
 			</div>
@@ -475,19 +474,19 @@
 			<!-- left angle -->
 			<div class="manu-triangle-left">
 				<div class="manu-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-manu"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-manu"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="manu-triangle-right">
 				<div class="manu-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-manu"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-manu"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="manu-triangle-down">
 				<div class="manu-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-manu"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-manu"></span>
 				</div>
 			</div>
 		</div>
@@ -589,6 +588,7 @@
 						},
 					},
 				});
+				myChart.options.elements.point.radius = 1;
 				$$$.message('Create new temperature graph', DEBUG, '$power-btn.click(html)');
 
 				intervalIDtmp = setInterval(() => updateTemperatureGraph(), 1000);
@@ -639,32 +639,32 @@
 		<!-- left angle -->
 			<div class="temp-triangle-left">
 				<div class="temp-triangle-left-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>
+					<span class="glyphicon glyphicon-triangle-left" id="left-mark-temp"></span>
 				</div>
 			</div>
 			<!-- right angle -->
 			<div class="temp-triangle-right">
 				<div class="temp-triangle-right-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-right" id="right-mark-temp"></span>
+					<span class="glyphicon glyphicon-triangle-right" id="right-mark-temp"></span>
 				</div>
 			</div>
 			<!-- down angle-->
 			<div class="temp-triangle-down">
 				<div class="temp-triangle-down-mark">
-					<span class="glyphicon glyphicon glyphicon-triangle-bottom" id="down-mark-temp"></span>
+					<span class="glyphicon glyphicon-triangle-bottom" id="down-mark-temp"></span>
 				</div>
 			</div>
 		</div>
 	<!-- winctrl -->
 		<div class="nav-winctrl">
 			<div class="nav-minimum" id="minimize-btn">
-				<span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 			</div>
 			<div class="nav-fullscreen" id="fullscreen-btn">
-				<span class="glyphicon glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
 			</div>
 			<div class="nav-remove" id="remove-btn">
-				<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</div>
 		</div>
 	<!-- sub menu -->
@@ -672,41 +672,41 @@
 			<div class="nav-triangle-sub" id="submenu-btn">
 				&nbsp;
 			</div>
-			<div class="nav-move">
+			<div class="nav-move" id="nav-move-ctrl">
 				<div class="nav-move-icon">
-					<span class="glyphicon glyphicon glyphicon-move"></span><br />
+					<span class="glyphicon glyphicon-move"></span><br />
 				</div>
 				<div class="nav-move-title">
 					move
 				</div>
 			</div>
-			<div class="nav-stats">
+			<div class="nav-stats" id="nav-stats-ctrl">
 				<div class="nav-stats-icon">
-					<span class="glyphicon glyphicon glyphicon-stats"></span><br />
+					<span class="glyphicon glyphicon-stats"></span><br />
 				</div>
 				<div class="nav-stats-title">
 					glaph
 				</div>
 			</div>
-			<div class="nav-console">
+			<div class="nav-console" id="nav-console-ctrl">
 				<div class="nav-console-icon">
-					<span class="glyphicon glyphicon glyphicon-console"></span><br />
+					<span class="glyphicon glyphicon-console"></span><br />
 				</div>
 				<div class="nav-console-title">
 					gCode
 				</div>
 			</div>
-			<div class="nav-cog">
+			<div class="nav-cog" id="nav-cog-ctrl">
 				<div class="nav-cog-icon">
-					<span class="glyphicon glyphicon glyphicon-cog"></span><br />
+					<span class="glyphicon glyphicon-cog"></span><br />
 				</div>
 				<div class="nav-cog-title">
 					config
 				</div>
 			</div>
-			<div class="nav-log">
+			<div class="nav-log" id="nav-log-ctrl">
 				<div class="nav-log-icon">
-					<span class="glyphicon glyphicon glyphicon-file"></span><br />
+					<span class="glyphicon glyphicon-file"></span><br />
 				</div>
 				<div class="nav-log-title">
 					log
@@ -714,7 +714,7 @@
 			</div>
 			<div class="nav-suspend" id="suspend-btn">
 				<div class="nav-suspend-icon">
-					<span class="glyphicon glyphicon glyphicon-remove"></span><br />
+					<span class="glyphicon glyphicon-remove"></span><br />
 				</div>
 				<div class="nav-suspend-title">
 					close
@@ -732,9 +732,1027 @@
 		</div>
 	<!-- reload button -->
 		<div class="reload-btn debug-contents">
-			<span class="glyphicon glyphicon glyphicon-repeat" id="reload-btn-ctrl"></span>
+			<span class="glyphicon glyphicon-repeat" id="reload-btn-ctrl"></span>
 		</div>
+	<!-- setting panel -->
+		<div class="setting-panel" id="setting-panel-ctrl">
+			<div class="title">Configration Panel</div>
+			<div class="content-base" id="content-base-ctrl">
+				<div class="content-body-uri" id="content-body-uri-ctrl">
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="Host name or address"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="uri-host-ctrl"
+							/>
+							<label class="label">Host name or address</label>
+							<label class="error"></label>
+						</div>
+						<script>
+							$(() => {if($('#uri-host-ctrl').val() != '') $('#uri-host-ctrl').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="Port Address"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="uri-port-ctrl"
+							/>
+							<label class="label">Port Address</label>
+							<label class="error"></label>
+						</div>
+						<script>
+							$(() => {if($('#uri-port-ctrl').val() != '') $('#uri-port-ctrl').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="api-key"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="uri-apikey-ctrl"
+							/>
+							<label class="label">api-key</label>
+							<label class="error"></label>
+						</div>
+						<script>
+							$(() => {if($('#uri-apikey-ctrl').val() != '') $('#uri-apikey-ctrl').attr('value', 'not-null');});
+						</script>
+						<div class="select">
+							<select class="origin">
+								<option value="0">http://</option>
+								<option value="1">https://</option>
+							</select>
+							<label class="label">Select origin</label>
+							<label class="error"></label>
+						</div>
+					</div>
+				</div>
+				<div class="content-body-movement" id="content-body-movement-ctrl">
+					<div class="titlebox">
+						Normal panel movement amount
+					</div>
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P1 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p1"
+							/>
+							<label class="label">P1 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p1"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p1').val() != '') $('#movement-p1').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P2 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p2"
+							/>
+							<label class="label">P2 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p2"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p2').val() != '') $('#movement-p2').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P3 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p3"
+							/>
+							<label class="label">P3 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p3"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p3').val() != '') $('#movement-p3').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P4 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p4"
+							/>
+							<label class="label">P4 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p4"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p4').val() != '') $('#movement-p4').attr('value', 'not-null');});
+						</script>
+					</div>
+					<div class="titlebox">
+						Big panel movement amount(G1)
+					</div>
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P1 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p11"
+							/>
+							<label class="label">P1 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p11"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p11').val() != '') $('#movement-p11').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P2 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p12"
+							/>
+							<label class="label">P2 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p12"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p12').val() != '') $('#movement-p12').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P3 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p13"
+							/>
+							<label class="label">P3 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p13"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p13').val() != '') $('#movement-p13').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P4 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p14"
+							/>
+							<label class="label">P4 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p14"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p14').val() != '') $('#movement-p14').attr('value', 'not-null');});
+						</script>
+					</div>
+					<div class="titlebox">
+						Big panel movement amount(G2)
+					</div>
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P1 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p21"
+							/>
+							<label class="label">P1 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p21"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p21').val() != '') $('#movement-p21').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P2 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p22"
+							/>
+							<label class="label">P2 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p22"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p22').val() != '') $('#movement-p22').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P3 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p23"
+							/>
+							<label class="label">P3 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p23"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p23').val() != '') $('#movement-p23').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="textbox"
+								placeholder="P4 movement amount"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="movement-p24"
+							/>
+							<label class="label">P4 movement amount</label>
+							<label class="error"></label>
+							<div class="unit">mm <span class="glyphicon glyphicon-remove remove" id="movement-remove-p24"></span></div>
+						</div>
+						<script>
+							$(() => {if($('#movement-p24').val() != '') $('#movement-p24').attr('value', 'not-null');});
+						</script>
+					</div>
+				</div>
+				<div class="content-body-printer" id="content-body-printer-ctrl">
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Discharge temp"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="extruder-temp-ctrl"
+							/>
+							<label class="label">Discharge temp</label>
+							<label class="error"></label>
+							<div class="unit">C</div> 
+						</div>
+						<script>
+							$(() => {if($(`#extruder-temp-ctrl`).val() != '') $(`#extruder-temp-ctrl`).attr(`value`, `not-null`);});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Bed size width"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="bedsize-w-ctrl"
+							/>
+							<label class="label">Bed size width</label>
+							<label class="error"></label>
+							<div class="unit">mm</div> 
+						</div>
+						<script>
+							$(() => {if($(`#bedsize-w-ctrl`).val() != '') $(`#bedsize-w-ctrl`).attr(`value`, `not-null`);});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Bed size depth"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="bedsize-d-ctrl"
+							/>
+							<label class="label">Bed size depth</label>
+							<label class="error"></label>
+							<div class="unit">mm</div> 
+						</div>
+						<script>
+							$(() => {if($(`#bedsize-d-ctrl`).val() != '') $(`#bedsize-d-ctrl`).attr(`value`, `not-null`);});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Bed size height"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="bedsize-h-ctrl"
+							/>
+							<label class="label">Bed size height</label>
+							<label class="error"></label>
+							<div class="unit">mm</div> 
+						</div>
+						<script>
+							$(() => {if($(`#bedsize-h-ctrl`).val() != '') $(`#bedsize-h-ctrl`).attr(`value`, `not-null`);});
+						</script>
+					</div>
+				</div>
+				<div class="content-body-win-control" id="content-body-win-control-ctrl">
+					<div class="input-width">
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Window position for X"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="win-pos-x"
+							/>
+							<label class="label">Window position for X</label>
+							<label class="error"></label>
+						</div>
+						<script>
+							$(() => {if($('#win-pos-x').val() != '') $('#win-pos-x').attr('value', 'not-null');});
+						</script>
+						<div class="textbox">
+							<input
+								class="text"
+								type="number"
+								placeholder="Window position for Y"
+								onkeyup="this.setAttribute('value', this.value);"
+								value=""
+								id="win-pos-y"
+							/>
+							<label class="label">Window position for Y</label>
+							<label class="error"></label>
+						</div>
+						<script>
+							$(() => {if($('#win-pos-y').val() != '') $('#win-pos-y').attr('value', 'not-null');});
+						</script>
+						<div class="checkbox-pos"><input type="checkbox" class="checkbox" id="debug-mode-ctrl"></div>
+						<div class="text-pos">Show debug mode contents</div>
+					</div>
+				</div>
+				<div class="leftmark" id="leftmark-ctrl">
+					<span class="glyphicon glyphicon-triangle-right"></span>
+				</div>
+				<div class="conf-set" id="conf-set-ctrl">
+					<span class="text">Set</span>
+				</div>
+			</div>
+		</div>
+	<!-- barrier layer -->
+		<div class="barrierLayer" id="barrierLayer-ctrl"></div>
+	<!-- gcode panel -->
+		<div class="gCode-panel gCode-panel-x4" id="gCode-panel-ctrl">
+			<div class="title title-x4" id="gCode-title-ctrl">
+				Terminal
+			</div>
+			<textarea name="name-gCode-monitor" class="gCode-monitor gCode-monitor-x4" id="gCode-monitor-ctrl" cols="43" rows="5" readonly="true"></textarea>
+			<input type="text" name="name-gCode-line" class="gCode-line gCode-line-x4" id="gCode-line-ctrl">
+			<div class="gCode-send-btn gCode-send-btn-x4" id="gCode-send-btn-ctrl">
+				<span class="text">Send</span>
+			</div>
+			<div class="gCode-close-btn gCode-close-btn-x4" id="gCode-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+		</div>
+	<!-- big manual panel -->
+		<div class="big-manual-panel" id="big-manual-panel-ctrl">
+			<div class="title">
+				Manual operation panel
+			</div>
+			<table class="table1x7">
+				<tr>
+					<td id="button-big-1x7-1" class="button">
+						<span class="text-big">H</span>
+						<span class="text-small">ome</span>
+						<span class="suffix">A</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="space"></td>
+				</tr>
+				<tr>
+					<td id="button-big-1x7-2" class="button">
+						<span class="text-big">H</span>
+						<span class="text-small">ome</span>
+						<span class="suffix">X</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="space"></td>
+				</tr>
+				<tr>
+					<td id="button-big-1x7-3" class="button">
+						<span class="text-big">H</span>
+						<span class="text-small">ome</span>
+						<span class="suffix">Y</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="space"></td>
+				</tr>
+				<tr>
+					<td id="button-big-1x7-4" class="button">
+						<span class="text-big">H</span>
+						<span class="text-small">ome</span>
+						<span class="suffix">Z</span>
+					</td>
+				</tr>
+			</table>
+			<table class="table9x9">
+				<tr>
+					<td id="button-big-9x9-11" class="button"><span class="glyphicon glyphicon-arrow-left CW"></span></td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-12" class="button">M1</td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-13" class="button"><span class="glyphicon glyphicon-arrow-up"></span></td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-14" class="button">M2</td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-15" class="button"><span class="glyphicon glyphicon-arrow-right CCW"></span></td>
+				</tr>
+				<tr>
+					<td class="space-v orange">|</td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space-v orange">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-9x9-21" class="button">RL</td>
+					<td class="space"></td>
+					<td id="button-big-9x9-22" class="button"><span class="glyphicon glyphicon-arrow-left CW"></span></td>
+					<td class="space-h">-</td>
+					<td id="button-big-9x9-23" class="button"><span class="glyphicon glyphicon-arrow-up"></span></td>
+					<td class="space-h">-</td>
+					<td id="button-big-9x9-24" class="button"><span class="glyphicon glyphicon-arrow-right CCW"></span></td>
+					<td class="space"></td>
+					<td id="button-big-9x9-25" class="button">RR</td>
+				</tr>
+				<tr>
+					<td class="space-v orange">|</td>
+					<td class="space"></td>
+					<td class="space-v">|</td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space-v">|</td>
+					<td class="space"></td>
+					<td class="space-v orange">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-9x9-31" class="button"><span class="glyphicon glyphicon-arrow-left"></span></td>
+					<td class="space"></td>
+					<td id="button-big-9x9-32" class="button"><span class="glyphicon glyphicon-arrow-left"></span></td>
+					<td class="space"></td>
+					<td id="button-big-9x9-33" class="button"><span class="glyphicon glyphicon-home"></span></td>
+					<td class="space"></td>
+					<td id="button-big-9x9-34" class="button"><span class="glyphicon glyphicon-arrow-right"></span></td>
+					<td class="space"></td>
+					<td id="button-big-9x9-35" class="button"><span class="glyphicon glyphicon-arrow-right"></span></td>
+				</tr>
+				<tr>
+					<td class="space-v orange">|</td>
+					<td class="space"></td>
+					<td class="space-v">|</td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space-v">|</td>
+					<td class="space"></td>
+					<td class="space-v orange">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-9x9-41" class="button">FL</td>
+					<td class="space"></td>
+					<td id="button-big-9x9-42" class="button"><span class="glyphicon glyphicon-arrow-left CCW"></span></td>
+					<td class="space-h">-</td>
+					<td id="button-big-9x9-43" class="button"><span class="glyphicon glyphicon-arrow-down"></span></td>
+					<td class="space-h">-</td>
+					<td id="button-big-9x9-44" class="button"><span class="glyphicon glyphicon-arrow-right CW"></span></td>
+					<td class="space"></td>
+					<td id="button-big-9x9-45" class="button">FR</td>
+				</tr>
+				<tr>
+					<td class="space-v orange">|</td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space"></td>
+					<td class="space-v orange">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-9x9-51" class="button"><span class="glyphicon glyphicon-arrow-left CCW"></span></td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-52" class="button">M3</td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-53" class="button"><span class="glyphicon glyphicon-arrow-down"></span></td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-54" class="button">M4</td>
+					<td class="space-h orange">-</td>
+					<td id="button-big-9x9-55" class="button"><span class="glyphicon glyphicon-arrow-right CW"></span></td>
+				</tr>
+			</table>
+			<table class="table1x9">
+				<tr>
+					<td id="button-big-1x9-1" class="button"><span class="glyphicon glyphicon-arrow-up"></span></td>
+				</tr>
+				<tr>
+					<td class="space-v">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-1x9-2" class="button"><span class="glyphicon glyphicon-arrow-up"></span></td>
+				</tr>
+				<tr>
+					<td class="space-v">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-1x9-3" class="button"><span class="glyphicon glyphicon-home"></span></td>
+				</tr>
+				<tr>
+					<td class="space-v">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-1x9-4" class="button"><span class="glyphicon glyphicon-arrow-down"></span></td>
+				</tr>
+				<tr>
+					<td class="space-v">|</td>
+				</tr>
+				<tr>
+					<td id="button-big-1x9-5" class="button"><span class="glyphicon glyphicon-arrow-down"></span></td>
+				</tr>
+			</table>
+			<div class="movement-amount-area1">
+				<div class="title-sunshine">Yellow</div><div class="title-normal">&nbsp;line movement amount.</div>
+			</div>
+			<div class="movement-amount-area2">
+				<div class="title-rescureorange">Orange</div><div class="title-normal">&nbsp;line movement amount.</div>
+			</div>
+			<table class="table4x1-area1">
+				<tr>
+					<td class="frame" id="feed-amount-big-p11">0.1mm</td>
+					<td class="frame" id="feed-amount-big-p12">1mm</td>
+					<td class="frame" id="feed-amount-big-p13">10mm</td>
+					<td class="frame" id="feed-amount-big-p14">100mm</td>
+				</tr>
+			</table>
+			<div class="big-manual-close-btn" id="big-manual-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+			<table class="table4x1-area2">
+				<tr>
+					<td class="frame" id="feed-amount-big-p21">0.1mm</td>
+					<td class="frame" id="feed-amount-big-p22">1mm</td>
+					<td class="frame" id="feed-amount-big-p23">10mm</td>
+					<td class="frame" id="feed-amount-big-p24">100mm</td>
+				</tr>
+			</table>
+			<div class="title-extruder">Extruder</div>
+			<table class="table5x1">
+				<tr>
+					<td class="number">
+						<div class="input-group">
+							<input type="number" id="amount-value-big" class="form-control" aria-describedby="basic-addon1" value="5" style="text-align:right">
+							<span class="input-group-addon" id="basic-addon1">mm</span>
+						</div>
+					</td>
+					<td class="space"></td>
+					<td id="button-big-5x1-1" class="button"><span class="glyphicon glyphicon-arrow-up"></span></td>
+					<td class="space"></td>
+					<td id="button-big-5x1-2" class="button"><span class="glyphicon glyphicon-arrow-down"></span></td>
+				</tr>
+			</table>
+			<div class="title-temperture">Temperture</div>
+			<div class="fire-tool">
+				<div class="fire-tool-name">tool</div>
+				<div id="fire-tool-target-ctrl" class="fire-tool-target">N/A</div>
+				<div id="fire-tool-icon-ctrl" class="fire-tool-icon"><span class="glyphicon glyphicon-fire"></span></div>
+				<div id="fire-tool-actual-ctrl" class="fire-tool-actual">N/A</div>
+			</div>
+			<div class="fire-bed">
+				<div class="fire-bed-name">bed</div>
+				<div id="fire-bed-target-ctrl" class="fire-bed-target">N/A</div>
+				<div id="fire-bed-icon-ctrl" class="fire-bed-icon"><span class="glyphicon glyphicon-fire"></span></div>
+				<div id="fire-bed-actual-ctrl" class="fire-bed-actual">N/A</div>
+			</div>
+		</div>
+	<!-- big slider panel tool -->
+		<div class="slider-panel-tool-big" id="slider-panel-tool-big-ctrl">
+			<strong class="slider-text">Tool temperature</strong>
+			<div class="slider">
+				<div class="block">
+					<div class="cell">
+						<div id="handle3" class="slider-look"></div>
+						<style>
+								#handle3 .rs-handle  {
+									background-color:	transparent;
+									border:				8px solid transparent;
+									border-right-color: black;
+									margin:				-6px 0px 0px 14px !important;
+									border-width:		6px 64px 6px 4px;
+								}
+								#handle3 .rs-handle:before  {
+									display:			block;
+									content:			" ";
+									position:			absolute;
+									height:				22px;
+									width:				22px;
+									background:			black;
+									right:				-11px;
+									bottom:				-11px;
+									border-radius:		100px;
+								}
+								#handle3 .rs-tooltip  {
+									top:				75%;
+									font-size:			11px;
+									color:				#FFDC00;
+								}
+								#handle3 .rs-tooltip div  {
+									text-align:			center;
+									color:				#FFDC00;
+									border-radius: 4px;
+									padding: 1px 5px 2px;
+									margin-top: 4px;
+								}
+								#handle3 .rs-range-color  {
+									background-color:	#EA5405;
+								}
+								#handle3 .rs-path-color  {
+									background-color:	#FFDC00;
+								}
+								#handle3 .rs-bg-color {
+									background-color:	#008DB7;
+								}
+						</style>
+						<script>
+							$(`#handle3`).roundSlider({
+								sliderType: 		"min-range",
+									editableTooltip:	false,
+									radius:				65,
+									width:				16,
+									value:				0,
+									min:				0,
+									max:				240,
+									handleSize: 		0,
+									handleShape:		"square",
+									circleShape:		"pie",
+									startAngle:			315,
+									tooltipFormat:		"changeTooltipToolBig",
+									valueChange:		"changeValueToolBig"
 
+							});
+							function changeTooltipToolBig(event) {
+								var val = event.value, temperature;
+								if(val < 180) temperature = 'Low';
+								else if(val < 210) temperature = 'PLA';
+								else if(val < 230) temperature = 'ABS';
+								else temperature = 'Very high';
+
+								if(val == 0) return `N/A<div>${temperature}</div>`; 
+								else return `${val}C<div>${temperature}</div>`;
+							}
+							function changeValueToolBig(event) {
+								toolTempValue = event.value;
+								$$$.message(`Tool value is ${toolTempValue}`, LOWDEBUG, 'changeValueTool');
+							}
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="tool-on-sw" id="tool-on-sw-big-btn">
+				<span class="glyphicon glyphicon-off" area-hidden="true"></span>
+			</div>
+			<div class="tool-on-remove" id="tool-on-remove-big-btn">
+				<span class="glyphicon glyphicon-remove" area-hidden="true"></span>
+			</div>
+		</div>
+	<!-- big slider panel bed -->
+		<div class="slider-panel-bed-big" id="slider-panel-bed-big-ctrl">
+			<strong class="slider-text">Bed temperature</strong>
+			<div class="slider">
+				<div class="block">
+					<div class="cell">
+						<div id="handle4" class="slider-look"></div>
+						<style>
+								#handle4 .rs-handle  {
+									background-color:	transparent;
+									border:				8px solid transparent;
+									border-right-color: black;
+									margin:				-6px 0px 0px 14px !important;
+									border-width:		6px 64px 6px 4px;
+								}
+								#handle4 .rs-handle:before  {
+									display:			block;
+									content:			" ";
+									position:			absolute;
+									height:				22px;
+									width:				22px;
+									background:			black;
+									right:				-11px;
+									bottom:				-11px;
+									border-radius:		100px;
+								}
+								#handle4 .rs-tooltip  {
+									top:				75%;
+									font-size:			11px;
+									color:				#FFDC00;
+								}
+								#handle4 .rs-tooltip div  {
+									text-align:			center;
+									color:				#FFDC00;
+									border-radius: 4px;
+									padding: 1px 5px 2px;
+									margin-top: 4px;
+								}
+								#handle4 .rs-range-color  {
+									background-color:	#EA5405;
+								}
+								#handle4 .rs-path-color  {
+									background-color:	#FFDC00;
+								}
+								#handle4 .rs-bg-color {
+									background-color:	#008DB7;
+								}
+						</style>
+						<script>
+							$(`#handle4`).roundSlider({
+								sliderType: 		"min-range",
+									editableTooltip:	false,
+									radius:				65,
+									width:				16,
+									value:				0,
+									min:				0,
+									max:				140,
+									handleSize: 		0,
+									handleShape:		"square",
+									circleShape:		"pie",
+									startAngle:			315,
+									tooltipFormat:		"changeTooltipBedBig",
+									valueChange:		"changeValueBedBig"
+
+							});
+							function changeTooltipBedBig(event) {
+								var val = event.value, temperature;
+								if(val < 40) temperature = 'Low';
+								else if(val < 66) temperature = 'PLA';
+								else if(val < 121) temperature = 'ABS';
+								else temperature = 'Very high';
+
+								if(val == 0) return `N/A<div>${temperature}</div>`; 
+								else return `${val}C<div>${temperature}</div>`;
+							}
+							function changeValueBedBig(event) {
+								bedTempValue = event.value;
+								$$$.message(`Tool value is ${bedTempValue}`, LOWDEBUG, 'changeValueTool');
+							}
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="bed-on-sw" id="bed-on-sw-big-btn">
+				<span class="glyphicon glyphicon-off" area-hidden="true"></span>
+			</div>
+			<div class="bed-on-remove" id="bed-on-remove-big-btn">
+				<span class="glyphicon glyphicon-remove" area-hidden="true"></span>
+			</div>
+		</div>
+	<!-- big graph panel -->
+		<div class="big-graph-panel" id="big-graph-panel-ctrl">
+			<div class="title">
+				Graph panel
+			</div>
+			<div class="big-temperature-panel">
+				<div class="big-graph1" id="big-graph1-ctrl">
+					<canvas class="big-temperature-canvas-p1" id="big-graph-panel1"></canvas>
+				</div>
+			</div>
+			<script>
+				let ctx_big			= document.getElementById('big-graph-panel1');
+				let refreshCnt		= 1;
+				let targetTool		= 'tool'
+				let labelArr		= [];
+				let temperatureArr	= [];
+				let max,min;
+				let myChart_big = new Chart(ctx_big, {
+					type: 'line',
+					data: {
+						labels: [],
+						datasets: [{
+							label: 'tool',
+							data: [],
+							// データライン
+							borderColor: '#f88',
+						}],
+					},
+					options: {
+						plugins: {
+							// グラフタイトル
+							title: {
+								display: false,
+							},
+							// 凡例
+							legend: {
+								position: 'right',
+								align: 'center',
+								// 凡例ラベル
+								labels: {
+									boxWidth: 10,
+									boxHeight: 8,
+								},
+							},
+							// ツールチップ
+							tooltip: {
+								backgroundColor: '#933',
+							},
+						},
+						scales: {
+							y: {
+								// 最小値・最大値
+								min: 0,
+								max: 240,
+								// 軸タイトル
+								title: {
+									display: true,
+								},
+								// 目盛ラベル
+								ticks: {
+									color: lapislazuli,
+									stepSize: 20,
+									showLabelBackdrop: true,
+									backdropColor: skyhigh,
+									backdropPadding: { x: 1, y: 1 },
+									major: {
+										enabled: true,
+									},
+									align: 'end',
+									crossAlign: 'center',
+									sampleSize: 2,
+								},
+								grid: {
+									// 軸線
+									borderColor: 'orange',
+									borderWidth: 2,
+									drawBorder: true,
+									// 目盛線＆グリッド線
+									color: lapislazuli,
+									display: true,
+									// グリッド線
+									borderDash: [3, 3],
+									borderDashOffset: 0,
+									// 目盛線
+									drawTicks: true,
+									tickColor: 'blue',
+									tickLength: 10,
+									tickWidth: 2,
+									tickBorderDash: [2, 2],
+									tickBorderDashOffset: 0,
+								},
+							},
+							x: {
+								grid: {
+									borderColor: 'orange',
+									borderWidth: 2,
+								},
+							},
+						},
+					},
+				});
+				myChart_big.options.elements.point.radius = 1;
+				intervalIDtmpBig = setInterval(updateBigGraph, 1000);
+				function updateBigGraph() {
+					$$$.message(`Call updateBigGraph`, LOWDEBUG, 'updateBigGraph');
+					
+					var flag;
+					$(`#big-graph-pause-btn-ctrl`).css(`background-color`) == `rgb(38, 31, 135)` ? flag = false : flag = true;
+
+					if($('input[name="powerFlag"]').prop('checked') == true && flag) {
+						if(!powerFlagTemp) {
+							$$$.message(`Change powerFlagTemp. value is true`, DEBUG, 'updateBigGraph');
+							powerFlagTemp = true;
+						}
+						var oldTargetTool = targetTool;
+						$(`#big-graph-tool-btn-ctrl`).css('background-color') == 'rgb(38, 31, 135)' ? targetTool = 'tool' : targetTool = 'bed';
+						client.printer.getFullState()
+							.done((response) => {
+								var val = NaN;
+								if('tool0' in response.temperature && targetTool == 'tool') val = response.temperature.tool0.actual;
+								if('bed' in response.temperature && targetTool == 'bed') val = response.temperature.bed.actual;
+								if(val == NaN) return;
+
+								if(oldTargetTool != targetTool) {
+									myChart_big.options.scales.y.max = 240;
+									myChart_big.options.scales.y.min = 0;
+									myChart_big.options.scales.y.ticks.stepSize = 20;
+									labelArr = [];
+									temperatureArr = [];
+									myChart_big.data.labels = labelArr;
+									myChart_big.data.datasets[0].data = temperatureArr;;
+									myChart_big.data.datasets[0].label = targetTool;
+									max = 0;
+									min = tempInitialValue;
+									targetTool == 'tool' ? myChart_big.data.datasets[0].borderColor = '#f88' : myChart_big.data.datasets[0].borderColor = '#484';
+									myChart_big.update();
+								}
+
+								refreshCnt++;
+								var omax = max,omin = min;
+								
+								max = 0;
+								for(var i=0; i<temperatureArr.length; i++)
+									if(temperatureArr[i] > max) max = temperatureArr[i];
+								min = tempInitialValue;
+								for(var i=0; i<temperatureArr.length; i++)
+									if(temperatureArr[i] < min) min = temperatureArr[i];
+
+								if(omax < max || omin > min) {
+									myChart_big.options.scales.y.max = max + 1;
+									myChart_big.options.scales.y.min = min - 1;
+									myChart_big.options.scales.y.ticks.stepSize = (max - min) / 10
+								}
+								if(labelArr.length >= 60) labelArr.shift();
+								labelArr.push(new Date().getSeconds());
+								if(temperatureArr.length  >= 60) temperatureArr.shift();
+								temperatureArr.push(val);
+
+								myChart_big.data.labels = labelArr;
+								myChart_big.data.datasets[0].data = temperatureArr;
+								if(refreshCnt > 10) {
+									refreshCnt = 1;
+									myChart_big.options.scales.y.max = max + 1;
+									myChart_big.options.scales.y.min = min - 1;
+									myChart_big.options.scales.y.ticks.stepSize = (max - min) / 10
+								}
+								myChart_big.update();
+							}).fail((err)=>{});
+					}
+				}
+			</script>
+			<div class="big-graph-pause-btn" id="big-graph-pause-btn-ctrl">
+				<span class="text"><span class="glyphicon glyphicon-pause">Pause</span></span>
+			</div>
+			<div class="big-graph-tool-btn" id="big-graph-tool-btn-ctrl">
+				<span class="text">Tool</span>
+			</div>
+			<div class="big-graph-bed-btn" id="big-graph-bed-btn-ctrl">
+				<span class="text">Bed</span>
+			</div>
+			<div class="big-graph-close-btn" id="big-graph-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+		</div>
+	<!-- log panel -->
+		<div class="log-panel log-panel-x4" id="log-panel-ctrl">
+			<div class="title title-x4" id="log-panel-title-ctrl">
+				Log viewer
+			</div>
+			<div class="content-log-panel content-log-panel-x4" id="content-log-panel-ctrl">
+				<div class="button all-btn" id="all-btn-ctrl">&nbsp;all&nbsp;</div>
+				<div class="button error-btn" id="error-btn-ctrl">&nbsp;error&nbsp;</div>
+				<div class="button warn-btn" id="warn-btn-ctrl">&nbsp;warn&nbsp;</div>
+				<div class="button info-btn" id="info-btn-ctrl">&nbsp;info&nbsp;</div>
+				<div class="button debug-btn" id="debug-btn-ctrl">&nbsp;debug&nbsp;</div>
+				<div class="button low-info-btn low-info-btn-x4" id="low-info-btn-ctrl">&nbsp;low-info&nbsp;</div>
+				<div class="button low-debug-btn low-debug-btn-x4" id="low-debug-btn-ctrl">&nbsp;low-debug&nbsp;</div>
+				<div class="log-information log-information-x4" id="log-information-ctrl"></div>
+			</div>
+			<div class="log-close-btn" id="log-close-btn-ctrl">
+				<span class="text">Close</span>
+			</div>
+		</div>
+	<!-- cancel panel -->
+		<div class="cancel-panel" id="cancel-panel-ctrl">
+			<div class="title">Cancel print</div>
+			<div class="mbody">Do you want to stop printing?</div>
+			<div class="button cancel-ok" id="cancel-ok-ctrl"><span class="adjust">Yes</span></div>
+			<div class="button cancel-no" id="cancel-no-ctrl"><span class="adjust">No</span></div>
+		</div>
+	<!-- textMeasure-->
+		<div class="sampleText" id="textMeasure"></div>
+		<div class="sampleText2" id="textMeasure2"></div>
 	<!-- scripts -->
 		<script src="./renderer.js"></script>
 		<!-- install bootstrap -->

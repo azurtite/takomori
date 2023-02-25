@@ -2057,7 +2057,7 @@ $(() => {
 				case 6:
 					x = extruderPosition[0];
 					y = extruderPosition[1];
-					z = extruderPosition[2] = feedValue;
+					z = extruderPosition[2] + feedValue;
 					if(z > bedSize[2]) z = bedSize[2];
 					break;
 				case 7:
@@ -2089,6 +2089,7 @@ $(() => {
 				.done(() => {
 					extruderPosition[0] = x;
 					extruderPosition[1] = y;
+					extruderPosition[2] = z;
 					$$$.message(`gCode succcess.`, INFO, `diagonalMove`);
 					$$$.message(`Extruder position is x=${x} y=${y} z=${z}`, INFO,  `diagonalMove`);
 				}).fail((err) => {

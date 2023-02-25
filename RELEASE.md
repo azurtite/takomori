@@ -21,6 +21,15 @@
 		- [新機能](#新機能)
 		- [バグ修正 #0017](#バグ修正-0017)
 		- [機能改善](#機能改善-1)
+- [0.1.3](#013)
+	- [0.1.3 00001(English)](#013-00001english)
+		- [new function](#new-function-1)
+		- [Bug fixes](#bug-fixes)
+		- [Functional improvement](#functional-improvement)
+	- [0.1.3 00001(Japanese)](#013-00001japanese)
+		- [新機能](#新機能-1)
+		- [バグ修正](#バグ修正)
+		- [機能改善](#機能改善-2)
 
 # 0.1.0 00001
 以下の機能を実装
@@ -93,3 +102,44 @@
 - intervalIDprnの2重起動防止
 - プリンター未接続をファイルリストに表示するように変更
 - サーバー上のファイルがないことを表示するように変更
+
+# 0.1.3
+## 0.1.3 00001(English)
+### new function
+- Implement each dialog in submenu
+	- Large screen manual operation
+	- Send G-code
+	- Large screen temperature graph
+	- log viewer
+- Implemented settings dialog
+### Bug fixes
+- Fixed a bug that the icon color does not change when executing getFilelist
+- Fixed behavior when gCode Analysis parameter does not exist
+### Functional improvement
+- Fixed a bug that the file panel display was strange
+- Changed setting storage location from file to localStorage
+- Changed to display that there is no print file when there is no print file on the octopi server.
+- remove debug code
+- Fixed file-related icons not operable when printing, now operable except for the file being printed
+- Added a function to cancel printing by operating the printer icon
+- Modified the code of the manual operation screen
+
+## 0.1.3 00001(Japanese)
+### 新機能
+- サブメニューの各ダイアログを実装
+	- 大画面マニュアル操作
+	- Gコード送信
+	- 大画面温度グラフ
+	- ログビューアー
+- 設定ダイアログを実装
+### バグ修正
+- getFilelist実行時にアイコン色が変わらない不具合を修正
+- gCode Analysisパラメーターが存在しないときの挙動を修正
+### 機能改善
+- ファイルパネル表示がおかしくなる不具合を修正
+- 設定の保存場所をファイルからlocalStorageに変更
+- octopiサーバーにプリントファイルが存在しないとき、ファイルが無いことを表示するように変更
+- デバッグコードを削除
+- 印刷時にファイル関連アイコン操作不可能にしていたものを、印刷中のファイル以外は操作可能に修正
+- プリンターアイコンを操作してプリントキャンセルできる機能を追加
+- マニュアル操作画面のコードを改修
